@@ -14,8 +14,8 @@ GO
 -- CategoryID: Primary Key, Identity
 CREATE TABLE Category (
     Id INT PRIMARY KEY IDENTITY,
-    Name_Ar NVARCHAR(50) NOT NULL,
-    Name_En VARCHAR(50) NOT NULL
+    Name_Local NVARCHAR(255) NOT NULL,
+    Name_Global VARCHAR(255) NOT NULL
 );
 GO
 
@@ -24,8 +24,8 @@ GO
 -- CategoryID: Foreign Key
 CREATE TABLE SubCategory (
     Id INT PRIMARY KEY IDENTITY,
-    Name_Ar NVARCHAR(50) NOT NULL,
-    Name_Eng VARCHAR(50) NOT NULL,
+    Name_Local NVARCHAR(255) NOT NULL,
+    Name_Global VARCHAR(255) NOT NULL,
     CategoryId INT NOT NULL,
     -- Foreign Key
     FOREIGN KEY (CategoryId) REFERENCES Category(Id)
@@ -37,10 +37,10 @@ GO
 -- SubCategoryID: Foreign Key
 CREATE TABLE Product (
     Id INT PRIMARY KEY IDENTITY,
-    Name_Ar NVARCHAR(50) NOT NULL,
-    Name_Eng VARCHAR(50) NOT NULL,
-    Description_Ar NVARCHAR(255) NULL,
-    Description_Eng VARCHAR(255) NULL,
+    Name_Local NVARCHAR(255) NOT NULL,
+    Name_Global VARCHAR(255) NOT NULL,
+    Description_Local NVARCHAR(MAX) NULL,
+    Description_Global VARCHAR(MAX) NULL,
     SubCategoryId INT NOT NULL,
     -- Foreign Key
     FOREIGN KEY (SubCategoryId) REFERENCES SubCategory(Id)
@@ -48,13 +48,14 @@ CREATE TABLE Product (
 GO
 
 -- Creating PriceHistory table
--- Prod_Id: Primary Key, Identity, Foreign Key
+-- ProdId: Primary Key, Identity, Foreign Key
 CREATE TABLE PriceHistory (
-    Prod_Id INT,
+    Id INT PRIMARY KEY IDENTITY,
+    ProdId INT NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     Date DATETIME NOT NULL,
     -- Foreign Key
-    FOREIGN KEY (Prod_Id) REFERENCES Product(Id)
+    FOREIGN KEY (ProdId) REFERENCES Product(Id)
 );
 GO
 
@@ -62,30 +63,30 @@ GO
 -- DomainID: Primary Key, Identity
 CREATE TABLE Domain (
     Id INT PRIMARY KEY IDENTITY,
-    Name_Ar NVARCHAR(50) NOT NULL,
-    Name_Eng VARCHAR(50) NOT NULL,
-    Description_Ar NVARCHAR(255) NULL,
-    Description_Eng VARCHAR(255) NULL,
-    Url NVARCHAR(255) NOT NULL,
-    Logo NVARCHAR(255) NOT NULL
+    Name_Local NVARCHAR(255) NOT NULL,
+    Name_Global VARCHAR(255) NOT NULL,
+    Description_Local NVARCHAR(MAX) NULL,
+    Description_Global VARCHAR(MAX) NULL,
+    Url NVARCHAR(MAX) NOT NULL,
+    Logo NVARCHAR(MAX) NOT NULL
 );
 GO
 
 -- Creating ProductLinks table
 -- Id: Primary Key, Identity
--- Prod_Id: Foreign Key
+-- ProdId: Foreign Key
 -- DomainID: Foreign Key
 CREATE TABLE ProductLinks (
     Id INT PRIMARY KEY IDENTITY,
-    Prod_Id INT NOT NULL,
+    ProdId INT NOT NULL,
     DomainId INT NOT NULL,
-    ProductLink NVARCHAR(255) NOT NULL UNIQUE,
-    Status NVARCHAR(50) NOT NULL,
+    ProductLink NVARCHAR(MAX) NOT NULL,
+    Status NVARCHAR(255) NOT NULL,
     -- CHECK (Status IN('Active', 'Inactive', 'Deleted'))
     LastUpdated DATETIME NOT NULL,
     LastScraped DATETIME NOT NULL,
     -- Foreign Key
-    FOREIGN KEY (Prod_Id) REFERENCES Product(Id),
+    FOREIGN KEY (ProdId) REFERENCES Product(Id),
     FOREIGN KEY (DomainId) REFERENCES Domain(Id)
 );
 GO
@@ -94,14 +95,14 @@ GO
 -- Id: Primary Key, Identity, Foreign Key
 CREATE TABLE ProductDetails (
     Id INT PRIMARY KEY IDENTITY,
-    Name_Ar NVARCHAR(50) NOT NULL,
-    Name_Eng NVARCHAR(50) NOT NULL,
-    Description_Ar NVARCHAR(255) NOT NULL,
-    Description_Eng NVARCHAR(255) NOT NULL,
+    Name_Local NVARCHAR(255) NOT NULL,
+    Name_Global NVARCHAR(255) NOT NULL,
+    Description_Local NVARCHAR(MAX) NOT NULL,
+    Description_Global NVARCHAR(MAX) NOT NULL,
     Price DECIMAL(18, 2) NOT NULL,
     Rating DECIMAL(3, 2) NULL, -- 0.0 to 5.0
     isAvailable BIT NOT NULL,
-    Brand NVARCHAR(50) NOT NULL
+    Brand NVARCHAR(255) NULL
     -- Foreign Key
     FOREIGN KEY (Id) REFERENCES ProductLinks(Id)
 );
@@ -112,26 +113,27 @@ GO
 -- CHECK (Rating >= 0.0 AND Rating <= 5.0);
 
 -- Creating ProductImages table
--- Prod_Id: Primary Key, Identity, Foreign Key
+-- ProdId: Primary Key, Identity, Foreign Key
 CREATE TABLE ProductImages (
-    Prod_Id INT,
-    Image NVARCHAR(255) NOT NULL,
+    Id INT PRIMARY KEY IDENTITY,
+    ProdId INT NOT NULL,
+    Image NVARCHAR(MAX) NOT NULL,
     -- Foreign Key
-    FOREIGN KEY (Prod_Id) REFERENCES ProductDetails(Id)
+    FOREIGN KEY (ProdId) REFERENCES ProductDetails(Id)
 );
 GO
 
 -- Creating ProductSponsored table
 -- Id: Primary Key, Identity
--- Prod_Id: Foreign Key
+-- ProdId: Foreign Key
 CREATE TABLE ProductSponsored (
     Id INT PRIMARY KEY IDENTITY,
-    Cost DECIMAL(18, 2) NOT NULL,
+    Cost DECIMAL(18, 2) NOT NULL, -- Priority
     StartDate DATETIME NOT NULL,
     Duration INT NOT NULL, -- in days
-    Prod_Id INT NOT NULL,
+    ProdId INT NOT NULL,
     -- Foreign Key
-    FOREIGN KEY (Prod_Id) REFERENCES ProductDetails(Id)
+    FOREIGN KEY (ProdId) REFERENCES ProductDetails(Id)
 );
 GO
 
@@ -139,66 +141,75 @@ GO
 -- UserID: Primary Key, Identity
 CREATE TABLE Users (
     Id INT PRIMARY KEY IDENTITY,
-    FName NVARCHAR(50) NOT NULL,
-    LName NVARCHAR(50) NOT NULL,
-    Email NVARCHAR(50) NOT NULL,
-    Password NVARCHAR(50) NOT NULL, -- Hashed
+    FName NVARCHAR(255) NOT NULL,
+    LName NVARCHAR(255) NOT NULL,
+    -- UserName NVARCHAR(255) NOT NULL UNIQUE,
+    Email NVARCHAR(255) NOT NULL UNIQUE,
+    Password NVARCHAR(255) NOT NULL, -- Hashed
     Gender NVARCHAR(10) NOT NULL,
--- CHECK (Gender IN('Male', 'Female', 'Unknown'))
-    PhoneCode NVARCHAR(10) NOT NULL,
-    PhoneNumber NVARCHAR(50) NOT NULL,
-    DateOfBirth DATE NOT NULL,
+    -- CHECK (Gender IN('Male', 'Female', 'Unknown'))
+    Country NVARCHAR(255) NOT NULL,
+    -- CHECK (Country IN('Egypt', Saudi Arabia'))
     JoinDate DATE NOT NULL,
+    PhoneCode NVARCHAR(255) NULL,
+    -- CHECK (list of phone codes)
+    PhoneNumber NVARCHAR(255) NULL,
+    DateOfBirth DATE NULL,
     -- LastLogin DATETIME NOT NULL,
-    Image NVARCHAR(255) NOT NULL,
-    Country NVARCHAR(50) NOT NULL
-    -- ,Role NVARCHAR(50) NOT NULL
+    Image NVARCHAR(MAX) NULL,
+    Role NVARCHAR(255) NULL
+    -- CHECK (Role IN('Admin', 'User'))
+
 );
 GO
 
 -- Creating SearchValues table
 -- UserID: Primary Key, Identity, Foreign Key
 CREATE TABLE SearchValues (
-    UserID INT,
-    SearchValue NVARCHAR(50) NOT NULL,
+    Id INT PRIMARY KEY IDENTITY,
+    UserID INT NOT NULL,
+    SearchValue NVARCHAR(255) NULL,
     -- Foreign Key
-    FOREIGN KEY (UserID) REFERENCES Users(Id)
+    FOREIGN KEY (UserID) REFERENCES Users(Id),
 );
 GO
 
 -- Creating UserFavProd table
 -- UserID: Foreign Key
--- Prod_Id: Foreign Key
+-- ProdId: Foreign Key
 CREATE TABLE UserFavProd (
-    UserID INT,
-    Prod_Id INT NOT NULL
+    UserID INT NOT NULL,
+    ProdId INT NOT NULL
     -- Foreign Key
     FOREIGN KEY (UserID) REFERENCES Users(Id),
-    FOREIGN KEY (Prod_Id) REFERENCES Product(Id)
+    FOREIGN KEY (ProdId) REFERENCES Product(Id),
+    PRIMARY KEY (UserID, ProdId)
 );
 GO
 
 -- Creating UserAlertProd table
 -- UserID: Foreign Key
--- Prod_Id: Foreign Key
+-- ProdId: Foreign Key
 CREATE TABLE UserAlertProd (
-    UserID INT,
-    Prod_Id INT NOT NULL
+    UserID INT NOT NULL,
+    ProdId INT NOT NULL
     -- Foreign Key
     FOREIGN KEY (UserID) REFERENCES Users(Id),
-    FOREIGN KEY (Prod_Id) REFERENCES Product(Id)
+    FOREIGN KEY (ProdId) REFERENCES Product(Id),
+    PRIMARY KEY (UserID, ProdId)
 );
 GO
 
 -- Creating UserHistoryProd table
 -- UserID: Foreign Key
--- Prod_Id: Foreign Key
+-- ProdId: Foreign Key
 CREATE TABLE UserHistoryProd (
-    UserID INT,
-    Prod_Id INT NOT NULL
+    UserID INT NOT NULL,
+    ProdId INT NOT NULL
     -- Foreign Key
     FOREIGN KEY (UserID) REFERENCES Users(Id),
-    FOREIGN KEY (Prod_Id) REFERENCES Product(Id)
+    FOREIGN KEY (ProdId) REFERENCES Product(Id),
+    PRIMARY KEY (UserID, ProdId)
 );
 GO
 
