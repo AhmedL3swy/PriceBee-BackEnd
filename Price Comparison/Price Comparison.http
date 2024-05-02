@@ -1,0 +1,6 @@
+@Price_Comparison_HostAddress = http://localhost:5190
+
+GET {{Price_Comparison_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
