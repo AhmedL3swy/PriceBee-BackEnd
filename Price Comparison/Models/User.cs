@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace DBtoclasses.Models;
+namespace Price_Comparison.Models;
 
 [Index("Email", Name = "UQ__Users__A9D10534A011E897", IsUnique = true)]
 public partial class User

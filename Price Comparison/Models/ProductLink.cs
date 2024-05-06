@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace DBtoclasses.Models;
+namespace Price_Comparison.Models;
 
 public partial class ProductLink
 {

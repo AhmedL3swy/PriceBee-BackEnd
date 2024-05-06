@@ -1,7 +1,11 @@
 
-using Day2.UnitOfWork;
+//using Day2.UnitOfWork;
 using Price_Comparison.Models;
+using Microsoft.EntityFrameworkCore;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Price_Comparison.UnitOfWork;
+using Price_Comparison._ِAutoMigration;
 
 namespace Price_Comparison
 {
@@ -20,9 +24,9 @@ namespace Price_Comparison
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<DBContextForTest>(o => o.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));
+            builder.Services.AddDbContext<ProductComparingDBContext>(o => o.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));
 
-            builder.Services.AddCors(options =>
+			builder.Services.AddCors(options =>
             {
                 options.AddPolicy(corsTxt,
                 builder =>
@@ -35,30 +39,29 @@ namespace Price_Comparison
 
             builder.Services.AddScoped<UnitOfWOrks>();
 
+			#region Security code
+			//builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
+			//    .AddJwtBearer("myscheme",
+			//    //validate token
+			//    op =>
+			//    {
+			//        #region secret key
+			//        string key = "welcome to my secret key mohamed elshafie";
+			//        var secertkey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+			//        #endregion
+			//        op.TokenValidationParameters = new TokenValidationParameters()
+			//        {
+			//            IssuerSigningKey = secertkey,
+			//            ValidateIssuer = false,
+			//            ValidateAudience = false
 
-            #region Security code
-            //builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
-            //    .AddJwtBearer("myscheme",
-            //    //validate token
-            //    op =>
-            //    {
-            //        #region secret key
-            //        string key = "welcome to my secret key mohamed elshafie";
-            //        var secertkey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
-            //        #endregion
-            //        op.TokenValidationParameters = new TokenValidationParameters()
-            //        {
-            //            IssuerSigningKey = secertkey,
-            //            ValidateIssuer = false,
-            //            ValidateAudience = false
-
-            //        };
-            //    }
-            //    );
-            #endregion
+			//        };
+			//    }
+			//    );
+			#endregion
 
 
-            var app = builder.Build();
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -75,8 +78,9 @@ namespace Price_Comparison
             app.UseCors(corsTxt);
 
             app.MapControllers();
+            app.CreateDbIfNotExisi();
 
-            app.Run();
+			app.Run();
         }
     }
 }

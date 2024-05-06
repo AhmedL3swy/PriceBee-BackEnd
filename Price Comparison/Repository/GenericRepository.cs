@@ -5,9 +5,9 @@ namespace Price_Comparison.Repository
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
-        DBContextForTest _db;
+		ProductComparingDBContext _db;
 
-        public GenericRepository(DBContextForTest db)
+        public GenericRepository(ProductComparingDBContext db)
         {
             _db = db;
         }
@@ -17,7 +17,7 @@ namespace Price_Comparison.Repository
             return _db.Set<TEntity>().ToList();
         }
 
-        public TEntity selectbyid(int id)
+        public TEntity? selectbyid(int id)
         {
             return _db.Set<TEntity>().Find(id);
         }
@@ -33,13 +33,16 @@ namespace Price_Comparison.Repository
             _db.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
         }
 
-        public void delete(int id)
-        {
-            TEntity obj = _db.Set<TEntity>().Find(id);
-            _db.Set<TEntity>().Remove(obj);
-        }
+		public void delete(int id)
+		{
+			TEntity? obj = _db.Set<TEntity>().Find(id);
+			if (obj != null)
+			{
+				_db.Set<TEntity>().Remove(obj);
+			}
+		}
 
-        public void save()
+		public void save()
         {
             _db.SaveChanges();
         }
