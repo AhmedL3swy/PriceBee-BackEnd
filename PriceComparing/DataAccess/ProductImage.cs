@@ -19,5 +19,5 @@ public partial class ProductImage
 
     [ForeignKey("ProdId")]
     [InverseProperty("ProductImages")]
-    public virtual ProductDetail Prod { get; set; }
+    public virtual Product Prod { get; set; }
 }
