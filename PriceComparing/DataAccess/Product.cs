@@ -29,6 +29,8 @@ public partial class Product
 
     public int SubCategoryId { get; set; }
 
+    public int ViewsNumber { get; set; }
+
     [InverseProperty("Prod")]
     public virtual ICollection<PriceHistory> PriceHistories { get; set; } = new List<PriceHistory>();
 
