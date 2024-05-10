@@ -1,9 +1,10 @@
 ﻿using DataAccess;
+using DataAccess.Models;
 namespace PriceComparing.Models
 {
 	public class SeedingData
 	{
-		public static void InitializeDataBase(DBContext context)
+		public static void InitializeDataBase(DatabaseContext context)
 		{
 			context.Database.EnsureCreated();
 

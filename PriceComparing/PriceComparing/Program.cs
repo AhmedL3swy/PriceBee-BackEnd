@@ -4,6 +4,7 @@ using static System.Net.Mime.MediaTypeNames;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using PriceComparing.UnitOfWork;
 using PriceComparing.AutoMigration;
+using DataAccess.Models;
 
 namespace PriceComparing
 {
@@ -22,7 +23,7 @@ namespace PriceComparing
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<DBContext>(o => o.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));
+            builder.Services.AddDbContext<DatabaseContext>(o => o.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));
 
             builder.Services.AddCors(options =>
             {

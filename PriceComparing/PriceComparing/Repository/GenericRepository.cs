@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DataAccess;
+using DataAccess.Models;
 
 namespace PriceComparing.Repository
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
-		DBContext _db;
+		DatabaseContext _db;
 
-        public GenericRepository(DBContext db)
+        public GenericRepository(DatabaseContext db)
         {
             _db = db;
         }

@@ -1,4 +1,5 @@
 ﻿using DataAccess;
+using DataAccess.Models;
 using EFCore.AutomaticMigrations;
 using PriceComparing.Models;
 
@@ -13,7 +14,7 @@ namespace PriceComparing.AutoMigration
 				var services = scope.ServiceProvider;
 				try
 				{
-					var context = services.GetRequiredService<DBContext>();
+					var context = services.GetRequiredService<DatabaseContext>();
 					await context.Database.EnsureCreatedAsync();
 					MigrateDatabaseToLatestVersion.Execute(context);
 					SeedingData.InitializeDataBase(context);
