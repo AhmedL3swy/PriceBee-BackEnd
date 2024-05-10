@@ -1,6 +1,5 @@
 ﻿using DataAccess.Models;
 using DTO;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PriceComparing.Repository;
 
@@ -38,7 +37,7 @@ namespace PriceComparing.Controllers
 			// using GenericRepository
 			var category = await _category.SelectById(id);
 			// Check
-			if (category == null){return NotFound();}
+			if (category == null) { return NotFound(); }
 			// using DTO
 			CategoryDTO categoryDTO = new CategoryDTO()
 			{
