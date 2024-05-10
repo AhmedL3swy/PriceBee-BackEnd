@@ -28,7 +28,7 @@ namespace PriceComparing
 			builder.Services.AddDbContext<DatabaseContext>(o => o.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 			// Add services to the container.
-			//builder.Services.AddScoped<GenericRepository<Category>>();
+			builder.Services.AddScoped<GenericRepository<Category>>();
 
 
 			builder.Services.AddCors(options =>

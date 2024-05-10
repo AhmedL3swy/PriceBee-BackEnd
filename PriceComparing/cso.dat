@@ -14,3 +14,7 @@ V1
 2:app,G
 2:ConfigureServices,P
 2:services,e
+2:DeleteCategory,y7
+2:id,f
+2:AddCategory,M
+2:category,PW

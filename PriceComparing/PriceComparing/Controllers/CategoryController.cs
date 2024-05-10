@@ -9,25 +9,26 @@ namespace PriceComparing.Controllers
 	[ApiController]
 	public class CategoryController : ControllerBase
 	{
-		private readonly DatabaseContext _db;
+		private readonly GenericRepository<Category> _category;
 
-		public CategoryController(DatabaseContext db)
-        {
-            _db = db;
-        }
+		public CategoryController(GenericRepository<Category> category)
+		{
+			_category = category;
+		}
 
 		// GET: api/Category
 		[HttpGet]
-		public IActionResult GetAllCategories()
+		public async Task<IActionResult> GetAllCategories()
 		{
-			return Ok(_db.Categories);
+			var categories = await _category.SelectAll();
+			return Ok(categories);
 		}
 
 		// GET: api/Category/5
 		[HttpGet("{id}")]
-		public IActionResult GetCategoryById(int id)
+		public async Task<IActionResult> GetCategoryById(int id)
 		{
-			var category = _db.Categories.Find(id);
+			var category = await _category.SelectById(id);
 			if (category == null)
 			{
 				return NotFound();
@@ -35,99 +36,44 @@ namespace PriceComparing.Controllers
 			return Ok(category);
 		}
 
-
 		// POST: api/Category
 		[HttpPost]
-		public IActionResult AddCategory([FromBody] Category category)
+		public async Task<IActionResult> AddCategory([FromBody] Category category)
 		{
-			_db.Categories.Add(category);
-			_db.SaveChanges();
+			if (category == null)
+			{
+				return BadRequest();
+			}
+			await _category.Add(category);
 			return Ok();
 		}
 
 		// PUT: api/Category/5
 		[HttpPut("{id}")]
-		public IActionResult UpdateCategory(int id, [FromBody] Category category)
+		public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
 		{
-			_db.Entry(category).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-			_db.SaveChanges();
+			await _category.UpdateAsync(category);
 			return Ok();
 		}
 
 		// DELETE: api/ApiWithActions/5
 		[HttpDelete("{id}")]
-		public IActionResult DeleteCategory(int id)
+		public async Task<IActionResult> DeleteCategory(int id)
 		{
-			var category = _db.Categories.Find(id);
-			if (category == null)
-			{
-				return NotFound();
-			}
-			_db.Categories.Remove(category);
-			_db.SaveChanges();
+			await _category.Delete(id);
 			return Ok();
 		}
 
 		// GET: api/Category/5/Brands
-
-		//private readonly GenericRepository<Category> category;
-
-		//public CategoryController(GenericRepository<Category> category)
-		//      {
-		//	this.category = category;
-		//}
-		//      // GET: api/Category
-		//      [HttpGet]
-		//public IActionResult GetAllCategories()
-		//{
-		//	//return Ok(category.selectall());
-		//}
-		//// GET: api/Category/5
-		//[HttpGet("{id}")]
-		//public IActionResult GetCategoryById(int id)
-		//{
-		//	return Ok(category.selectbyid(id));
-		//}
-
-		//// POST: api/Category
-		//[HttpPost]
-		//public IActionResult AddCategory([FromBody] Category category)
-		//{
-		//	this.category.add(category);
-		//	this.category.save();
-		//	return Ok();
-		//}
-
-		//// PUT: api/Category/5
-		//[HttpPut("{id}")]
-		//public IActionResult UpdateCategory(int id, [FromBody] Category category)
-		//{
-		//	this.category.update(category);
-		//	this.category.save();
-		//	return Ok();
-		//}
-
-		//// DELETE: api/ApiWithActions/5
-		//[HttpDelete("{id}")]
-		//public IActionResult DeleteCategory(int id)
-		//{
-		//	this.category.delete(id);
-		//	this.category.save();
-		//	return Ok();
-		//}
-
-		//// GET: api/Category/5/Brands
-		//[HttpGet("{id}/Brands")]
-		//public IActionResult GetBrandsByCategoryId(int id)
-		//{
-		//	var category = this.category.selectbyid(id);
-		//	if (category == null)
-		//	{
-		//		return NotFound();
-		//	}
-		//	return Ok(category.Brands);
+		[HttpGet("{id}/Brands")]
+		public async Task<IActionResult> GetBrandsByCategoryId(int id)
+		{
+			var category = await _category.SelectById(id);
+			if (category == null)
+			{
+				return NotFound();
+			}
+			return Ok(category.Brands);
+		}
 	}
-
-
 }
-
