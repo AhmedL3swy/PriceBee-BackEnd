@@ -31,6 +31,12 @@ public partial class Product
 
     public int SubCategoryId { get; set; }
 
+    public int? BrandId { get; set; }
+
+    [ForeignKey("BrandId")]
+    [InverseProperty("Products")]
+    public virtual Brand Brand { get; set; }
+
     [InverseProperty("Prod")]
     public virtual ICollection<PriceHistory> PriceHistories { get; set; } = new List<PriceHistory>();
 

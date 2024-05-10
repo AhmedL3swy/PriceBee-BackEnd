@@ -17,6 +17,8 @@ public partial class DatabaseContext : DbContext
     {
     }
 
+    public virtual DbSet<Brand> Brands { get; set; }
+
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Domain> Domains { get; set; }
@@ -45,6 +47,15 @@ public partial class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Brand>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Brands__3214EC070B848796");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Brands)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Brands__Category__06CD04F7");
+        });
+
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Category__3214EC0750830B99");
@@ -67,6 +78,8 @@ public partial class DatabaseContext : DbContext
         modelBuilder.Entity<Product>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Product__3214EC073BC2FE02");
+
+            entity.HasOne(d => d.Brand).WithMany(p => p.Products).HasConstraintName("FK_Product_Brands");
 
             entity.HasOne(d => d.SubCategory).WithMany(p => p.Products)
                 .OnDelete(DeleteBehavior.ClientSetNull)

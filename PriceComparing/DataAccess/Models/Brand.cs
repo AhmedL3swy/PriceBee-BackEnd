@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
-[Table("Category")]
-public partial class Category
+public partial class Brand
 {
     [Key]
     public int Id { get; set; }
@@ -23,9 +22,20 @@ public partial class Category
     [Unicode(false)]
     public string Name_Global { get; set; }
 
-    [InverseProperty("Category")]
-    public virtual ICollection<Brand> Brands { get; set; } = new List<Brand>();
+    public string Description_Local { get; set; }
 
-    [InverseProperty("Category")]
-    public virtual ICollection<SubCategory> SubCategories { get; set; } = new List<SubCategory>();
+    [Unicode(false)]
+    public string Description_Global { get; set; }
+
+    [Required]
+    public string Logo { get; set; }
+
+    public int CategoryId { get; set; }
+
+    [ForeignKey("CategoryId")]
+    [InverseProperty("Brands")]
+    public virtual Category Category { get; set; }
+
+    [InverseProperty("Brand")]
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }
