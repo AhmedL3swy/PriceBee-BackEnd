@@ -7,7 +7,7 @@ namespace PriceComparing.Models
 		public static void InitializeDataBase(DatabaseContext db)
 		{
 			// Delete the database if it exists
-			db.Database.EnsureDeleted();
+			//db.Database.EnsureDeleted();
 
 			// Create the database if it does not exist
 			db.Database.EnsureCreated();
@@ -95,16 +95,106 @@ namespace PriceComparing.Models
 				}
 				);
 			db.SaveChanges();
-			// Products ... 
+			// Brands
+			db.Brands.AddRange(
+				// Electronics:Phones
+				new Brand
+				{
+					// Id = 1,
+					Name_Local = "سامسونج",
+					Name_Global = "Samsung",
+					Description_Local = "سامسونج",
+					Description_Global = "Samsung",
+					CategoryId = 1
+				},
+				new Brand
+				{
+					// Id = 2,
+					Name_Local = "ابل",
+					Name_Global = "Apple",
+					Description_Local = "ابل",
+					Description_Global = "Apple",
+					CategoryId = 1
+				},
+				new Brand
+				{
+					// Id = 3,
+					Name_Local = "اتش بي",
+					Name_Global = "HP",
+					Description_Local = "اتش بي",
+					Description_Global = "HP",
+					CategoryId = 1
+				},
+				// Office Supplies:Pens
+				new Brand
+				{
+					// Id = 4,
+					Name_Local = "بيك",
+					Name_Global = "Bic",
+					Description_Local = "بيك",
+					Description_Global = "Bic",
+					CategoryId = 2
+				},
+				new Brand
+				{
+					// Id = 5,
+					Name_Local = "ماكس",
+					Name_Global = "Max",
+					Description_Local = "ماكس",
+					Description_Global = "Max",
+					CategoryId = 2
+				},
+				new Brand
+				{
+					// Id = 6,
+					Name_Local = "دار النشر",
+					Name_Global = "Dar El Nashr",
+					Description_Local = "دار النشر",
+					Description_Global = "Dar El Nashr",
+					CategoryId = 2
+				},
+				new Brand
+				{
+					// Id = 7,
+					Name_Local = "بيركس",
+					Name_Global = "Pyrex",
+					Description_Local = "بيركس",
+					Description_Global = "Pyrex",
+					CategoryId = 3
+				},
+				new Brand
+				{
+					// Id = 8,
+					Name_Local = "فيك",
+					Name_Global = "Vic",
+					Description_Local = "فيك",
+					Description_Global = "Vic",
+					CategoryId = 3
+				},
+				new Brand
+				{
+					// Id = 9,
+					Name_Local = "تيفال",
+					Name_Global = "Tefal",
+					Description_Local = "تيفال",
+					Description_Global = "Tefal",
+					CategoryId = 3
+				}
+
+
+				);
+
+			// Products 
 			db.Products.AddRange(
-				// Electronics:Pones
+				// Electronics:Phones
 				new Product
 				{
 					Name_Local = "تليفون سامسونج",
 					Name_Global = "Samsung Phone",
 					Description_Local = "تليفون سامسونج",
 					Description_Global = "Samsung Phone",
-					SubCategoryId = 1
+					SubCategoryId = 1,
+					BrandId = 1
 				},
 				new Product
 				{
@@ -112,7 +202,8 @@ namespace PriceComparing.Models
 					Name_Global = "Apple Phone",
 					Description_Local = "تليفون ابل",
 					Description_Global = "Apple Phone",
-					SubCategoryId = 1
+					SubCategoryId = 1,
+					BrandId = 2
 				},
 				// Electronics:Laptops
 				new Product
@@ -121,7 +212,8 @@ namespace PriceComparing.Models
 					Name_Global = "HP Laptop",
 					Description_Local = "لاب توب اتش بي",
 					Description_Global = "HP Laptop",
-					SubCategoryId = 2
+					SubCategoryId = 2,
+					BrandId = 3
 				},
 				// Electronics:Printers
 				new Product
@@ -130,7 +222,8 @@ namespace PriceComparing.Models
 					Name_Global = "HP Printer",
 					Description_Local = "طابعة اتش بي",
 					Description_Global = "HP Printer",
-					SubCategoryId = 3
+					SubCategoryId = 3,
+					BrandId = 3
 				},
 				// Office Supplies:Pens
 				new Product
@@ -139,7 +232,8 @@ namespace PriceComparing.Models
 					Name_Global = "Ballpoint Pen",
 					Description_Local = "قلم جاف",
 					Description_Global = "Ballpoint Pen",
-					SubCategoryId = 4
+					SubCategoryId = 4,
+					BrandId = 4
 				},
 				// Office Supplies:Paper
 				new Product
@@ -148,7 +242,8 @@ namespace PriceComparing.Models
 					Name_Global = "A4 Paper",
 					Description_Local = "ورق A4",
 					Description_Global = "A4 Paper",
-					SubCategoryId = 5
+					SubCategoryId = 5,
+					BrandId = 5
 				},
 				// Office Supplies:Books
 				new Product
@@ -157,7 +252,8 @@ namespace PriceComparing.Models
 					Name_Global = "Novel Book",
 					Description_Local = "كتاب رواية",
 					Description_Global = "Novel Book",
-					SubCategoryId = 6
+					SubCategoryId = 6,
+					BrandId = 6
 				},
 				// Home Supplies:Dishes
 				new Product
@@ -166,7 +262,8 @@ namespace PriceComparing.Models
 					Name_Global = "Dishes Set",
 					Description_Local = "طقم أواني",
 					Description_Global = "Dishes Set",
-					SubCategoryId = 7
+					SubCategoryId = 7,
+					BrandId = 7
 				},
 				// Home Supplies:Cleaning Tools
 				new Product
@@ -175,7 +272,8 @@ namespace PriceComparing.Models
 					Name_Global = "Detergent",
 					Description_Local = "مسحوق غسيل",
 					Description_Global = "Detergent",
-					SubCategoryId = 8
+					SubCategoryId = 8,
+					BrandId = 8
 				},
 				// Home Supplies:Cooking Tools
 				new Product
@@ -184,7 +282,8 @@ namespace PriceComparing.Models
 					Name_Global = "Frying Pan",
 					Description_Local = "مقلاة",
 					Description_Global = "Frying Pan",
-					SubCategoryId = 9
+					SubCategoryId = 9,
+					BrandId = 9
 				}
 				);
 			db.SaveChanges();
@@ -277,7 +376,7 @@ namespace PriceComparing.Models
 								);
 			db.SaveChanges();
 
-			// 
+
 
 
 		}

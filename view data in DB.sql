@@ -6,7 +6,7 @@ select * from [dbo].[Category]
 select * from [dbo].[SubCategory]
 --3. [dbo].[Product]
 select * from [dbo].[Product]
---4. 
+--4. [dbo].[ProductImage]
 
 
 -- Category and SubCategory

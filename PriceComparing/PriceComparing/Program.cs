@@ -5,83 +5,89 @@ using Microsoft.EntityFrameworkCore.SqlServer;
 using PriceComparing.UnitOfWork;
 using PriceComparing.AutoMigration;
 using DataAccess.Models;
+using PriceComparing.Repository;
 
 namespace PriceComparing
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            string corsTxt = "";
+	public class Program
+	{
+		public static void Main(string[] args)
+		{
+			string corsTxt = "";
 
-            var builder = WebApplication.CreateBuilder(args);
+			var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+			// Add services to the container.
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            builder.Services.AddDbContext<DatabaseContext>(o => o.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy(corsTxt,
-                builder =>
-                {
-                    builder.AllowAnyOrigin();
-                    builder.AllowAnyMethod();
-                    builder.AllowAnyHeader();
-                });
-            });
-
-            builder.Services.AddScoped<UnitOfWOrks>();
-
-            #region Security code
-            //builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
-            //    .AddJwtBearer("myscheme",
-            //    //validate token
-            //    op =>
-            //    {
-            //        #region secret key
-            //        string key = "welcome to my secret key mohamed elshafie";
-            //        var secertkey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
-            //        #endregion
-            //        op.TokenValidationParameters = new TokenValidationParameters()
-            //        {
-            //            IssuerSigningKey = secertkey,
-            //            ValidateIssuer = false,
-            //            ValidateAudience = false
-
-            //        };
-            //    }
-            //    );
-            #endregion
+			builder.Services.AddControllers();
+			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+			builder.Services.AddEndpointsApiExplorer();
+			builder.Services.AddSwaggerGen();
 
 
-            var app = builder.Build();
+			builder.Services.AddDbContext<DatabaseContext>(o => o.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                // app.MapSwagger().RequireAuthorization(op=>op.RequireRole("admin"));
-                app.UseSwaggerUI();
-            }
+			// Add services to the container.
+			//builder.Services.AddScoped<GenericRepository<Category>>();
 
-            app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy(corsTxt,
+				builder =>
+				{
+					builder.AllowAnyOrigin();
+					builder.AllowAnyMethod();
+					builder.AllowAnyHeader();
+				});
+			});
 
-            app.UseCors(corsTxt);
+			builder.Services.AddScoped<UnitOfWOrks>();
 
-            app.MapControllers();
-            app.CreateDbIfNotExisi();
+			#region Security code
+			//builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
+			//    .AddJwtBearer("myscheme",
+			//    //validate token
+			//    op =>
+			//    {
+			//        #region secret key
+			//        string key = "welcome to my secret key mohamed elshafie";
+			//        var secertkey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+			//        #endregion
+			//        op.TokenValidationParameters = new TokenValidationParameters()
+			//        {
+			//            IssuerSigningKey = secertkey,
+			//            ValidateIssuer = false,
+			//            ValidateAudience = false
 
-            app.Run();
-        }
-    }
+			//        };
+			//    }
+			//    );
+			#endregion
+
+
+			var app = builder.Build();
+
+			// Configure the HTTP request pipeline.
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseSwagger();
+				// app.MapSwagger().RequireAuthorization(op=>op.RequireRole("admin"));
+				app.UseSwaggerUI();
+			}
+
+			app.UseHttpsRedirection();
+
+			app.UseAuthorization();
+
+			app.UseCors(corsTxt);
+
+			app.MapControllers();
+			app.CreateDbIfNotExisi();
+
+			app.Run();
+		}
+	}
 }
 // reinstall packages
 // PM> Update-Package -ProjectName PriceComparing -Reinstall

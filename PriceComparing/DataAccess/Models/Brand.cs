@@ -27,7 +27,6 @@ public partial class Brand
     [Unicode(false)]
     public string Description_Global { get; set; }
 
-    [Required]
     public string Logo { get; set; }
 
     public int CategoryId { get; set; }
