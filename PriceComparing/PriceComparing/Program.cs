@@ -101,6 +101,7 @@ namespace PriceComparing
 // Microsoft.EntityFrameworkCore.SqlServer (8.0.4)
 // Microsoft.EntityFrameworkCore.Tools (8.0.4)
 // Microsoft.EntityFrameworkCore.Metadata.Builders (8.0.4)
+// Microsoft.AspNetCore.Mvc.NewtonsoftJson
 // Swashbuckle.AspNetCore (6.4.0)
 // PM> Install-Package EFCore.AutomaticMigrations -Version 8.0.0
 // PM> Install-Package Microsoft.EntityFrameworkCore -Version 8.0.4
@@ -110,3 +111,4 @@ namespace PriceComparing
 // PM> Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 8.0.4
 // PM> Install-Package Microsoft.EntityFrameworkCore.Tools -Version 8.0.4
 // PM> Install-Package Swashbuckle.AspNetCore -Version 6.4.0
+// PM> Install-Package Microsoft.AspNetCore.Mvc.NewtonsoftJson
