@@ -16,7 +16,6 @@ namespace PriceComparing.Models
 			{
 				return;
 			}
-
 			// flag to enable/disable seeding data
 			// Categories
 			db.Categories.AddRange(
@@ -375,6 +374,33 @@ namespace PriceComparing.Models
 								}
 								);
 			db.SaveChanges();
+
+			// Users
+			// user has
+			// Id, FName, LName, Email, Password, Gender, Country, JoinDate, PhoneCode, PhoneNumber, DateOfBirth, Image, Role, SearchValues, Prods, Prods1, ProdsNavigation
+			db.Users.AddRange(
+								new User
+								{
+									FName = "Ahmed",
+									LName = "Ali",
+									Email = "AhmedAli@gmail.com",
+									Password = "123456",
+									Gender = "Male",
+									Country = "Egypt",
+									JoinDate = new DateOnly(2021, 1, 1),
+									PhoneCode = "+20",
+									PhoneNumber = "123456789",
+									DateOfBirth = new DateOnly(1990, 1, 1),
+									Image = "AhmedAli.jpg",
+									Role = "User"
+								},
+								new User
+								{
+									FName = "Mohamed",
+									LName = "Ali",
+									Email = ""
+								}
+								);
 
 
 

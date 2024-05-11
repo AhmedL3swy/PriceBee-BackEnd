@@ -26,6 +26,18 @@ namespace PriceComparing.Controllers
 			if (categories == null) { return NotFound(); }
 			// using DTO
 			List<CategoryDTO> categoriesDTO = new List<CategoryDTO>();
+			foreach (var category in categories)
+			{
+				categoriesDTO.Add(new CategoryDTO()
+				{
+					Id = category.Id,
+					Name_Local = category.Name_Local,
+					Name_Global = category.Name_Global,
+					// Brands = category.Brands,
+					// SubCategories = category.SubCategories
+
+				});
+			}
 			// return 
 			return Ok(categoriesDTO);
 		}
@@ -53,13 +65,22 @@ namespace PriceComparing.Controllers
 
 		// POST: api/Category
 		[HttpPost]
-		public async Task<IActionResult> AddCategory([FromBody] Category category)
+		public async Task<IActionResult> AddCategory([FromBody] CategoryDTO categoryDTO)
 		{
 			// Check
-			if (category == null)
+			if (categoryDTO == null)
 			{
 				return BadRequest();
 			}
+			// using DTO
+			Category category = new Category()
+			{
+				Name_Local = categoryDTO.Name_Local,
+				Name_Global = categoryDTO.Name_Global,
+				// Brands = category.Brands,
+				// SubCategories = category.SubCategories
+			};
+
 			// using GenericRepository
 			await _category.Add(category);
 			// return
@@ -93,5 +114,6 @@ namespace PriceComparing.Controllers
 			}
 			return Ok(category.Brands);
 		}
+
 	}
 }
