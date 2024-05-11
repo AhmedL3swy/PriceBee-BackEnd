@@ -1,95 +1,47 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using DataAccess;
+﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace PriceComparing.Repository
 {
-    public class GenericRepository<TEntity> where TEntity : class
-    {
-		DBContext _db;
+	public class GenericRepository<TEntity> where TEntity : class
+	{
+		private readonly DatabaseContext _db;
 
-        public GenericRepository(DBContext db)
-        {
-            _db = db;
-        }
-
-        public List<TEntity> selectall()
-        {
-            return _db.Set<TEntity>().ToList();
-        }
-
-        public TEntity? selectbyid(int id)
-        {
-            return _db.Set<TEntity>().Find(id);
-        }
-
-        public void add(TEntity entity)
-        {
-            _db.Set<TEntity>().Add(entity);
-          
-        }
-
-        public void update(TEntity entity)
-        {
-            _db.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-        }
-
-		public void delete(int id)
+		public GenericRepository(DatabaseContext db)
 		{
-			TEntity? obj = _db.Set<TEntity>().Find(id);
+			_db = db;
+		}
+
+		public async Task<List<TEntity>> SelectAll()
+		{
+			return await _db.Set<TEntity>().AsNoTracking().ToListAsync();
+		}
+
+		public async Task<TEntity?> SelectById(int id)
+		{
+			return await _db.Set<TEntity>().FindAsync(id);
+		}
+
+		public async Task Add(TEntity entity)
+		{
+			await _db.Set<TEntity>().AddAsync(entity);
+			await _db.SaveChangesAsync();
+		}
+
+		public async Task UpdateAsync(TEntity entity)
+		{
+			_db.Entry(entity).State = EntityState.Modified;
+			await _db.SaveChangesAsync();
+		}
+
+		public async Task Delete(int id)
+		{
+			TEntity? obj = await _db.Set<TEntity>().FindAsync(id);
 			if (obj != null)
 			{
 				_db.Set<TEntity>().Remove(obj);
+				await _db.SaveChangesAsync();
 			}
 		}
-
-		public void save()
-        {
-            _db.SaveChanges();
-        }
-
-        #region Pagination
-        //Cast it to Generic
-        //[HttpGet("/api/pagination")]
-        //public IActionResult Getpagination([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
-        //{
-        //    var students = _db.Students.Include(x => x.Dept).Include(x => x.St_superNavigation).ToList();
-        //    var studentsDTO = students.Select(s => new StudentDTO
-        //    {
-        //        Id = s.St_Id,
-        //        FullName = s.St_Fname + " " + s.St_Lname,
-        //        Address = s.St_Address,
-        //        DepartmentName = s.Dept != null ? s.Dept.Dept_Name : "",
-        //        Supervisor = s.St_superNavigation != null ? s.St_superNavigation.St_Fname + " " + s.St_superNavigation.St_Lname : ""
-        //    });
-        //    var totalCount = students.Count();
-        //    var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
-        //    studentsDTO = studentsDTO.Skip((page - 1) * pageSize).Take(pageSize);
-        //    return Ok(studentsDTO);
-        //}
-        #endregion
-
-        #region Search
-        //Cast it to Generic
-        //[HttpGet("/api/search")]
-        //public IActionResult Search([FromQuery] string name)
-        //{
-        //    if (string.IsNullOrWhiteSpace(name))
-        //    {
-        //        return BadRequest("Search query cannot be empty");
-        //    }
-        //    var students = _db.Students.Include(x => x.Dept).Include(x => x.St_superNavigation).Where(s => s.St_Fname.Contains(name) || s.St_Lname.Contains(name)).ToList();
-        //    var studentsDTO = students.Select(s => new StudentDTO
-        //    {
-        //        Id = s.St_Id,
-        //        FullName = s.St_Fname + " " + s.St_Lname,
-        //        Address = s.St_Address,
-        //        DepartmentName = s.Dept != null ? s.Dept.Dept_Name : "",
-        //        Supervisor = s.St_superNavigation != null ? s.St_superNavigation.St_Fname + " " + s.St_superNavigation.St_Lname : ""
-        //    });
-        //    return Ok(studentsDTO);
-        //}
-        #endregion
-
-
-    }
+	}
 }
