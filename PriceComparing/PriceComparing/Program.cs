@@ -4,6 +4,7 @@ using static System.Net.Mime.MediaTypeNames;
 using Microsoft.EntityFrameworkCore.SqlServer;
 using PriceComparing.UnitOfWork;
 using PriceComparing.AutoMigration;
+using PriceComparing.Services;
 
 namespace PriceComparing
 {
@@ -21,6 +22,16 @@ namespace PriceComparing
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            //Add HttpClient 
+            builder.Services.AddHttpClient(
+                "ScrapingClient",
+                client => client.BaseAddress = new Uri(builder.Configuration["ScrapingService"])
+            
+                );
+            
+
+            // Inject ScrappingService
+            builder.Services.AddScoped<ScrapingService>();
 
             builder.Services.AddDbContext<DBContext>(o => o.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DeafultConnection")));
 
@@ -77,7 +88,6 @@ namespace PriceComparing
 
             app.MapControllers();
             app.CreateDbIfNotExisi();
-
             app.Run();
         }
     }
