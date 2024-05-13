@@ -52,4 +52,8 @@ public partial class Product
     [ForeignKey("ProdId")]
     [InverseProperty("ProdsNavigation")]
     public virtual ICollection<User> UsersNavigation { get; set; } = new List<User>();
+
+
+    [InverseProperty("Prod")]
+    public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 }
