@@ -4,3 +4,17 @@ V1
 2:s136784978,g
 2:t136784978,H
 1:1,PriceComparing,F_,g_,H_
+2:InitializeDataBase,w
+2:db,wJ
+2:args,r
+2:corsTxt,I
+2:builder,y
+2:options,o
+2:sqlOptions,S
+2:app,G
+2:ConfigureServices,P
+2:services,e
+2:DeleteCategory,y7
+2:id,f
+2:AddCategory,M
+2:category,PW

@@ -1,17 +1,18 @@
 ﻿using DataAccess;
+using DataAccess.Models;
 using PriceComparing.Repository;
 
 namespace PriceComparing.UnitOfWork
 {
     public class UnitOfWOrks
     {
-        DBContext _db;
+		DatabaseContext _db;
         //WE Will change code Here After the Models is Done 
 
          //GenericRepository<Student> studentsRepository;
          //GenericRepository<Department> departmentRepository;
 
-        public UnitOfWOrks(DBContext db)
+        public UnitOfWOrks(DatabaseContext db)
         {
             _db = db;
         }
