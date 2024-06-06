@@ -74,6 +74,35 @@ namespace PriceComparing.Controllers
 			return Ok(product);
 		}
 
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductPostDTO productDTO)
+		{
+			if (productDTO == null) { return BadRequest(); }
+			var product = await _UnitOfWork.ProductRepository.SelectById(id);
+			if (product == null) { return NotFound(); }
+
+			product.Name_Local = productDTO.Name_Local;
+			product.Name_Global = productDTO.Name_Global;
+			product.Description_Local = productDTO.Description_Local;
+			product.Description_Global = productDTO.Description_Global;
+			product.SubCategoryId = productDTO.SubCategoryId;
+			product.BrandId = productDTO.BrandId;
+
+			await _UnitOfWork.ProductRepository.UpdateAsync(product);
+			return Ok(product);
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteProduct(int id)
+		{
+			var product = await _UnitOfWork.ProductRepository.SelectById(id);
+			if (product == null) { return NotFound(); }
+
+			await _UnitOfWork.ProductRepository.Delete(id);
+			return Ok();
+		}
+
+
 
 
 	}
