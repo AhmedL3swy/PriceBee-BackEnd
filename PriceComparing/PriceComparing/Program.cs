@@ -7,6 +7,7 @@ using PriceComparing.AutoMigration;
 using DataAccess.Models;
 using PriceComparing.Repository;
 using PriceComparing.Services;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -24,9 +25,24 @@ namespace PriceComparing
 
 			// Add services to the container.
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+			builder.Services.AddControllers();
+
+			//this code below is for the json loop reference and will fix the edit in some controllers but it change the json format
+			//builder.Services.AddControllers()
+			//	.AddJsonOptions(options =>
+			//	{
+			//		options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+			//	});
+
+
+
+
+
+
+
+
+			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+			builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             //Add HttpClient 
             builder.Services.AddHttpClient(
@@ -38,10 +54,9 @@ namespace PriceComparing
 
             // Inject ScrappingService
             builder.Services.AddScoped<ScrapingService>();
-			builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+			//builder.Services.AddEndpointsApiExplorer();
+			//builder.Services.AddSwaggerGen();
 
 
 			builder.Services.AddDbContext<DatabaseContext>(o => o.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
