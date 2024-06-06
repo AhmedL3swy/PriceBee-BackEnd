@@ -4,54 +4,61 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
-[Index("Email", Name = "UQ__Users__A9D10534A011E897", IsUnique = true)]
-public partial class User
+//[Index("Email", Name = "UQ__Users__A9D10534A011E897", IsUnique = true)]
+public partial class User 
 {
     [Key]
     public int Id { get; set; }
 
-    [Required]
-    [StringLength(255)]
-    public string FName { get; set; }
+    public virtual AuthUser AuthenticatedUser { get; set; }
 
-    [Required]
-    [StringLength(255)]
-    public string LName { get; set; }
+    [ForeignKey("AuthenticatedUser")]
+    public string AuthUserID { get; set; }
 
-    [Required]
-    [StringLength(255)]
-    public string Email { get; set; }
 
-    [Required]
-    [StringLength(255)]
-    public string Password { get; set; }
+    //[Required]
+    //[StringLength(255)]
+    //public string FName { get; set; }
 
-    [Required]
-    [StringLength(10)]
-    public string Gender { get; set; }
+    //[Required]
+    //[StringLength(255)]
+    //public string LName { get; set; }
 
-    [Required]
-    [StringLength(255)]
-    public string Country { get; set; }
+    //[Required]
+    //[StringLength(255)]
+    //public string Email { get; set; }
 
-    public DateOnly JoinDate { get; set; }
+    //[Required]
+    //[StringLength(255)]
+    //public string Password { get; set; }
 
-    [StringLength(255)]
-    public string PhoneCode { get; set; }
+    //[Required]
+    //[StringLength(10)]
+    //public string Gender { get; set; }
 
-    [StringLength(255)]
-    public string PhoneNumber { get; set; }
+    //[Required]
+    //[StringLength(255)]
+    //public string Country { get; set; }
 
-    public DateOnly? DateOfBirth { get; set; }
+    //public DateOnly JoinDate { get; set; }
 
-    public string Image { get; set; }
+    //[StringLength(255)]
+    //public string PhoneCode { get; set; }
 
-    [StringLength(255)]
-    public string Role { get; set; }
+    //[StringLength(255)]
+    //public string PhoneNumber { get; set; }
+
+    //public DateOnly? DateOfBirth { get; set; }
+
+    //public string Image { get; set; }
+
+    //[StringLength(255)]
+    //public string Role { get; set; }
 
     [InverseProperty("User")]
     public virtual ICollection<SearchValue> SearchValues { get; set; } = new List<SearchValue>();
