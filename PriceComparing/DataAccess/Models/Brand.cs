@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
+[Index("CategoryId", Name = "IX_Brands_CategoryId")]
 public partial class Brand
 {
     [Key]
@@ -30,6 +31,8 @@ public partial class Brand
     public string Logo { get; set; }
 
     public int CategoryId { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Brands")]

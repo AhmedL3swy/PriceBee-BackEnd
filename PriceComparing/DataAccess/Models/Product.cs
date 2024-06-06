@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataAccess.Models;
 
 [Table("Product")]
+[Index("BrandId", Name = "IX_Product_BrandId")]
 [Index("SubCategoryId", Name = "IX_Product_SubCategoryId")]
 public partial class Product
 {
