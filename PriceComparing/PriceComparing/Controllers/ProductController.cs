@@ -101,9 +101,5 @@ namespace PriceComparing.Controllers
 			await _UnitOfWork.ProductRepository.Delete(id);
 			return Ok();
 		}
-
-
-
-
 	}
 }

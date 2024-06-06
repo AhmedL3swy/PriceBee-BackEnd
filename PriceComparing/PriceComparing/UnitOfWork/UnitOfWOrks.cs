@@ -10,6 +10,8 @@ namespace PriceComparing.UnitOfWork
 		//WE Will change code Here After the Models is Done 
 
 		GenericRepository<Product> productRepository;
+		GenericRepository<ProductImage> productImageRepository;
+
 
 
 		public UnitOfWOrks(DatabaseContext db)
@@ -26,6 +28,18 @@ namespace PriceComparing.UnitOfWork
 					productRepository = new GenericRepository<Product>(_db);
 				}
 				return productRepository;
+			}
+		}
+
+		public GenericRepository<ProductImage> ProductImageRepository
+		{
+			get
+			{
+				if (productImageRepository == null)
+				{
+					productImageRepository = new GenericRepository<ProductImage>(_db);
+				}
+				return productImageRepository;
 			}
 		}
 
