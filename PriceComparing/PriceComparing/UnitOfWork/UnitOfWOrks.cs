@@ -14,6 +14,7 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<Domain> domainRepository;
 		GenericRepository<ProductLink> productLinkRepository;
 		GenericRepository<ProductDetail> productDetailRepository;
+		GenericRepository<ProductSponsored> productSponsoredRepository;
 
 
 
@@ -77,6 +78,17 @@ namespace PriceComparing.UnitOfWork
 					productDetailRepository = new GenericRepository<ProductDetail>(_db);
 				}
 				return productDetailRepository;
+			}
+		}
+		public GenericRepository<ProductSponsored> ProductSponsoredRepository
+		{
+			get
+			{
+				if (productSponsoredRepository == null)
+				{
+					productSponsoredRepository = new GenericRepository<ProductSponsored>(_db);
+				}
+				return productSponsoredRepository;
 			}
 		}
 
