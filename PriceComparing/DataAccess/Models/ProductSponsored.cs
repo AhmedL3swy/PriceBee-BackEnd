@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataAccess.Models;
 
 [Table("ProductSponsored")]
-[Index("ProdId", Name = "IX_ProductSponsored_ProdId")]
+[Index("ProdDetId", Name = "IX_ProductSponsored_ProdId")]
 public partial class ProductSponsored
 {
     [Key]
@@ -23,9 +23,9 @@ public partial class ProductSponsored
 
     public int Duration { get; set; }
 
-    public int ProdId { get; set; }
+    public int ProdDetId { get; set; }
 
-    [ForeignKey("ProdId")]
+    [ForeignKey("ProdDetId")]
     [InverseProperty("ProductSponsoreds")]
-    public virtual ProductDetail Prod { get; set; }
+    public virtual ProductDetail ProdDet { get; set; }
 }

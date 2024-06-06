@@ -42,6 +42,6 @@ public partial class ProductDetail
     [InverseProperty("ProductDetail")]
     public virtual ProductLink IdNavigation { get; set; }
 
-    [InverseProperty("Prod")]
+    [InverseProperty("ProdDet")]
     public virtual ICollection<ProductSponsored> ProductSponsoreds { get; set; } = new List<ProductSponsored>();
 }
