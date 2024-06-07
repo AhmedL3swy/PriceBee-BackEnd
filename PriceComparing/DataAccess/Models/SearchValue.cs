@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
 [Index("UserID", Name = "IX_SearchValues_UserID")]
-public partial class SearchValue
+public partial class SearchValue : ISoftDeletable
 {
     [Key]
     public int Id { get; set; }

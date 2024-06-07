@@ -17,7 +17,15 @@ namespace PriceComparing.Repository
 			return await _db.Set<TEntity>().AsNoTracking().ToListAsync();
 		}
 
-		public async Task<TEntity?> SelectById(int id)
+        public async Task<List<TEntity>> SelectAllIgnoringFiltersAsync()
+        {
+            return await _db.Set<TEntity>()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .ToListAsync();
+        }
+
+        public async Task<TEntity?> SelectById(int id)
 		{
 			return await _db.Set<TEntity>().FindAsync(id);
 		}

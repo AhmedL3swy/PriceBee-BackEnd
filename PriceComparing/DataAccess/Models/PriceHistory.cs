@@ -4,13 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
 [Table("PriceHistory")]
 [Index("ProdId", Name = "IX_PriceHistory_ProdId")]
-public partial class PriceHistory
+public partial class PriceHistory : ISoftDeletable
 {
     [Key]
     public int Id { get; set; }
