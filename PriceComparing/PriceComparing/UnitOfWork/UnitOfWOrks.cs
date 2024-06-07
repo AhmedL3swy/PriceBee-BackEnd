@@ -16,6 +16,7 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<ProductDetail> productDetailRepository;
 		GenericRepository<ProductSponsored> productSponsoredRepository;
 		GenericRepository<PriceHistory> priceHistoryRepository;
+		ProductRepository productRepo;
 
 
 
@@ -103,6 +104,17 @@ namespace PriceComparing.UnitOfWork
 				return priceHistoryRepository;
 			}
 		}
+		public ProductRepository ProductRepo
+		{
+            get
+			{
+                if (productRepo == null)
+				{
+                    productRepo = new ProductRepository(_db);
+                }
+                return productRepo;
+            }
+        }
 
 		public void savechanges()
         {
