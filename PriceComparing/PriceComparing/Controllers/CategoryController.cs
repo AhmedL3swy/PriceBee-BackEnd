@@ -37,7 +37,6 @@ namespace PriceComparing.Controllers
 					Name_Global = category.Name_Global,
 					// Brands = category.Brands,
 					// SubCategories = category.SubCategories
-
 				});
 			}
 			// return 
@@ -108,13 +107,12 @@ namespace PriceComparing.Controllers
 				// Brands = category.Brands,
 				// SubCategories = category.SubCategories
 			};
-
 			// using GenericRepository
 			await _category.Add(category);
 			// return
 			return Ok();
 		}
-
+		
 		// PUT: api/Category/5
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
@@ -141,7 +139,7 @@ namespace PriceComparing.Controllers
             {
                 return NotFound();
             }
-
+		
             // Use the EF Core API to set the shadow property
             _db.Entry(category).Property("IsDeleted").CurrentValue = true;
 
