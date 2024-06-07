@@ -4,11 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
-public partial class ProductDetail
+public partial class ProductDetail : ISoftDeletable
 {
     [Key]
     public int Id { get; set; }
@@ -42,6 +43,6 @@ public partial class ProductDetail
     [InverseProperty("ProductDetail")]
     public virtual ProductLink IdNavigation { get; set; }
 
-    [InverseProperty("Prod")]
+    [InverseProperty("ProdDet")]
     public virtual ICollection<ProductSponsored> ProductSponsoreds { get; set; } = new List<ProductSponsored>();
 }

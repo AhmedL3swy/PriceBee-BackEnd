@@ -4,13 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
 [Table("ProductSponsored")]
-[Index("ProdId", Name = "IX_ProductSponsored_ProdId")]
-public partial class ProductSponsored
+[Index("ProdDetId", Name = "IX_ProductSponsored_ProdId")]
+public partial class ProductSponsored : ISoftDeletable
 {
     [Key]
     public int Id { get; set; }
@@ -23,9 +24,9 @@ public partial class ProductSponsored
 
     public int Duration { get; set; }
 
-    public int ProdId { get; set; }
+    public int ProdDetId { get; set; }
 
-    [ForeignKey("ProdId")]
+    [ForeignKey("ProdDetId")]
     [InverseProperty("ProductSponsoreds")]
-    public virtual ProductDetail Prod { get; set; }
+    public virtual ProductDetail ProdDet { get; set; }
 }

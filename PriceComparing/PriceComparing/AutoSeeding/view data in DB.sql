@@ -8,6 +8,9 @@ select * from [dbo].[SubCategory]
 select * from [dbo].[Product]
 --4. [dbo].[ProductImage]
 
+--5. brand
+select * from [dbo].[Brands]
+
 
 -- Category and SubCategory
 SELECT * FROM [dbo].[Category] c

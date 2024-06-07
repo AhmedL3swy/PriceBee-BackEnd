@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
-public partial class Brand
+[Index("CategoryId", Name = "IX_Brands_CategoryId")]
+public partial class Brand : ISoftDeletable
 {
     [Key]
     public int Id { get; set; }
@@ -30,6 +32,8 @@ public partial class Brand
     public string Logo { get; set; }
 
     public int CategoryId { get; set; }
+
+    public bool IsDeleted { get; set; }
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Brands")]

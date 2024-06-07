@@ -2,18 +2,19 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+=======
+using DataAccess.Interfaces;
+using System.Linq.Expressions;
+>>>>>>> Preview
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
 public partial class DatabaseContext : IdentityDbContext<AuthUser>
 {
-    public DatabaseContext()
-    {
-    }
-
     public DatabaseContext(DbContextOptions<DatabaseContext> options)
         : base(options)
     {
@@ -43,12 +44,15 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
 
     public virtual DbSet<User> Users { get; set; }
 
+<<<<<<< HEAD
     
 
 //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
 //        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ProdCompDatabase;Integrated Security=True");
 
+=======
+>>>>>>> Preview
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Brand>(entity =>
@@ -127,7 +131,7 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
         {
             entity.HasKey(e => e.Id).HasName("PK__ProductS__3214EC0736B50124");
 
-            entity.HasOne(d => d.Prod).WithMany(p => p.ProductSponsoreds)
+            entity.HasOne(d => d.ProdDet).WithMany(p => p.ProductSponsoreds)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ProductSp__ProdI__4D94879B");
         });
@@ -224,9 +228,31 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             }
             );
 
+<<<<<<< HEAD
 
         base.OnModelCreating(modelBuilder);
         // OnModelCreatingPartial(modelBuilder);
+=======
+        // Apply soft delete configuration to all entities that implement ISoftDeletable
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+            {
+                modelBuilder.Entity(entityType.ClrType)
+                    .Property<bool>("IsDeleted")
+                    .HasDefaultValue(false);
+
+                // Creating the filter expression
+                var parameter = Expression.Parameter(entityType.ClrType, "e");
+                var propertyMethod = typeof(EF).GetMethod("Property").MakeGenericMethod(typeof(bool));
+                var propertyAccess = Expression.Call(propertyMethod, parameter, Expression.Constant("IsDeleted"));
+                var filter = Expression.Lambda(Expression.Equal(propertyAccess, Expression.Constant(false)), parameter);
+                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+            }
+        }
+
+        OnModelCreatingPartial(modelBuilder);
+>>>>>>> Preview
     }
 
 

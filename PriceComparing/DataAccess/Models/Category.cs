@@ -4,12 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
 [Table("Category")]
-public partial class Category
+public partial class Category : ISoftDeletable
 {
     [Key]
     public int Id { get; set; }

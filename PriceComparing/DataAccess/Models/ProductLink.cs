@@ -4,13 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
 [Index("DomainId", Name = "IX_ProductLinks_DomainId")]
 [Index("ProdId", Name = "IX_ProductLinks_ProdId")]
-public partial class ProductLink
+public partial class ProductLink : ISoftDeletable
 {
     [Key]
     public int Id { get; set; }

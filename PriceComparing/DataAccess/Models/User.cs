@@ -4,13 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Identity;
+=======
+using DataAccess.Interfaces;
+>>>>>>> Preview
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
 
+<<<<<<< HEAD
 //[Index("Email", Name = "UQ__Users__A9D10534A011E897", IsUnique = true)]
 public partial class User 
+=======
+[Index("Email", Name = "UQ__Users__A9D10534A011E897", IsUnique = true)]
+public partial class User : ISoftDeletable
+>>>>>>> Preview
 {
     [Key]
     public int Id { get; set; }
