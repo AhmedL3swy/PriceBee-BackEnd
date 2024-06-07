@@ -1,0 +1,9 @@
+// Add Product Test
+{
+  "name_Local": "string",
+  "name_Global": "string",
+  "description_Local": "string",
+  "description_Global": "string",
+  "subCategoryId": 1,
+  "brandId": 1
+}
