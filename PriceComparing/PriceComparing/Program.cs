@@ -8,6 +8,10 @@ using DataAccess.Models;
 using PriceComparing.Repository;
 using PriceComparing.Services;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace PriceComparing
 {
@@ -60,8 +64,16 @@ namespace PriceComparing
 			// Add services to the container.
 			builder.Services.AddScoped<GenericRepository<Category>>();
 
+            // Register AuthService
+            builder.Services.AddScoped<IAuthServices, AuthService>();
 
-			builder.Services.AddCors(options =>
+            // Configure JWT settings
+            builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
+
+            builder.Services.AddIdentity<AuthUser, IdentityRole>()
+               .AddEntityFrameworkStores<DatabaseContext>()
+               .AddDefaultTokenProviders();
+            builder.Services.AddCors(options =>
 			{
 				options.AddPolicy(corsTxt,
 				builder =>
@@ -72,7 +84,29 @@ namespace PriceComparing
 				});
 			});
 
-			builder.Services.AddScoped<UnitOfWOrks>();
+            // Configure JWT authentication
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(o =>
+            {
+                o.RequireHttpsMetadata = false;
+                o.SaveToken = false;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = builder.Configuration["JWT:Issuer"],
+                    ValidAudience = builder.Configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
+                };
+            });
+
+            builder.Services.AddScoped<UnitOfWOrks>();
 
 			#region Security code
 			//builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
@@ -108,12 +142,13 @@ namespace PriceComparing
 
 			app.UseHttpsRedirection();
 
-			app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
 			app.UseCors(corsTxt);
 
             app.MapControllers();
-            app.CreateDbIfNotExisi();
+            //app.CreateDbIfNotExisi();
             app.Run();
         }
     }
