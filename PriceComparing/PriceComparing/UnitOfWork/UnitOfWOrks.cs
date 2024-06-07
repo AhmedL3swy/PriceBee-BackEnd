@@ -7,41 +7,92 @@ namespace PriceComparing.UnitOfWork
     public class UnitOfWOrks
     {
 		DatabaseContext _db;
-        //WE Will change code Here After the Models is Done 
+		//WE Will change code Here After the Models is Done 
 
-         //GenericRepository<Student> studentsRepository;
-         //GenericRepository<Department> departmentRepository;
+		GenericRepository<Product> productRepository;
+		GenericRepository<ProductImage> productImageRepository;
+		GenericRepository<Domain> domainRepository;
+		GenericRepository<ProductLink> productLinkRepository;
+		GenericRepository<ProductDetail> productDetailRepository;
+		GenericRepository<ProductSponsored> productSponsoredRepository;
 
-        public UnitOfWOrks(DatabaseContext db)
+
+
+		public UnitOfWOrks(DatabaseContext db)
         {
             _db = db;
         }
 
-        //public GenericRepository<Student> StudentsRepository
-        //{
-        //    get
-        //    {
-        //        if (studentsRepository == null)
-        //        {
-        //            studentsRepository = new GenericRepository<Student>(_db);
+		public GenericRepository<Product> ProductRepository
+		{
+			get
+			{
+				if (productRepository == null)
+				{
+					productRepository = new GenericRepository<Product>(_db);
+				}
+				return productRepository;
+			}
+		}
 
-        //        }
-        //        return studentsRepository;
-        //    }
-        //}
+		public GenericRepository<ProductImage> ProductImageRepository
+		{
+			get
+			{
+				if (productImageRepository == null)
+				{
+					productImageRepository = new GenericRepository<ProductImage>(_db);
+				}
+				return productImageRepository;
+			}
+		}
 
-        //public GenericRepository<Department> DepartmentRepository
-        //{
-        //    get
-        //    {
-        //        if(departmentRepository == null)
-        //        {
-        //            departmentRepository = new GenericRepository<Department>(_db);
-        //        }
-        //        return departmentRepository;
-        //    }
-        //}
-        public void savechanges()
+		public GenericRepository<Domain> DomainRepository
+		{
+			get
+			{
+				if (domainRepository == null)
+				{
+					domainRepository = new GenericRepository<Domain>(_db);
+				}
+				return domainRepository;
+			}
+		}
+		public GenericRepository<ProductLink> ProductLinkRepository
+		{
+			get
+			{
+				if (productLinkRepository == null)
+				{
+					productLinkRepository = new GenericRepository<ProductLink>(_db);
+				}
+				return productLinkRepository;
+			}
+		}
+		public GenericRepository<ProductDetail> ProductDetailRepository
+		{
+			get
+			{
+				if (productDetailRepository == null)
+				{
+					productDetailRepository = new GenericRepository<ProductDetail>(_db);
+				}
+				return productDetailRepository;
+			}
+		}
+		public GenericRepository<ProductSponsored> ProductSponsoredRepository
+		{
+			get
+			{
+				if (productSponsoredRepository == null)
+				{
+					productSponsoredRepository = new GenericRepository<ProductSponsored>(_db);
+				}
+				return productSponsoredRepository;
+			}
+		}
+
+		public void savechanges()
         {
             _db.SaveChanges();
         }
