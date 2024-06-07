@@ -32,7 +32,7 @@ namespace PriceComparing.Controllers
 					Cost = productSponsored.Cost,
 					StartDate = productSponsored.StartDate,
 					Duration = productSponsored.Duration,
-					ProdId = productSponsored.ProdId
+					//ProdId = productSponsored.ProdId
 				});
 			}
 			return Ok(productSponsoredDTOs);
@@ -50,7 +50,7 @@ namespace PriceComparing.Controllers
 				Cost = productSponsored.Cost,
 				StartDate = productSponsored.StartDate,
 				Duration = productSponsored.Duration,
-				ProdId = productSponsored.ProdId
+				//ProdId = productSponsored.ProdId
 			};
 			return Ok(productSponsoredDTO);
 		}
@@ -65,7 +65,7 @@ namespace PriceComparing.Controllers
 				Cost = productSponsoredDTO.Cost,
 				StartDate = productSponsoredDTO.StartDate,
 				Duration = productSponsoredDTO.Duration,
-				ProdId = productSponsoredDTO.ProdId
+				//ProdId = productSponsoredDTO.ProdId
 			};
 			await _unitOfWork.ProductSponsoredRepository.Add(productSponsored);
 			_unitOfWork.savechanges();
@@ -82,7 +82,7 @@ namespace PriceComparing.Controllers
 			productSponsored.Cost = productSponsoredDTO.Cost;
 			productSponsored.StartDate = productSponsoredDTO.StartDate;
 			productSponsored.Duration = productSponsoredDTO.Duration;
-			productSponsored.ProdId = productSponsoredDTO.ProdId;
+			//productSponsored.ProdId = productSponsoredDTO.ProdId;
 
 			await _unitOfWork.ProductSponsoredRepository.UpdateAsync(productSponsored);
 			return Ok(productSponsored);
