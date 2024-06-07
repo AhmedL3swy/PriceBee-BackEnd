@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DataAccess.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Models;
@@ -11,7 +12,7 @@ namespace DataAccess.Models;
 [Table("Product")]
 [Index("BrandId", Name = "IX_Product_BrandId")]
 [Index("SubCategoryId", Name = "IX_Product_SubCategoryId")]
-public partial class Product
+public partial class Product : ISoftDeletable
 {
     [Key]
     public int Id { get; set; }
