@@ -70,6 +70,7 @@ namespace PriceComparing.Controllers
 
 			ProductDetail productDetail = new ProductDetail()
 			{
+				Id = productDetailDTO.Id,
 				Name_Local = productDetailDTO.Name_Local,
 				Name_Global = productDetailDTO.Name_Global,
 				Description_Local = productDetailDTO.Description_Local,
@@ -81,7 +82,20 @@ namespace PriceComparing.Controllers
 			};
 			await _unitOfWork.ProductDetailRepository.Add(productDetail);
 			_unitOfWork.savechanges();
-			return Ok(productDetail);
+			ProductDetailDTO productDetailUpdated = new ProductDetailDTO()
+			{
+				Id = productDetail.Id,
+				Name_Local = productDetail.Name_Local,
+				Name_Global = productDetail.Name_Global,
+				Description_Local = productDetail.Description_Local,
+				Description_Global = productDetail.Description_Global,
+				Price = productDetail.Price,
+				Rating = productDetail.Rating,
+				isAvailable = productDetail.isAvailable,
+				Brand = productDetail.Brand
+			};
+			return Ok(productDetailDTO);
+			//return Ok(productDetail);
 		}
 
 		[HttpPut("{id}")]
@@ -90,7 +104,6 @@ namespace PriceComparing.Controllers
 			if (productDetailDTO == null) return BadRequest();
 			var productDetail = await _unitOfWork.ProductDetailRepository.SelectById(id);
 			if (productDetail == null) return NotFound();
-
 			productDetail.Name_Local = productDetailDTO.Name_Local;
 			productDetail.Name_Global = productDetailDTO.Name_Global;
 			productDetail.Description_Local = productDetailDTO.Description_Local;
@@ -101,7 +114,19 @@ namespace PriceComparing.Controllers
 			productDetail.Brand = productDetailDTO.Brand;
 
 			await _unitOfWork.ProductDetailRepository.UpdateAsync(productDetail);
-			return Ok(productDetail);
+				ProductDetailDTO productDetailUpdated = new ProductDetailDTO()
+			{
+				Id = productDetail.Id,
+				Name_Local = productDetail.Name_Local,
+				Name_Global = productDetail.Name_Global,
+				Description_Local = productDetail.Description_Local,
+				Description_Global = productDetail.Description_Global,
+				Price = productDetail.Price,
+				Rating = productDetail.Rating,
+				isAvailable = productDetail.isAvailable,
+				Brand = productDetail.Brand
+			};
+			return Ok(productDetailDTO);
 		}
 
 		[HttpDelete("{id}")]
