@@ -11,6 +11,6 @@ namespace DTO
 		public decimal Cost { get; set; }
 		public DateTime StartDate { get; set; }
 		public int Duration { get; set; }
-		public int ProdId { get; set; }
+		public int ProdDetId { get; set; }
 	}
 }
