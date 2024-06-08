@@ -103,6 +103,7 @@ namespace PriceComparing.Controllers
 			if (domain == null) return NotFound();
 
 			await _unitOfWork.DomainRepository.Delete(id);
+
 			return Ok();
 		}
 	}

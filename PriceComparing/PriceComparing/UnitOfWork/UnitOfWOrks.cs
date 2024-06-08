@@ -15,6 +15,9 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<ProductLink> productLinkRepository;
 		GenericRepository<ProductDetail> productDetailRepository;
 		GenericRepository<ProductSponsored> productSponsoredRepository;
+		GenericRepository<Brand> brandRepository;
+		GenericRepository<Category> categoryRepository;
+		GenericRepository<SubCategory> subCategoryRepository;
 
 
 
@@ -91,6 +94,39 @@ namespace PriceComparing.UnitOfWork
 				return productSponsoredRepository;
 			}
 		}
+		public GenericRepository<Brand> BrandRepository
+        {
+            get
+            {
+                if (brandRepository == null)
+                {
+                    brandRepository = new GenericRepository<Brand>(_db);
+                }
+                return brandRepository;
+            }
+        }
+		public GenericRepository<Category> CategoryRepository
+			{
+            get
+            {
+                if (categoryRepository == null)
+                {
+                    categoryRepository = new GenericRepository<Category>(_db);
+                }
+                return categoryRepository;
+            }
+        }
+		public GenericRepository<SubCategory> SubCategoryRepository
+			{
+            get
+            {
+                if (subCategoryRepository == null)
+                {
+                    subCategoryRepository = new GenericRepository<SubCategory>(_db);
+                }
+                return subCategoryRepository;
+            }
+        }
 
 		public void savechanges()
         {
