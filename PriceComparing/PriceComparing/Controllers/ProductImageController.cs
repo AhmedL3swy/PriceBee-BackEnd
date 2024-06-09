@@ -34,7 +34,27 @@ namespace PriceComparing.Controllers
 			}
 			return Ok(productImagesDTO);
 		}
-		[HttpGet("{id}")]
+
+		// GET: api/ProductImage/All
+		[HttpGet("All")]
+        public async Task<IActionResult> GetAllProductImagesIgnoringFilters()
+        {
+            var productImages = await _UnitOfWork.ProductImageRepository.SelectAllIgnoringFiltersAsync();
+            if (productImages == null) { return NotFound(); }
+            List<ProductImageDTO> productImagesDTO = new List<ProductImageDTO>();
+            foreach (var productImage in productImages)
+            {
+                productImagesDTO.Add(new ProductImageDTO()
+                {
+                    Id = productImage.Id,
+                    ProdId = productImage.ProdId,
+                    Image = productImage.Image
+                });
+            }
+            return Ok(productImagesDTO);
+        }
+
+        [HttpGet("{id}")]
 		public async Task<IActionResult> GetProductImageById(int id)
 		{
 			var productImage = await _UnitOfWork.ProductImageRepository.SelectById(id);

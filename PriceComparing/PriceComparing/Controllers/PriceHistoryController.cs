@@ -37,7 +37,28 @@ namespace PriceComparing.Controllers
 			return Ok(priceHistoryDTOs);
 		}
 
-		[HttpGet("{id}")]
+        // GET: api/PriceHistory/All
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllPriceHistoriesIgnoringFilters()
+        {
+            var priceHistories = await _unitOfWork.PriceHistoryRepository.SelectAllIgnoringFiltersAsync();
+            if (priceHistories == null) return NotFound();
+
+            List<PriceHistoryDTO> priceHistoryDTOs = new List<PriceHistoryDTO>();
+            foreach (var priceHistory in priceHistories)
+            {
+                priceHistoryDTOs.Add(new PriceHistoryDTO()
+                {
+                    Id = priceHistory.Id,
+                    ProdId = priceHistory.ProdId,
+                    Price = priceHistory.Price,
+                    Date = priceHistory.Date
+                });
+            }
+            return Ok(priceHistoryDTOs);
+        }
+
+        [HttpGet("{id}")]
 		public async Task<IActionResult> GetPriceHistoryById(int id)
 		{
 			var priceHistory = await _unitOfWork.PriceHistoryRepository.SelectById(id);

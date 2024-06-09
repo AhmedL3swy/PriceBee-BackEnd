@@ -40,7 +40,31 @@ namespace PriceComparing.Controllers
 			return Ok(productLinkDTOs);
 		}
 
-		[HttpGet("{id}")]
+		// GET: api/ProductLink/All
+		[HttpGet("All")]
+        public async Task<IActionResult> GetAllProductLinksIgnoringFilters()
+		{
+            var productLinks = await _unitOfWork.ProductLinkRepository.SelectAllIgnoringFiltersAsync();
+            if (productLinks == null) return NotFound();
+
+            List<ProductLinkDTO> productLinkDTOs = new List<ProductLinkDTO>();
+            foreach (var productLink in productLinks)
+            {
+                productLinkDTOs.Add(new ProductLinkDTO()
+                {
+                    Id = productLink.Id,
+                    ProdId = productLink.ProdId,
+                    DomainId = productLink.DomainId,
+                    ProductLink1 = productLink.ProductLink1,
+                    Status = productLink.Status,
+                    LastUpdated = productLink.LastUpdated,
+                    LastScraped = productLink.LastScraped
+                });
+            }
+            return Ok(productLinkDTOs);
+        }
+
+        [HttpGet("{id}")]
 		public async Task<IActionResult> GetProductLinkById(int id)
 		{
 			var productLink = await _unitOfWork.ProductLinkRepository.SelectById(id);

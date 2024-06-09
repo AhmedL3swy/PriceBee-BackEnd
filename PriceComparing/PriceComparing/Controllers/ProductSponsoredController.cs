@@ -38,7 +38,29 @@ namespace PriceComparing.Controllers
 			return Ok(productSponsoredDTOs);
 		}
 
-		[HttpGet("{id}")]
+        // GET: api/ProductSponsored/All
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllProductSponsoredsIgnoringFilters()
+        {
+            var productSponsoreds = await _unitOfWork.ProductSponsoredRepository.SelectAllIgnoringFiltersAsync();
+            if (productSponsoreds == null) return NotFound();
+
+            List<ProductSponsoredDTO> productSponsoredDTOs = new List<ProductSponsoredDTO>();
+            foreach (var productSponsored in productSponsoreds)
+            {
+                productSponsoredDTOs.Add(new ProductSponsoredDTO()
+                {
+                    Id = productSponsored.Id,
+                    Cost = productSponsored.Cost,
+                    StartDate = productSponsored.StartDate,
+                    Duration = productSponsored.Duration,
+                    ProdDetId = productSponsored.ProdDetId
+                });
+            }
+            return Ok(productSponsoredDTOs);
+        }
+
+        [HttpGet("{id}")]
 		public async Task<IActionResult> GetProductSponsoredById(int id)
 		{
 			var productSponsored = await _unitOfWork.ProductSponsoredRepository.SelectById(id);

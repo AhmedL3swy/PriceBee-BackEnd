@@ -40,7 +40,31 @@ namespace PriceComparing.Controllers
 			return Ok(domainDTOs);
 		}
 
-		[HttpGet("{id}")]
+        // GET: api/Domain/All
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllDomainsIgnoringFilters()
+        {
+            var domains = await _unitOfWork.DomainRepository.SelectAllIgnoringFiltersAsync();
+            if (domains == null) return NotFound();
+
+            List<DomainDTO> domainDTOs = new List<DomainDTO>();
+            foreach (var domain in domains)
+            {
+                domainDTOs.Add(new DomainDTO()
+                {
+                    Id = domain.Id,
+                    Name_Local = domain.Name_Local,
+                    Name_Global = domain.Name_Global,
+                    Description_Local = domain.Description_Local,
+                    Description_Global = domain.Description_Global,
+                    Url = domain.Url,
+                    Logo = domain.Logo
+                });
+            }
+            return Ok(domainDTOs);
+        }
+
+        [HttpGet("{id}")]
 		public async Task<IActionResult> GetDomainById(int id)
 		{
 			var domain = await _unitOfWork.DomainRepository.SelectById(id);
