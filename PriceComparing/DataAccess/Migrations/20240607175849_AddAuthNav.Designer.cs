@@ -4,6 +4,7 @@ using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240607175849_AddAuthNav")]
+    partial class AddAuthNav
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -593,15 +596,15 @@ namespace DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1a18203c-50c7-4b71-b846-9ec006dc26f6",
-                            ConcurrencyStamp = "8be35ab6-508e-4641-9515-173c3242bab4",
+                            Id = "c3d2def0-eb76-450b-a82a-12bbe0d4e381",
+                            ConcurrencyStamp = "637a77fa-2d4b-4aea-9486-8b69f6a28e63",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0f82d3d5-28c3-4139-b45c-0401ebdd6bf6",
-                            ConcurrencyStamp = "5a481a35-8aa8-4978-9e97-599e0871707b",
+                            Id = "fb3b171e-47ca-42c2-8316-2e7bb17c85fa",
+                            ConcurrencyStamp = "3fbab4fb-ad5d-49e1-a989-363b10ffbed0",
                             Name = "User",
                             NormalizedName = "USER"
                         });

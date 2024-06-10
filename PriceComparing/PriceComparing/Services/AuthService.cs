@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -21,11 +22,11 @@ namespace PriceComparing.Services
             roleManager = _roleManager;
         }
 
-        public async Task<AuthModel> Register(RegisteredModel user)
+        public async Task<AuthModel> Register(RegsiterUserDTO user)
         {
             if (await userManager.FindByEmailAsync(user.Email) != null)
                 return new AuthModel { Message = "this Eamil already exist" };
-            if (await userManager.FindByEmailAsync(user.UserName) != null)
+            if (await userManager.FindByNameAsync(user.UserName) != null)
                 return new AuthModel { Message = "this UserName already exist" };
             var CreatedUser = new AuthUser
             {
@@ -35,10 +36,10 @@ namespace PriceComparing.Services
                 PasswordHash = user.Password,
                 UserName = user.UserName,
                 Country =user.Country,
-               // DateOfBirth =user.DateOfBirth,
+                DateOfBirth =user.DateOfBirth,
                 PhoneCode = user.PhoneNumber,
                 PhoneNumber =user.PhoneNumber,
-              //  JoinDate =user.JoinDate,
+               // JoinDate = DateOnly.FromDateTime(DateTime.Now),
                 Gender =user.Gender,
             };
 
@@ -62,8 +63,9 @@ namespace PriceComparing.Services
                 IsAuthenticated = true,
                 Roles = new List<string> { "User" },
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                Username = user.UserName 
-                
+                Username = user.UserName ,
+                Message = "Success"
+
             };
 
         }
@@ -103,7 +105,7 @@ namespace PriceComparing.Services
 
 
 
-        public async Task<AuthModel> Login(LoginModel LoginedUser)
+        public async Task<AuthModel> Login(LoginUserDTO LoginedUser)
         {
             AuthModel authmodel = new AuthModel();
             var user = await userManager.FindByEmailAsync(LoginedUser.Email);
@@ -116,13 +118,14 @@ namespace PriceComparing.Services
             var Token = await CreateJwtToken(user);
             var Roles = await userManager.GetRolesAsync(user);
 
-            // authmodel = new AuthModel();
+         
             authmodel.IsAuthenticated = true;
             authmodel.Token = new JwtSecurityTokenHandler().WriteToken(Token);
             authmodel.Email = user.Email;
             authmodel.Username = user.UserName;
             authmodel.ExpiresOn = Token.ValidTo;
             authmodel.Roles = Roles.ToList();
+            authmodel.Message = "Success";
 
             return authmodel;
         }

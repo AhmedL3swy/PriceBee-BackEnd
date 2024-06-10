@@ -70,9 +70,18 @@ namespace PriceComparing
             // Configure JWT settings
             builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 
-            builder.Services.AddIdentity<AuthUser, IdentityRole>()
+            builder.Services.AddIdentity<AuthUser, IdentityRole>(options =>
+				options.Password = new PasswordOptions
+				{
+					RequireDigit = true,
+					RequiredLength = 12,
+					RequireLowercase = true,
+					RequireUppercase = true,
+					RequireNonAlphanumeric = true
+				})
                .AddEntityFrameworkStores<DatabaseContext>()
                .AddDefaultTokenProviders();
+
             builder.Services.AddCors(options =>
 			{
 				options.AddPolicy(corsTxt,

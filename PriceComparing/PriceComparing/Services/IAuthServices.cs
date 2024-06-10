@@ -1,11 +1,12 @@
-﻿using PriceComparing.AuthModels;
+﻿using DTO;
+using PriceComparing.AuthModels;
 
 namespace PriceComparing.Services
 {
     public interface IAuthServices
     {
-        Task<AuthModel> Register(RegisteredModel model);
-        Task<AuthModel> Login(LoginModel model);
+        Task<AuthModel> Register(RegsiterUserDTO model);
+        Task<AuthModel> Login(LoginUserDTO model);
         Task<string> AssignRole(RoleModel role);
     }
 }

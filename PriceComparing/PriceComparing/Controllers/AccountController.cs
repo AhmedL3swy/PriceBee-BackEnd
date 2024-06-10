@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PriceComparing.AuthModels;
 using PriceComparing.Services;
@@ -15,7 +16,7 @@ namespace PriceComparing.Controllers
             authserv = _authserv;
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisteredModel user)
+        public async Task<IActionResult> Register([FromBody] RegsiterUserDTO user)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -29,7 +30,7 @@ namespace PriceComparing.Controllers
 
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel user)
+        public async Task<IActionResult> Login([FromBody] LoginUserDTO user)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
