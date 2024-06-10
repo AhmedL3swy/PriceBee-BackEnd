@@ -129,5 +129,15 @@ namespace PriceComparing.Controllers
 			await _unitOfWork.DomainRepository.Delete(id);
 			return Ok();
 		}
-	}
+
+        [HttpDelete("SoftDelete/{id}")]
+        public async Task<IActionResult> SoftDeleteDomain(int id)
+        {
+            var domain = await _unitOfWork.DomainRepository.SelectById(id);
+            if (domain == null) return NotFound();
+
+            await _unitOfWork.DomainRepository.SoftDelete(id);
+            return Ok();
+        }
+    }
 }

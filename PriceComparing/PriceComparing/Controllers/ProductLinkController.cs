@@ -129,5 +129,15 @@ namespace PriceComparing.Controllers
 			await _unitOfWork.ProductLinkRepository.Delete(id);
 			return Ok();
 		}
-	}
+
+        [HttpDelete("SoftDelete/{id}")]
+        public async Task<IActionResult> SoftDeleteProductLink(int id)
+        {
+            var productLink = await _unitOfWork.ProductLinkRepository.SelectById(id);
+            if (productLink == null) return NotFound();
+
+            await _unitOfWork.ProductLinkRepository.SoftDelete(id);
+            return Ok();
+        }
+    }
 }

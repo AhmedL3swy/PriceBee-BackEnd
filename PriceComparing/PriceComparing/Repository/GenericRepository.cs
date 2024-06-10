@@ -51,5 +51,16 @@ namespace PriceComparing.Repository
 				await _db.SaveChangesAsync();
 			}
 		}
-	}
+
+		// Soft Delete using shadow property
+		public async Task SoftDelete(int id)
+        {
+            TEntity? obj = await _db.Set<TEntity>().FindAsync(id);
+            if (obj != null)
+            {
+                _db.Entry(obj).Property("IsDeleted").CurrentValue = true;
+                await _db.SaveChangesAsync();
+            }
+        }
+    }
 }

@@ -105,5 +105,15 @@ namespace PriceComparing.Controllers
 			await _UnitOfWork.ProductImageRepository.Delete(id);
 			return Ok();
 		}
-	}
+
+        [HttpDelete("SoftDelete/{id}")]
+        public async Task<IActionResult> SoftDeleteProductImage(int id)
+        {
+            var productImage = await _UnitOfWork.ProductImageRepository.SelectById(id);
+            if (productImage == null) { return NotFound(); }
+
+            await _UnitOfWork.ProductImageRepository.SoftDelete(id);
+            return Ok();
+        }
+    }
 }

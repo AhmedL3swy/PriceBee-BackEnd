@@ -121,5 +121,15 @@ namespace PriceComparing.Controllers
 			await _unitOfWork.PriceHistoryRepository.Delete(id);
 			return Ok();
 		}
-	}
+
+        [HttpDelete("SoftDelete/{id}")]
+        public async Task<IActionResult> SoftDeletePriceHistory(int id)
+        {
+            var priceHistory = await _unitOfWork.PriceHistoryRepository.SelectById(id);
+            if (priceHistory == null) return NotFound();
+
+            await _unitOfWork.PriceHistoryRepository.SoftDelete(id);
+            return Ok();
+        }
+    }
 }
