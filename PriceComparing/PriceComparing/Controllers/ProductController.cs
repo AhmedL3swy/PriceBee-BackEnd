@@ -89,18 +89,7 @@ namespace PriceComparing.Controllers
 			product.BrandId = productDTO.BrandId;
 
 			await _UnitOfWork.ProductRepository.UpdateAsync(product);
-			ProductDTO productUpdated = new ProductDTO()
-			{
-				Id = product.Id,
-				Name_Local = product.Name_Local,
-				Name_Global = product.Name_Global,
-				Description_Local = product.Description_Local,
-				Description_Global = product.Description_Global,
-				SubCategoryId = product.SubCategoryId,
-				BrandId = product.BrandId
-			};
-			return Ok(productUpdated);
-			//return Ok(product);
+			return Ok(product);
 		}
 
 		[HttpDelete("{id}")]
