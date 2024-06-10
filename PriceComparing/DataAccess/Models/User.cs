@@ -15,8 +15,6 @@ namespace DataAccess.Models;
 
 
 
-
-[Index("Email", Name = "UQ__Users__A9D10534A011E897", IsUnique = true)]
 public partial class User : ISoftDeletable
 
 {
@@ -83,5 +81,5 @@ public partial class User : ISoftDeletable
     [InverseProperty("UsersNavigation")]
     public virtual ICollection<Product> ProdsNavigation { get; set; } = new List<Product>();
 
-    public AuthUser AuthUser { get; set; }  
+    // public AuthUser AuthUser { get; set; }  
 }
