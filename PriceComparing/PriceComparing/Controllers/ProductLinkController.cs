@@ -117,7 +117,18 @@ namespace PriceComparing.Controllers
 			productLink.LastScraped = productLinkDTO.LastScraped;
 
 			await _unitOfWork.ProductLinkRepository.UpdateAsync(productLink);
-			return Ok(productLink);
+			ProductLinkDTO productLinkUpdated = new ProductLinkDTO()
+			{
+				Id = productLink.Id,
+				ProdId = productLink.ProdId,
+				DomainId = productLink.DomainId,
+				ProductLink1 = productLink.ProductLink1,
+				Status = productLink.Status,
+				LastUpdated = productLink.LastUpdated,
+				LastScraped = productLink.LastScraped
+			};
+			return Ok(productLinkUpdated);
+			//return Ok(productLink);
 		}
 
 		[HttpDelete("{id}")]

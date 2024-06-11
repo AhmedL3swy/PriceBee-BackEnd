@@ -91,7 +91,16 @@ namespace PriceComparing.Controllers
 			};
 			await _unitOfWork.ProductSponsoredRepository.Add(productSponsored);
 			_unitOfWork.savechanges();
-			return Ok(productSponsored);
+			ProductSponsoredDTO productSponsoredUpdated = new ProductSponsoredDTO()
+			{
+				Id = productSponsored.Id,
+				Cost = productSponsored.Cost,
+				StartDate = productSponsored.StartDate,
+				Duration = productSponsored.Duration,
+				ProdDetId = productSponsored.ProdDetId
+			};
+			return Ok(productSponsoredUpdated);
+			//return Ok(productSponsored);
 		}
 
 		[HttpPut("{id}")]
@@ -107,7 +116,16 @@ namespace PriceComparing.Controllers
 			productSponsored.ProdDetId = productSponsoredDTO.ProdDetId;
 
 			await _unitOfWork.ProductSponsoredRepository.UpdateAsync(productSponsored);
-			return Ok(productSponsored);
+			ProductSponsoredDTO productSponsoredUpdated = new ProductSponsoredDTO()
+			{
+				Id = productSponsored.Id,
+				Cost = productSponsored.Cost,
+				StartDate = productSponsored.StartDate,
+				Duration = productSponsored.Duration,
+				ProdDetId = productSponsored.ProdDetId
+			};
+			return Ok(productSponsoredUpdated);
+			//return Ok(productSponsored);
 		}
 
 		[HttpDelete("{id}")]
