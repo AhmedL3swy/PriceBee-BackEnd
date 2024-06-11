@@ -63,6 +63,7 @@ namespace PriceComparing
 
 			// Add services to the container.
 			builder.Services.AddScoped<GenericRepository<Category>>();
+			builder.Services.AddScoped<GenericRepository<Brand>>();
 
             // Register AuthService
             builder.Services.AddScoped<IAuthServices, AuthService>();
@@ -157,7 +158,7 @@ namespace PriceComparing
 			app.UseCors(corsTxt);
 
             app.MapControllers();
-            //app.CreateDbIfNotExisi();
+            app.CreateDbIfNotExists();
             app.Run();
         }
     }

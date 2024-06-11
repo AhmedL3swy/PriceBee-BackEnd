@@ -42,7 +42,33 @@ namespace PriceComparing.Controllers
 			return Ok(productDetailDTOs);
 		}
 
-		[HttpGet("{id}")]
+        // GET: api/ProductDetail/All
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllProductDetailsIgnoringFilters()
+        {
+            var productDetails = await _unitOfWork.ProductDetailRepository.SelectAllIgnoringFiltersAsync();
+            if (productDetails == null) return NotFound();
+
+            List<ProductDetailDTO> productDetailDTOs = new List<ProductDetailDTO>();
+            foreach (var productDetail in productDetails)
+            {
+                productDetailDTOs.Add(new ProductDetailDTO()
+                {
+                    Id = productDetail.Id,
+                    Name_Local = productDetail.Name_Local,
+                    Name_Global = productDetail.Name_Global,
+                    Description_Local = productDetail.Description_Local,
+                    Description_Global = productDetail.Description_Global,
+                    Price = productDetail.Price,
+                    Rating = productDetail.Rating,
+                    isAvailable = productDetail.isAvailable,
+                    Brand = productDetail.Brand
+                });
+            }
+            return Ok(productDetailDTOs);
+        }
+
+        [HttpGet("{id}")]
 		public async Task<IActionResult> GetProductDetailById(int id)
 		{
 			var productDetail = await _unitOfWork.ProductDetailRepository.SelectById(id);
@@ -113,5 +139,15 @@ namespace PriceComparing.Controllers
 			await _unitOfWork.ProductDetailRepository.Delete(id);
 			return Ok();
 		}
-	}
+
+        [HttpDelete("SoftDelete/{id}")]
+        public async Task<IActionResult> SoftDeleteProductDetail(int id)
+        {
+            var productDetail = await _unitOfWork.ProductDetailRepository.SelectById(id);
+            if (productDetail == null) return NotFound();
+
+            await _unitOfWork.ProductDetailRepository.SoftDelete(id);
+            return Ok();
+        }
+    }
 }
