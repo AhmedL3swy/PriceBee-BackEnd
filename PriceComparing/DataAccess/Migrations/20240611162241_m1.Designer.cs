@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240531033618_init10")]
-    partial class init10
+    [Migration("20240611162241_m1")]
+    partial class m1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,9 @@ namespace DataAccess.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -61,6 +64,12 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("JoinDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("LName")
                         .IsRequired()
@@ -115,6 +124,10 @@ namespace DataAccess.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex(new[] { "Email" }, "UQ__Users__A9D10534A011E897")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -153,7 +166,7 @@ namespace DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Brands__3214EC070B848796");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex(new[] { "CategoryId" }, "IX_Brands_CategoryId");
 
                     b.ToTable("Brands");
                 });
@@ -283,7 +296,7 @@ namespace DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Product__3214EC073BC2FE02");
 
-                    b.HasIndex("BrandId");
+                    b.HasIndex(new[] { "BrandId" }, "IX_Product_BrandId");
 
                     b.HasIndex(new[] { "SubCategoryId" }, "IX_Product_SubCategoryId");
 
@@ -409,7 +422,7 @@ namespace DataAccess.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProdId")
+                    b.Property<int>("ProdDetId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -418,7 +431,7 @@ namespace DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("PK__ProductS__3214EC0736B50124");
 
-                    b.HasIndex(new[] { "ProdId" }, "IX_ProductSponsored_ProdId");
+                    b.HasIndex(new[] { "ProdDetId" }, "IX_ProductSponsored_ProdId");
 
                     b.ToTable("ProductSponsored");
                 });
@@ -491,7 +504,9 @@ namespace DataAccess.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Users__3214EC07DA5FEBAD");
 
-                    b.HasIndex("AuthUserID");
+                    b.HasIndex("AuthUserID")
+                        .IsUnique()
+                        .HasFilter("[AuthUserID] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
@@ -521,6 +536,22 @@ namespace DataAccess.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "e62827d4-265c-4634-9434-22c4d6a955bb",
+                            ConcurrencyStamp = "baad67ed-8c2e-40c0-bc98-7e58aa68391c",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "8f23b805-98f8-43ae-a614-12a3c61387ef",
+                            ConcurrencyStamp = "102f2e9d-6614-4565-a80d-1f9a730f320a",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -799,13 +830,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("DataAccess.Models.ProductSponsored", b =>
                 {
-                    b.HasOne("DataAccess.Models.ProductDetail", "Prod")
+                    b.HasOne("DataAccess.Models.ProductDetail", "ProdDet")
                         .WithMany("ProductSponsoreds")
-                        .HasForeignKey("ProdId")
+                        .HasForeignKey("ProdDetId")
                         .IsRequired()
                         .HasConstraintName("FK__ProductSp__ProdI__4D94879B");
 
-                    b.Navigation("Prod");
+                    b.Navigation("ProdDet");
                 });
 
             modelBuilder.Entity("DataAccess.Models.SearchValue", b =>
@@ -833,8 +864,8 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("DataAccess.Models.User", b =>
                 {
                     b.HasOne("DataAccess.Models.AuthUser", "AuthenticatedUser")
-                        .WithMany()
-                        .HasForeignKey("AuthUserID");
+                        .WithOne("User")
+                        .HasForeignKey("DataAccess.Models.User", "AuthUserID");
 
                     b.Navigation("AuthenticatedUser");
                 });
@@ -933,6 +964,11 @@ namespace DataAccess.Migrations
                         .HasForeignKey("UserID")
                         .IsRequired()
                         .HasConstraintName("FK__UserHisto__ProdI__5DCAEF64");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.AuthUser", b =>
+                {
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DataAccess.Models.Brand", b =>

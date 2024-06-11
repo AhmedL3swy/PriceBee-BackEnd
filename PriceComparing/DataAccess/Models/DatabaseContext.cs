@@ -233,24 +233,24 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
         // OnModelCreatingPartial(modelBuilder);
 
         // Apply soft delete configuration to all entities that implement ISoftDeletable
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
-            {
-                modelBuilder.Entity(entityType.ClrType)
-                    .Property<bool>("IsDeleted")
-                    .HasDefaultValue(false);
+        //foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        //{
+        //    if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+        //    {
+        //        modelBuilder.Entity(entityType.ClrType)
+        //            .Property<bool>("IsDeleted")
+        //            .HasDefaultValue(false);
 
-                // Creating the filter expression
-                var parameter = Expression.Parameter(entityType.ClrType, "e");
-                var propertyMethod = typeof(EF).GetMethod("Property").MakeGenericMethod(typeof(bool));
-                var propertyAccess = Expression.Call(propertyMethod, parameter, Expression.Constant("IsDeleted"));
-                var filter = Expression.Lambda(Expression.Equal(propertyAccess, Expression.Constant(false)), parameter);
-                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
-            }
-        }
+        //        // Creating the filter expression
+        //        var parameter = Expression.Parameter(entityType.ClrType, "e");
+        //        var propertyMethod = typeof(EF).GetMethod("Property").MakeGenericMethod(typeof(bool));
+        //        var propertyAccess = Expression.Call(propertyMethod, parameter, Expression.Constant("IsDeleted"));
+        //        var filter = Expression.Lambda(Expression.Equal(propertyAccess, Expression.Constant(false)), parameter);
+        //        modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
+        //    }
+        //}
 
-      //  OnModelCreatingPartial(modelBuilder);
+        //  OnModelCreatingPartial(modelBuilder);
 
     }
 

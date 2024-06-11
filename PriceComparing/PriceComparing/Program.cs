@@ -149,7 +149,7 @@ namespace PriceComparing
 			app.UseCors(corsTxt);
 
             app.MapControllers();
-            //app.CreateDbIfNotExisi();
+            app.CreateDbIfNotExists();
             app.Run();
         }
     }

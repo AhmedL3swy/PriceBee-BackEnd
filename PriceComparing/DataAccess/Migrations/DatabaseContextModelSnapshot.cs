@@ -146,11 +146,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("Description_Local")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("Logo")
                         .HasColumnType("nvarchar(max)");
 
@@ -180,11 +175,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("Name_Global")
                         .IsRequired()
@@ -217,11 +207,6 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("Description_Local")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("Logo")
                         .IsRequired()
@@ -259,11 +244,6 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
@@ -295,11 +275,6 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("Description_Local")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("Name_Global")
                         .IsRequired()
@@ -342,11 +317,6 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("Name_Global")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -384,11 +354,6 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<int>("ProdId")
                         .HasColumnType("int");
 
@@ -410,11 +375,6 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("DomainId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<DateTime>("LastScraped")
                         .HasColumnType("datetime");
@@ -459,11 +419,6 @@ namespace DataAccess.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<int>("ProdDetId")
                         .HasColumnType("int");
 
@@ -485,11 +440,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("SearchValue1")
                         .HasMaxLength(255)
@@ -517,11 +467,6 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.Property<string>("Name_Global")
                         .IsRequired()
@@ -552,11 +497,6 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("AuthUserID")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
 
                     b.HasKey("Id")
                         .HasName("PK__Users__3214EC07DA5FEBAD");
@@ -597,15 +537,15 @@ namespace DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5d1f3368-342a-49a9-8dac-db1c2a140e5c",
-                            ConcurrencyStamp = "1bf99acc-bb3b-4931-95f5-e2c58b3ef859",
+                            Id = "e62827d4-265c-4634-9434-22c4d6a955bb",
+                            ConcurrencyStamp = "baad67ed-8c2e-40c0-bc98-7e58aa68391c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "5e950883-a632-460a-8b3d-399a678d8282",
-                            ConcurrencyStamp = "3442a882-25bb-4854-ba0f-8070b357e24e",
+                            Id = "8f23b805-98f8-43ae-a614-12a3c61387ef",
+                            ConcurrencyStamp = "102f2e9d-6614-4565-a80d-1f9a730f320a",
                             Name = "User",
                             NormalizedName = "USER"
                         });

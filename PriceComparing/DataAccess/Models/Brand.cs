@@ -33,7 +33,7 @@ public partial class Brand : ISoftDeletable
 
     public int CategoryId { get; set; }
 
-    public bool IsDeleted { get; set; }
+    //public bool IsDeleted { get; set; }
 
     [ForeignKey("CategoryId")]
     [InverseProperty("Brands")]
