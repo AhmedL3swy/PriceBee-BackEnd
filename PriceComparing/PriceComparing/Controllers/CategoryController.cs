@@ -2,6 +2,7 @@
 using DTO;
 using Microsoft.AspNetCore.Mvc;
 using PriceComparing.Repository;
+using PriceComparing.UnitOfWork;
 
 namespace PriceComparing.Controllers
 {
@@ -9,12 +10,12 @@ namespace PriceComparing.Controllers
 	[ApiController]
 	public class CategoryController : ControllerBase
 	{
-		private readonly GenericRepository<Category> _category;
+        private readonly UnitOfWOrks _unitOfWork;
         private readonly DatabaseContext _db;
 
-        public CategoryController(GenericRepository<Category> category, DatabaseContext db)
-		{
-			_category = category;
+        public CategoryController(UnitOfWOrks unitOfWork, DatabaseContext db)
+        {
+            _unitOfWork = unitOfWork;
             _db = db;
         }
 
@@ -22,33 +23,8 @@ namespace PriceComparing.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetAllCategories()
 		{
-			// using GenericRepository
-			var categories = await _category.SelectAll();
-			// Check
-			if (categories == null) { return NotFound(); }
-			// using DTO
-			List<CategoryDTO> categoriesDTO = new List<CategoryDTO>();
-			foreach (var category in categories)
-			{
-				categoriesDTO.Add(new CategoryDTO()
-				{
-					Id = category.Id,
-					Name_Local = category.Name_Local,
-					Name_Global = category.Name_Global,
-					// Brands = category.Brands,
-					// SubCategories = category.SubCategories
-				});
-			}
-			// return 
-			return Ok(categoriesDTO);
-		}
-
-        // GET: api/Category/All
-        [HttpGet("All")]
-        public async Task<IActionResult> GetAllCategoriesIgnoringFilters()
-        {
             // using GenericRepository
-            var categories = await _category.SelectAllIgnoringFiltersAsync();
+            var categories = await _unitOfWork.CategoryRepository.SelectAll();
             // Check
             if (categories == null) { return NotFound(); }
             // using DTO
@@ -62,10 +38,34 @@ namespace PriceComparing.Controllers
                     Name_Global = category.Name_Global,
                     // Brands = category.Brands,
                     // SubCategories = category.SubCategories
-
                 });
             }
-            // return 
+            // return
+            return Ok(categoriesDTO);
+        }
+
+        // GET: api/Category/All
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllCategoriesIgnoringFilters()
+        {
+            // using GenericRepository
+            var categories = await _unitOfWork.CategoryRepository.SelectAllIgnoringFiltersAsync();
+            // Check
+            if (categories == null) { return NotFound(); }
+            // using DTO
+            List<CategoryDTO> categoriesDTO = new List<CategoryDTO>();
+            foreach (var category in categories)
+            {
+                categoriesDTO.Add(new CategoryDTO()
+                {
+                    Id = category.Id,
+                    Name_Local = category.Name_Local,
+                    Name_Global = category.Name_Global,
+                    // Brands = category.Brands,
+                    // SubCategories = category.SubCategories
+                });
+            }
+            // return
             return Ok(categoriesDTO);
         }
 
@@ -74,24 +74,25 @@ namespace PriceComparing.Controllers
 		public async Task<IActionResult> GetCategoryById(int id)
 		{
 			// using GenericRepository
-			var category = await _category.SelectById(id);
-			// Check
-			if (category == null) { return NotFound(); }
-			// using DTO
-			CategoryDTO categoryDTO = new CategoryDTO()
-			{
-				Id = category.Id,
-				Name_Local = category.Name_Local,
-				Name_Global = category.Name_Global,
-				// Brands = category.Brands,
-				// SubCategories = category.SubCategories
-			};
-			// return
-			return Ok(categoryDTO);
-		}
+			var category = await _unitOfWork.CategoryRepository.SelectById(id);
+            // Check
+            if (category == null) { return NotFound(); }
+            // using DTO
+            CategoryDTO categoryDTO = new CategoryDTO()
+            {
+                Id = category.Id,
+                Name_Local = category.Name_Local,
+                Name_Global = category.Name_Global,
+                // Brands = category.Brands,
+                // SubCategories = category.SubCategories
+            };
+            // return
+            return Ok(categoryDTO);
+        }
 
-		// POST: api/Category
-		[HttpPost]
+
+        // POST: api/Category
+        [HttpPost]
 		public async Task<IActionResult> AddCategory([FromBody] CategoryDTO categoryDTO)
 		{
 			// Check
@@ -108,25 +109,25 @@ namespace PriceComparing.Controllers
 				// SubCategories = category.SubCategories
 			};
 			// using GenericRepository
-			await _category.Add(category);
-			// return
-			return Ok();
-		}
-		
-		// PUT: api/Category/5
-		[HttpPut("{id}")]
+			await _unitOfWork.CategoryRepository.Add(category);
+            // return
+            return Ok();
+        }
+
+        // PUT: api/Category/5
+        [HttpPut("{id}")]
 		public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
 		{
-			await _category.UpdateAsync(category);
-			return Ok();
+            await _unitOfWork.CategoryRepository.UpdateAsync(category);
+            return Ok();
 		}
 
 		// DELETE: api/ApiWithActions/5
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteCategory(int id)
 		{
-			await _category.Delete(id);
-			return Ok();
+            await _unitOfWork.CategoryRepository.Delete(id);
+            return Ok();
 		}
 
         // DELETE: api/Category/SoftDelete/5
@@ -134,7 +135,7 @@ namespace PriceComparing.Controllers
         public async Task<IActionResult> SoftDeleteCategory(int id)
         {
             // Retrieve the entity using the repository
-            var category = await _category.SelectById(id);
+            var category = await _unitOfWork.CategoryRepository.SelectById(id);
             if (category == null)
             {
                 return NotFound();
@@ -153,7 +154,7 @@ namespace PriceComparing.Controllers
         [HttpGet("{id}/Brands")]
 		public async Task<IActionResult> GetBrandsByCategoryId(int id)
 		{
-			var category = await _category.SelectById(id);
+			var category = await _unitOfWork.CategoryRepository.SelectById(id);
 			if (category == null)
 			{
 				return NotFound();
