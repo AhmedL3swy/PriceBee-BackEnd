@@ -12,13 +12,11 @@ namespace PriceComparing.Controllers
 	{
         private readonly UnitOfWOrks _unitOfWork;
         private readonly DatabaseContext _db;
-        private readonly Category _category;
 
-        public CategoryController(UnitOfWOrks unitOfWork, DatabaseContext db, Category category)
+        public CategoryController(UnitOfWOrks unitOfWork, DatabaseContext db)
         {
             _unitOfWork = unitOfWork;
             _db = db;
-            _category = category;
         }
 
 		// GET: api/Category
