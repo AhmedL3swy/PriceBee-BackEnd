@@ -7,7 +7,7 @@
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class init16 : Migration
+    public partial class m78 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,17 +15,12 @@ namespace DataAccess.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "cc25cf0a-9886-4ac2-b8c0-e5e74a24e373");
+                keyValue: "8f23b805-98f8-43ae-a614-12a3c61387ef");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "d642cb2b-ffc6-4f82-b4cf-b34639b620e2");
-
-            migrationBuilder.RenameColumn(
-                name: "ProdId",
-                table: "ProductSponsored",
-                newName: "ProdDetId");
+                keyValue: "e62827d4-265c-4634-9434-22c4d6a955bb");
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsDeleted",
@@ -116,8 +111,8 @@ namespace DataAccess.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "71381593-5d85-46ef-a994-81dfde21916b", "c93116c7-56b4-456f-85f0-8c44752d8881", "User", "USER" },
-                    { "95b0379a-74d4-4e60-b8b8-b215005524fe", "a30bf196-4fb6-4a1c-b412-e4e5be982423", "Admin", "ADMIN" }
+                    { "4a8b45c9-9bfd-419a-b914-5f2d74a07ecb", "3530b448-ad19-4c34-b20d-0be3aacf144a", "User", "USER" },
+                    { "c5894d8b-87ec-428b-b6c0-ca1a7268ad02", "e07f26b6-20b6-493c-aba6-2a80c4fb2c68", "Admin", "ADMIN" }
                 });
         }
 
@@ -127,12 +122,12 @@ namespace DataAccess.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "71381593-5d85-46ef-a994-81dfde21916b");
+                keyValue: "4a8b45c9-9bfd-419a-b914-5f2d74a07ecb");
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: "95b0379a-74d4-4e60-b8b8-b215005524fe");
+                keyValue: "c5894d8b-87ec-428b-b6c0-ca1a7268ad02");
 
             migrationBuilder.DropColumn(
                 name: "IsDeleted",
@@ -182,18 +177,13 @@ namespace DataAccess.Migrations
                 name: "IsDeleted",
                 table: "Brands");
 
-            migrationBuilder.RenameColumn(
-                name: "ProdDetId",
-                table: "ProductSponsored",
-                newName: "ProdId");
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "cc25cf0a-9886-4ac2-b8c0-e5e74a24e373", "c04acf10-6ac9-4936-9237-50366fb9400b", "User", "USER" },
-                    { "d642cb2b-ffc6-4f82-b4cf-b34639b620e2", "7a20faa8-6989-4658-8b88-5346d83215b4", "Admin", "ADMIN" }
+                    { "8f23b805-98f8-43ae-a614-12a3c61387ef", "102f2e9d-6614-4565-a80d-1f9a730f320a", "User", "USER" },
+                    { "e62827d4-265c-4634-9434-22c4d6a955bb", "baad67ed-8c2e-40c0-bc98-7e58aa68391c", "Admin", "ADMIN" }
                 });
         }
     }

@@ -597,15 +597,15 @@ namespace DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5d1f3368-342a-49a9-8dac-db1c2a140e5c",
-                            ConcurrencyStamp = "1bf99acc-bb3b-4931-95f5-e2c58b3ef859",
+                            Id = "c5894d8b-87ec-428b-b6c0-ca1a7268ad02",
+                            ConcurrencyStamp = "e07f26b6-20b6-493c-aba6-2a80c4fb2c68",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "5e950883-a632-460a-8b3d-399a678d8282",
-                            ConcurrencyStamp = "3442a882-25bb-4854-ba0f-8070b357e24e",
+                            Id = "4a8b45c9-9bfd-419a-b914-5f2d74a07ecb",
+                            ConcurrencyStamp = "3530b448-ad19-4c34-b20d-0be3aacf144a",
                             Name = "User",
                             NormalizedName = "USER"
                         });

@@ -250,7 +250,7 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             }
         }
 
-      //  OnModelCreatingPartial(modelBuilder);
+        //  OnModelCreatingPartial(modelBuilder);
 
     }
 

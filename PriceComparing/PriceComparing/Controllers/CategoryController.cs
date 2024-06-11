@@ -36,8 +36,8 @@ namespace PriceComparing.Controllers
                     Id = category.Id,
                     Name_Local = category.Name_Local,
                     Name_Global = category.Name_Global,
-                    // Brands = category.Brands,
-                    // SubCategories = category.SubCategories
+                    //Brands = category.Brands,
+                    //SubCategories = category.SubCategories
                 });
             }
             // return
@@ -131,24 +131,24 @@ namespace PriceComparing.Controllers
 		}
 
         // DELETE: api/Category/SoftDelete/5
-        [HttpDelete("SoftDelete/{id}")]
-        public async Task<IActionResult> SoftDeleteCategory(int id)
-        {
-            // Retrieve the entity using the repository
-            var category = await _unitOfWork.CategoryRepository.SelectById(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete("SoftDelete/{id}")]
+        //public async Task<IActionResult> SoftDeleteCategory(int id)
+        //{
+        //    // Retrieve the entity using the repository
+        //    var category = await _unitOfWork.CategoryRepository.SelectById(id);
+        //    if (category == null)
+        //    {
+        //        return NotFound();
+        //    }
 		
-            // Use the EF Core API to set the shadow property
-            _db.Entry(category).Property("IsDeleted").CurrentValue = true;
+        //    // Use the EF Core API to set the shadow property
+        //    _db.Entry(category).Property("IsDeleted").CurrentValue = true;
 
-            // Save the changes
-            await _db.SaveChangesAsync();
+        //    // Save the changes
+        //    await _db.SaveChangesAsync();
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
         // GET: api/Category/5/Brands
         [HttpGet("{id}/Brands")]
