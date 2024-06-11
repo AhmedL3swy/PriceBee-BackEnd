@@ -18,6 +18,8 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<Brand> brandRepository;
 		GenericRepository<Category> categoryRepository;
 		GenericRepository<SubCategory> subCategoryRepository;
+		GenericRepository<PriceHistory> priceHistoryRepository;
+		ProductRepository productRepo;
 
 
 
@@ -125,6 +127,28 @@ namespace PriceComparing.UnitOfWork
                     subCategoryRepository = new GenericRepository<SubCategory>(_db);
                 }
                 return subCategoryRepository;
+            }
+        }
+		public GenericRepository<PriceHistory> PriceHistoryRepository
+		{
+			get
+			{
+				if (priceHistoryRepository == null)
+				{
+					priceHistoryRepository = new GenericRepository<PriceHistory>(_db);
+				}
+				return priceHistoryRepository;
+			}
+		}
+		public ProductRepository ProductRepo
+		{
+            get
+			{
+                if (productRepo == null)
+				{
+                    productRepo = new ProductRepository(_db);
+                }
+                return productRepo;
             }
         }
 

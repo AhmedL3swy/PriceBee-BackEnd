@@ -40,7 +40,7 @@ namespace PriceComparing.Controllers
             var subCategory = await _unitOfWork.SubCategoryRepository.SelectById(id);
             if (subCategory == null) return NotFound();
             SubCategory subCategoryDTO = new SubCategory()
-            {
+    {
                 Id = subCategory.Id,
                 Name_Local = subCategory.Name_Local,
                 Name_Global = subCategory.Name_Global,
@@ -54,7 +54,7 @@ namespace PriceComparing.Controllers
         {
             if (subCategoryPostDTO == null) return BadRequest();
             SubCategory subCategory = new SubCategory()
-            {
+        {
                 Name_Local = subCategoryPostDTO.Name_Local,
                 Name_Global = subCategoryPostDTO.Name_global,
 
@@ -64,7 +64,7 @@ namespace PriceComparing.Controllers
             return Ok();
 
         }
-
+            
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSubCategory(int id, [FromBody] SubCategory subCategory)
         {

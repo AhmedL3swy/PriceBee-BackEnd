@@ -32,7 +32,7 @@ namespace PriceComparing.Controllers
 					Cost = productSponsored.Cost,
 					StartDate = productSponsored.StartDate,
 					Duration = productSponsored.Duration,
-					ProdId = productSponsored.ProdId
+					ProdDetId = productSponsored.ProdDetId
 				});
 			}
 			return Ok(productSponsoredDTOs);
@@ -50,7 +50,7 @@ namespace PriceComparing.Controllers
 				Cost = productSponsored.Cost,
 				StartDate = productSponsored.StartDate,
 				Duration = productSponsored.Duration,
-				ProdId = productSponsored.ProdId
+				ProdDetId = productSponsored.ProdDetId
 			};
 			return Ok(productSponsoredDTO);
 		}
@@ -65,11 +65,20 @@ namespace PriceComparing.Controllers
 				Cost = productSponsoredDTO.Cost,
 				StartDate = productSponsoredDTO.StartDate,
 				Duration = productSponsoredDTO.Duration,
-				ProdId = productSponsoredDTO.ProdId
+				ProdDetId = productSponsoredDTO.ProdDetId
 			};
 			await _unitOfWork.ProductSponsoredRepository.Add(productSponsored);
 			_unitOfWork.savechanges();
-			return Ok(productSponsored);
+			ProductSponsoredDTO productSponsoredUpdated = new ProductSponsoredDTO()
+			{
+				Id = productSponsored.Id,
+				Cost = productSponsored.Cost,
+				StartDate = productSponsored.StartDate,
+				Duration = productSponsored.Duration,
+				ProdDetId = productSponsored.ProdDetId
+			};
+			return Ok(productSponsoredUpdated);
+			//return Ok(productSponsored);
 		}
 
 		[HttpPut("{id}")]
@@ -82,10 +91,19 @@ namespace PriceComparing.Controllers
 			productSponsored.Cost = productSponsoredDTO.Cost;
 			productSponsored.StartDate = productSponsoredDTO.StartDate;
 			productSponsored.Duration = productSponsoredDTO.Duration;
-			productSponsored.ProdId = productSponsoredDTO.ProdId;
+			productSponsored.ProdDetId = productSponsoredDTO.ProdDetId;
 
 			await _unitOfWork.ProductSponsoredRepository.UpdateAsync(productSponsored);
-			return Ok(productSponsored);
+			ProductSponsoredDTO productSponsoredUpdated = new ProductSponsoredDTO()
+			{
+				Id = productSponsored.Id,
+				Cost = productSponsored.Cost,
+				StartDate = productSponsored.StartDate,
+				Duration = productSponsored.Duration,
+				ProdDetId = productSponsored.ProdDetId
+			};
+			return Ok(productSponsoredUpdated);
+			//return Ok(productSponsored);
 		}
 
 		[HttpDelete("{id}")]
