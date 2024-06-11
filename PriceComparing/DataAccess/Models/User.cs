@@ -17,7 +17,6 @@ namespace DataAccess.Models;
 //[Index("Email", Name = "UQ__Users__A9D10534A011E897", IsUnique = true)]
 
 public partial class User : ISoftDeletable
-
 {
     [Key]
     public int Id { get; set; }
