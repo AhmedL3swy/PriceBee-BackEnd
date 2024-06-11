@@ -4,6 +4,7 @@ using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240610115354_init17")]
+    partial class init17
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -597,15 +600,15 @@ namespace DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1a18203c-50c7-4b71-b846-9ec006dc26f6",
-                            ConcurrencyStamp = "8be35ab6-508e-4641-9515-173c3242bab4",
+                            Id = "5d1f3368-342a-49a9-8dac-db1c2a140e5c",
+                            ConcurrencyStamp = "1bf99acc-bb3b-4931-95f5-e2c58b3ef859",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0f82d3d5-28c3-4139-b45c-0401ebdd6bf6",
-                            ConcurrencyStamp = "5a481a35-8aa8-4978-9e97-599e0871707b",
+                            Id = "5e950883-a632-460a-8b3d-399a678d8282",
+                            ConcurrencyStamp = "3442a882-25bb-4854-ba0f-8070b357e24e",
                             Name = "User",
                             NormalizedName = "USER"
                         });

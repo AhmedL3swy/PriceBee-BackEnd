@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Models
 {
+    [Index("Email", Name = "UQ__Users__A9D10534A011E897", IsUnique = true)]
+
     public class AuthUser : IdentityUser
     {
        

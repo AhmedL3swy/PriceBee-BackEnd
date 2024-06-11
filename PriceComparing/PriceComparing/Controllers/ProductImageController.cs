@@ -59,7 +59,14 @@ namespace PriceComparing.Controllers
 			};
 			await _UnitOfWork.ProductImageRepository.Add(productImage);
 			_UnitOfWork.savechanges();
-			return Ok();
+			ProductImageDTO productImageUpdated = new ProductImageDTO()
+			{
+				Id = productImage.Id,
+				ProdId = productImage.ProdId,
+				Image = productImage.Image
+			};
+			return Ok(productImageUpdated);
+			//return Ok();
 		}
 
 		[HttpPut("{id}")]
@@ -73,7 +80,14 @@ namespace PriceComparing.Controllers
 			productImage.Image = productImageDTO.Image;
 
 			await _UnitOfWork.ProductImageRepository.UpdateAsync(productImage);
-			return Ok(productImage);
+			ProductImageDTO productImageUpdated = new ProductImageDTO()
+			{
+				Id = productImage.Id,
+				ProdId = productImage.ProdId,
+				Image = productImage.Image
+			};
+			return Ok(productImageUpdated);
+			//return Ok(productImage);
 		}
 
 		[HttpDelete("{id}")]

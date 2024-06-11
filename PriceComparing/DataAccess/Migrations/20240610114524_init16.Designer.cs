@@ -4,6 +4,7 @@ using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240610114524_init16")]
+    partial class init16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,10 +123,6 @@ namespace DataAccess.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex(new[] { "Email" }, "UQ__Users__A9D10534A011E897")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -597,15 +596,15 @@ namespace DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1a18203c-50c7-4b71-b846-9ec006dc26f6",
-                            ConcurrencyStamp = "8be35ab6-508e-4641-9515-173c3242bab4",
+                            Id = "95b0379a-74d4-4e60-b8b8-b215005524fe",
+                            ConcurrencyStamp = "a30bf196-4fb6-4a1c-b412-e4e5be982423",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "0f82d3d5-28c3-4139-b45c-0401ebdd6bf6",
-                            ConcurrencyStamp = "5a481a35-8aa8-4978-9e97-599e0871707b",
+                            Id = "71381593-5d85-46ef-a994-81dfde21916b",
+                            ConcurrencyStamp = "c93116c7-56b4-456f-85f0-8c44752d8881",
                             Name = "User",
                             NormalizedName = "USER"
                         });
