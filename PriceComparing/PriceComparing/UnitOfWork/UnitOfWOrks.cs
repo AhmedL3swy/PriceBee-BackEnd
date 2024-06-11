@@ -121,28 +121,6 @@ namespace PriceComparing.UnitOfWork
 				return productSponsoredRepository;
 			}
 		}
-		public GenericRepository<Brand> BrandRepository
-        {
-            get
-            {
-                if (brandRepository == null)
-                {
-                    brandRepository = new GenericRepository<Brand>(_db);
-                }
-                return brandRepository;
-            }
-        }
-		public GenericRepository<Category> CategoryRepository
-			{
-            get
-            {
-                if (categoryRepository == null)
-                {
-                    categoryRepository = new GenericRepository<Category>(_db);
-                }
-                return categoryRepository;
-            }
-        }
 		public GenericRepository<SubCategory> SubCategoryRepository
 			{
             get
