@@ -28,12 +28,11 @@ namespace PriceComparing.Controllers
             // Check
             if (categories == null) { return NotFound(); }
             // using DTO
-            List<CategoryDTO> categoriesDTO = new List<CategoryDTO>();
+            List<CategoryPostDTO> categoriesDTO = new List<CategoryPostDTO>();
             foreach (var category in categories)
             {
-                categoriesDTO.Add(new CategoryDTO()
+                categoriesDTO.Add(new CategoryPostDTO()
                 {
-                    Id = category.Id,
                     Name_Local = category.Name_Local,
                     Name_Global = category.Name_Global,
                     //Brands = category.Brands,
@@ -48,7 +47,6 @@ namespace PriceComparing.Controllers
                         Name_Global = brand.Name_Global,
                         Description_Local = brand.Description_Local,
                         Description_Global = brand.Description_Global,
-                        CategoryId = category.Id,
                     });
                 }
 
@@ -58,7 +56,6 @@ namespace PriceComparing.Controllers
                     {
                         Name_Local = subCategory.Name_Local,
                         Name_global = subCategory.Name_Global,
-                        Categoryid = category.Id,
                     });
                 }
             }
