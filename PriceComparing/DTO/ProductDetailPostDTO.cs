@@ -25,5 +25,7 @@ namespace DTO
 		public decimal? Rating { get; set; }
 		public bool isAvailable { get; set; }
 		public string Brand { get; set; }
+        // List of images
+        public List<string> Images { get; set; }
 	}
 }
