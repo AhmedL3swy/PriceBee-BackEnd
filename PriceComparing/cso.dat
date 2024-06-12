@@ -18,3 +18,4 @@ V1
 2:id,f
 2:AddCategory,M
 2:category,PW
+2:GetAllCategories,IB

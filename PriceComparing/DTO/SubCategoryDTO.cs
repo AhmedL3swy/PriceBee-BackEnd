@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-    internal class SubCategoryDTO
+    public class SubCategoryDTO
     {
       public int id { get; set; }
         public string Name_Local { get; set; }
