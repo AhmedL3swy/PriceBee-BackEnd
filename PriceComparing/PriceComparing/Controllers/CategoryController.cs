@@ -28,11 +28,12 @@ namespace PriceComparing.Controllers
             // Check
             if (categories == null) { return NotFound(); }
             // using DTO
-            List<CategoryPostDTO> categoriesDTO = new List<CategoryPostDTO>();
+            List<CategoryDTO> categoriesDTO = new List<CategoryDTO>();
             foreach (var category in categories)
             {
-                categoriesDTO.Add(new CategoryPostDTO()
+                categoriesDTO.Add(new CategoryDTO()
                 {
+                    Id = category.Id,
                     Name_Local = category.Name_Local,
                     Name_Global = category.Name_Global,
                     //Brands = category.Brands,
