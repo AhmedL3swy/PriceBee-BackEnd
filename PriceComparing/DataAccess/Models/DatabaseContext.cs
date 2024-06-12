@@ -10,6 +10,7 @@ using DataAccess.Interfaces;
 using System.Linq.Expressions;
 
 using Microsoft.EntityFrameworkCore;
+using DataAccess.SeedData;
 
 namespace DataAccess.Models;
 
@@ -226,6 +227,7 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
                 ConcurrencyStamp = Guid.NewGuid().ToString()
             }
             );
+        modelBuilder.SeedData();    
 
 
 

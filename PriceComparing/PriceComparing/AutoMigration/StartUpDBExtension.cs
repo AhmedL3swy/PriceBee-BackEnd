@@ -17,7 +17,7 @@ namespace PriceComparing.AutoMigration
                 {
                     var context = services.GetRequiredService<DatabaseContext>();
                     await context.Database.EnsureDeletedAsync();
-                    await context.Database.EnsureDeletedAsync();
+                    await context.Database.EnsureCreatedAsync();
                     await context.Database.MigrateAsync();
                     SeedingData.InitializeDataBase(context);
                 }
