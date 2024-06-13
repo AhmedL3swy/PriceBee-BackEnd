@@ -492,38 +492,91 @@ namespace PriceComparing.Models
                 }
             );
             db.SaveChanges();
+			db.ProductImages.AddRange(
+	new ProductImage
+	{
+		ProdId = 1, // Assuming this corresponds to a "Samsung Phone"
+		Image = "samsung_phone_01.jpg"
+	},
+	new ProductImage
+	{
+		ProdId = 1, // Multiple images for the same product
+		Image = "samsung_phone_02.jpg"
+	},
+	new ProductImage
+	{
+		ProdId = 2, // Assuming this corresponds to an "Apple Phone"
+		Image = "apple_phone_01.jpg"
+	},
+	new ProductImage
+	{
+		ProdId = 3, // Assuming this corresponds to a "HP Laptop"
+		Image = "hp_laptop_01.jpg"
+	},
+	new ProductImage
+	{
+		ProdId = 4, // Assuming this corresponds to a "HP Printer"
+		Image = "hp_printer_01.jpg"
+	},
+	new ProductImage
+	{
+		ProdId = 5, // Assuming this corresponds to a "Ballpoint Pen"
+		Image = "ballpoint_pen_01.jpg"
+	},
+	new ProductImage
+	{
+		ProdId = 6, // Assuming this corresponds to "A4 Paper"
+		Image = "a4_paper_01.jpg"
+	},
+	new ProductImage
+	{
+		ProdId = 7, // Assuming this corresponds to a "Novel Book"
+		Image = "novel_book_01.jpg"
+	},
+	new ProductImage
+	{
+		ProdId = 8, // Assuming this corresponds to a "Dishes Set"
+		Image = "dishes_set_01.jpg"
+	},
+	new ProductImage
+	{
+		ProdId = 9, // Assuming this corresponds to a "Frying Pan"
+		Image = "frying_pan_01.jpg"
+	}
+);
+			db.SaveChanges();
 
-            // Users
-            // user has
-            // Id, FName, LName, Email, Password, Gender, Country, JoinDate, PhoneCode, PhoneNumber, DateOfBirth, Image, Role, SearchValues, Prods, Prods1, ProdsNavigation
-            //db.Users.AddRange(
-            //					new User
-            //					{
-            //						FName = "Ahmed",
-            //						LName = "Ali",
-            //						Email = "AhmedAli@gmail.com",
-            //						Password = "123456",
-            //						Gender = "Male",
-            //						Country = "Egypt",
-            //						JoinDate = new DateOnly(2021, 1, 1),
-            //						PhoneCode = "+20",
-            //						PhoneNumber = "123456789",
-            //						DateOfBirth = new DateOnly(1990, 1, 1),
-            //						Image = "AhmedAli.jpg",
-            //						Role = "User"
-            //					},
-            //					new User
-            //					{
-            //						FName = "Mohamed",
-            //						LName = "Ali",
-            //						Email = ""
-            //					}
-            //					);
+			// Users
+			// user has
+			// Id, FName, LName, Email, Password, Gender, Country, JoinDate, PhoneCode, PhoneNumber, DateOfBirth, Image, Role, SearchValues, Prods, Prods1, ProdsNavigation
+			//db.Users.AddRange(
+			//					new User
+			//					{
+			//						FName = "Ahmed",
+			//						LName = "Ali",
+			//						Email = "AhmedAli@gmail.com",
+			//						Password = "123456",
+			//						Gender = "Male",
+			//						Country = "Egypt",
+			//						JoinDate = new DateOnly(2021, 1, 1),
+			//						PhoneCode = "+20",
+			//						PhoneNumber = "123456789",
+			//						DateOfBirth = new DateOnly(1990, 1, 1),
+			//						Image = "AhmedAli.jpg",
+			//						Role = "User"
+			//					},
+			//					new User
+			//					{
+			//						FName = "Mohamed",
+			//						LName = "Ali",
+			//						Email = ""
+			//					}
+			//					);
 
 
 
 
-        }
+		}
 	}
 }
 /*
