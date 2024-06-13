@@ -16,7 +16,6 @@ namespace PriceComparing.Repository
 		{
 			return _db.Set<TEntity>().AsNoTracking();
 		}
-
 		public async Task<List<TEntity>> SelectAll()
 		{
 			return await _db.Set<TEntity>().AsNoTracking().ToListAsync();

@@ -44,6 +44,7 @@ namespace PriceComparing.Controllers
 			{
 				var combinedProductDetail = new CombinedProductDetailDTO
 				{
+					ProductId = product.Id,
 					ProductName_Global = product.Name_Global,
 					ProductDescription_Global = product.Description_Global,
 					SubCategoryName = product.SubCategory?.Name_Global,
