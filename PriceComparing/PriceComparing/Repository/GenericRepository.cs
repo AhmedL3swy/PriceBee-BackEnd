@@ -11,7 +11,7 @@ namespace PriceComparing.Repository
 		{
 			_db = db;
 		}
-
+		//ssssssssssssssssssssssss
 		public IQueryable<TEntity> SelectAllProduct()
 		{
 			return _db.Set<TEntity>().AsNoTracking();
