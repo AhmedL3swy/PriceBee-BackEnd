@@ -79,13 +79,13 @@ namespace PriceComparing.Controllers
 
             // Delete related with the user (UserFavProd, UserAlertProd, UserHistoryProd)
             // User Favorite Products
-            //await _unitOfWork.
+            // await _unitOfWork.
 
             // User Alert Products
-			// await _unitOfWork.ProductRepository.Delete(prodcut.Id);
+			await _unitOfWork.ProductRepository.DeleteRange(prodcut.UsersNavigation);
 
             // Delete related data
-			await _unitOfWork.PriceHistoryRepository.DeleteRange(prodcut.PriceHistories);
+            await _unitOfWork.PriceHistoryRepository.DeleteRange(prodcut.PriceHistories);
             await _unitOfWork.ProductImageRepository.DeleteRange(prodcut.ProductImages);
             await _unitOfWork.ProductDetailRepository.DeleteRange(prodcut.ProductLinks.Select(pl => pl.ProductDetail));
 			await _unitOfWork.ProductLinkRepository.DeleteRange(prodcut.ProductLinks);

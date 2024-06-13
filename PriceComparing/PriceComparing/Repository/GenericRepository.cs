@@ -67,14 +67,14 @@ namespace PriceComparing.Repository
             }
         }
 
-        internal async Task DeleteRange(object Item)
+        internal async Task DeleteRange(IEnumerable<object> entities)
         {
-            TEntity? obj = await _db.Set<TEntity>().FindAsync(Item);
-            if (obj != null)
-            {
-                _db.Set<TEntity>().RemoveRange(obj);
-                await _db.SaveChangesAsync();
-            }
+            //TEntity? obj = await _db.Set<TEntity>().FindAsync(entities);
+            _db.Set<TEntity>().RemoveRange(entities.Cast<TEntity>());
+            await _db.SaveChangesAsync();
+            //foreach (var item in Items)
+            //{
+            //}
         }
 
 
