@@ -1,10 +1,14 @@
 ﻿using DataAccess;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 namespace PriceComparing.Models
 {
 	public class SeedingData
 	{
-		public static void InitializeDataBase(DatabaseContext db)
+		
+        public static void InitializeDataBase(DatabaseContext db)
 		{
 			// Delete the database if it exists
 			//db.Database.EnsureDeleted();
@@ -372,42 +376,212 @@ namespace PriceComparing.Models
 									Price = 7100,
 									Date = DateTime.Now.AddDays(-1)
 								}
-								);
+			);
 			db.SaveChanges();
 
-			// Users
-			// user has
-			// Id, FName, LName, Email, Password, Gender, Country, JoinDate, PhoneCode, PhoneNumber, DateOfBirth, Image, Role, SearchValues, Prods, Prods1, ProdsNavigation
-			//db.Users.AddRange(
-			//					new User
-			//					{
-			//						FName = "Ahmed",
-			//						LName = "Ali",
-			//						Email = "AhmedAli@gmail.com",
-			//						Password = "123456",
-			//						Gender = "Male",
-			//						Country = "Egypt",
-			//						JoinDate = new DateOnly(2021, 1, 1),
-			//						PhoneCode = "+20",
-			//						PhoneNumber = "123456789",
-			//						DateOfBirth = new DateOnly(1990, 1, 1),
-			//						Image = "AhmedAli.jpg",
-			//						Role = "User"
-			//					},
-			//					new User
-			//					{
-			//						FName = "Mohamed",
-			//						LName = "Ali",
-			//						Email = ""
-			//					}
-			//					);
+			
+
+            var passwordHasher = new PasswordHasher<AuthUser>();
+
+			
+            var authUser = new AuthUser
+            {
+                UserName = "AhmedMostafa",
+                NormalizedUserName = "AHMEDMOSTAFA",
+                Email = "AhmedMostafa@gmail.com",
+                NormalizedEmail = "AHMEDMOSTAFA@GMAIL.COM",
+                EmailConfirmed = true,
+                FName = "Ahmed",
+                LName = "Mostafa",
+                Gender = "Male",
+                Country = "Egypt",
+                DateOfBirth = DateOnly.FromDateTime(new DateTime(1990, 1, 1)),
+                PhoneCode = "+20",
+                PhoneNumber = "1149147981",
+                Image = "path_to_image",
+                PasswordHash = passwordHasher.HashPassword(null, "password"),
+            };
+
+            var authUser2 = new AuthUser
+            {
+                UserName = "EslamMohmeh",
+                NormalizedUserName = "ESLAMMOHMEH",
+                Email = "EslamMohmeh@gmail.com",
+                NormalizedEmail = "ESLAMMOHMEH@GMAIL.COM",
+                EmailConfirmed = true,
+                FName = "Eslam",
+                LName = "Mohmeh",
+                Gender = "Male",
+                Country = "Egypt",
+                DateOfBirth = DateOnly.FromDateTime(new DateTime(1992, 1, 1)),
+                PhoneCode = "+20",
+                PhoneNumber = "1149147982",
+                Image = "path_to_image",
+                PasswordHash = passwordHasher.HashPassword(null, "kafarelsheikha"),
+            };
+
+            var authUser3 = new AuthUser
+            {
+                UserName = "AhmedAli",
+                NormalizedUserName = "AHMEDALI",
+                Email = "AhmedAli@gmail.com",
+                NormalizedEmail = "AHMEDALI@GMAIL.COM",
+                EmailConfirmed = true,
+                FName = "Ahmed",
+                LName = "Ali",
+                Gender = "Male",
+                Country = "Egypt",
+                DateOfBirth = DateOnly.FromDateTime(new DateTime(1999, 2, 1)),
+                PhoneCode = "+20",
+                PhoneNumber = "1099662282",
+                Image = "path_to_image",
+                PasswordHash = passwordHasher.HashPassword(null, "Ahmed@12345678"),
+            };
+
+            var authUser4 = new AuthUser
+            {
+                UserName = "MohamedSamy",
+                NormalizedUserName = "MOHAMEDSAMY",
+                Email = "MohamedSamy@gmail.com",
+                NormalizedEmail = "MOHAMEDSAMY@GMAIL.COM",
+                EmailConfirmed = true,
+                FName = "Mohamed",
+                LName = "Samy",
+                Gender = "Male",
+                Country = "Egypt",
+                DateOfBirth = DateOnly.FromDateTime(new DateTime(1999, 2, 1)),
+                PhoneCode = "+20",
+                PhoneNumber = "1099662282",
+                Image = "path_to_image",
+                PasswordHash = passwordHasher.HashPassword(null, "Mohamed@12345678"),
+            };
+
+            var authUser5 = new AuthUser
+            {
+                UserName = "MostafaMourad",
+                NormalizedUserName = "MOSTAFAMOURAD",
+                Email = "MostafaMourad@gmail.com",
+                NormalizedEmail = "MOSTAFAMOURAD@GMAIL.COM",
+                EmailConfirmed = true,
+                FName = "Mostafa",
+                LName = "Mourad",
+                Gender = "Male",
+                Country = "Egypt",
+                DateOfBirth = DateOnly.FromDateTime(new DateTime(1980, 2, 1)),
+                PhoneCode = "+20",
+                PhoneNumber = "1088775566",
+                Image = "path_to_image",
+                PasswordHash = passwordHasher.HashPassword(null, "Mourad@12345678"),
+            };
+
+            List<AuthUser> users = new List<AuthUser> ();
+			users.Add(authUser);
+            users.Add(authUser2);
+            users.Add(authUser3);
+            users.Add(authUser4);
+            users.Add(authUser5);
 
 
 
 
-		}
+            db.Users.AddRange(users);
+
+
+            db.Roles.AddRange(new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Admin",
+                NormalizedName = "Admin".ToUpper(),
+                ConcurrencyStamp = Guid.NewGuid().ToString()
+            },
+            new IdentityRole
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "User",
+                NormalizedName = "User".ToUpper(),
+                ConcurrencyStamp = Guid.NewGuid().ToString()
+            });
+
+            db.SaveChanges();
+
+
+
+			db.UserRoles.Add(
+			new IdentityUserRole<string> { 
+			UserId = authUser.Id,
+			RoleId = db.Roles.FirstOrDefault(a=>a.Name=="Admin").Id
+			});
+
+			db.UserRoles.Add(
+            new IdentityUserRole<string>
+             {
+                 UserId = authUser2.Id,
+                 RoleId = db.Roles.FirstOrDefault(a => a.Name == "User").Id
+             });
+
+            db.UserRoles.Add(
+            new IdentityUserRole<string>
+            {
+                UserId = authUser3.Id,
+                RoleId = db.Roles.FirstOrDefault(a => a.Name == "User").Id
+            });
+
+			
+			db.UserRoles.Add(
+            new IdentityUserRole<string>
+            {
+                UserId = authUser4.Id,
+                RoleId = db.Roles.FirstOrDefault(a => a.Name == "User").Id
+            });
+
+            db.UserRoles.Add(
+            new IdentityUserRole<string>
+            {
+                UserId = authUser5.Id,
+                RoleId = db.Roles.FirstOrDefault(a => a.Name == "User").Id
+            });
+
+
+            db.SaveChanges();
+
+
+        }
 	}
 }
+
+
+
+    // Users
+    // user has
+    // Id, FName, LName, Email, Password, Gender, Country, JoinDate, PhoneCode, PhoneNumber, DateOfBirth, Image, Role, SearchValues, Prods, Prods1, ProdsNavigation
+    //db.Users.AddRange(
+    //					new User
+    //					{
+    //						FName = "Ahmed",
+    //						LName = "Ali",
+    //						Email = "AhmedAli@gmail.com",
+    //						Password = "123456",
+    //						Gender = "Male",
+    //						Country = "Egypt",
+    //						JoinDate = new DateOnly(2021, 1, 1),
+    //						PhoneCode = "+20",
+    //						PhoneNumber = "123456789",
+    //						DateOfBirth = new DateOnly(1990, 1, 1),
+    //						Image = "AhmedAli.jpg",
+    //						Role = "User"
+    //					},
+    //					new User
+    //					{
+    //						FName = "Mohamed",
+    //						LName = "Ali",
+    //						Email = ""
+    //					}
+    //					);
+
+
+
+
+
 /*
 1   الكترونيات Electronics	1	تليفونات	Phones	1
 1	الكترونيات	Electronics	2	لاب توب	Laptops	1

@@ -67,7 +67,7 @@ namespace PriceComparing
 
             // Register AuthService
             builder.Services.AddScoped<IAuthServices, AuthService>();
-
+			builder.Services.AddScoped<UserRepoNonGenric>();
             // Configure JWT settings
             builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 
