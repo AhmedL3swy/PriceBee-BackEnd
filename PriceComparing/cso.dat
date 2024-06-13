@@ -19,3 +19,10 @@ V1
 2:AddCategory,M
 2:category,PW
 2:GetAllCategories,IB
+2:GetProductComposites,c
+2:products,B
+2:p,d
+2:pl,T
+2:productCompositeDTOs,D
+2:product,m
+2:pi,x
