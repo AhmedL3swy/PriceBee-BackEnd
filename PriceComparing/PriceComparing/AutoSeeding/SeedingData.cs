@@ -36,6 +36,7 @@ namespace PriceComparing.Models
 				}
 				);
 			db.SaveChanges();
+			
 			// SubCategories
 			db.SubCategories.AddRange(
 				new SubCategory
@@ -94,6 +95,7 @@ namespace PriceComparing.Models
 				}
 				);
 			db.SaveChanges();
+
 			// Brands
 			db.Brands.AddRange(
 				// Electronics:Phones
@@ -182,6 +184,9 @@ namespace PriceComparing.Models
 
 
 				);
+			db.ProductDetails.AddRange(
+				);
+			db.SaveChanges();
 
 			// Products 
 			db.Products.AddRange(
@@ -283,9 +288,11 @@ namespace PriceComparing.Models
 					Description_Global = "Frying Pan",
 					SubCategoryId = 9,
 					BrandId = 9
+					
 				}
 				);
 			db.SaveChanges();
+
 			// Prices History
 			db.PriceHistories.AddRange(
 								new PriceHistory
@@ -375,37 +382,148 @@ namespace PriceComparing.Models
 								);
 			db.SaveChanges();
 
-			// Users
-			// user has
-			// Id, FName, LName, Email, Password, Gender, Country, JoinDate, PhoneCode, PhoneNumber, DateOfBirth, Image, Role, SearchValues, Prods, Prods1, ProdsNavigation
-			//db.Users.AddRange(
-			//					new User
-			//					{
-			//						FName = "Ahmed",
-			//						LName = "Ali",
-			//						Email = "AhmedAli@gmail.com",
-			//						Password = "123456",
-			//						Gender = "Male",
-			//						Country = "Egypt",
-			//						JoinDate = new DateOnly(2021, 1, 1),
-			//						PhoneCode = "+20",
-			//						PhoneNumber = "123456789",
-			//						DateOfBirth = new DateOnly(1990, 1, 1),
-			//						Image = "AhmedAli.jpg",
-			//						Role = "User"
-			//					},
-			//					new User
-			//					{
-			//						FName = "Mohamed",
-			//						LName = "Ali",
-			//						Email = ""
-			//					}
-			//					);
+            // Domains seeding
+            db.Domains.AddRange(
+                new Domain
+                {
+					//Id = 1,
+                    Name_Local = "متجر الكترونيات مصري",
+                    Name_Global = "Egyptian Electronics Store",
+                    Description_Local = "متجر الكترونيات مصري",
+                    Description_Global = "Egyptian Electronics Store",
+                    Url = "http://www.egyptianelectronics.com",
+                    Logo = "logo1.jpg"
+                },
+                new Domain
+                {
+					//Id = 2,
+                    Name_Local = "متجر الكترونيات سعودي",
+                    Name_Global = "Saudi Electronics Store",
+                    Description_Local = "متجر الكترونيات سعودي",
+                    Description_Global = "Saudi Electronics Store",
+                    Url = "http://www.saudielectronics.com",
+                    Logo = "logo2.jpg"
+                },
+                new Domain
+                {
+						//Id = 3,
+                    Name_Local = "متجر الكترونيات اماراتي",
+                    Name_Global = "Emirati Electronics Store",
+                    Description_Local = "متجر الكترونيات اماراتي",
+                    Description_Global = "Emirati Electronics Store",
+                    Url = "http://www.emiratielectronics.com",
+                    Logo = "logo3.jpg"
+                }
+            );
+            db.SaveChanges();
+
+            // ProductLinks seeding
+            db.ProductLinks.AddRange(
+                new ProductLink
+                {
+					//Id = 1,
+                    ProdId = 1,
+                    DomainId = 1,
+                    ProductLink1 = "http://www.egyptianelectronics.com/product/1",
+                    Status = "In Stock",
+                    LastUpdated = DateTime.Now,
+                    LastScraped = DateTime.Now
+                },
+                new ProductLink
+                {
+					//Id = 2,
+                    ProdId = 1,
+                    DomainId = 2,
+                    ProductLink1 = "http://www.saudielectronics.com/product/1",
+                    Status = "Out of Stock",
+                    LastUpdated = DateTime.Now,
+                    LastScraped = DateTime.Now
+                },
+                new ProductLink
+                {
+
+					//Id= 3,
+                    ProdId = 2,
+                    DomainId = 2,
+                    ProductLink1 = "http://www.saudielectronics.com/product/2",
+                    Status = "In Stock",
+                    LastUpdated = DateTime.Now,
+                    LastScraped = DateTime.Now
+                }
+            );
+            db.SaveChanges();
+
+            // ProductDetails seeding
+            db.ProductDetails.AddRange(
+                new ProductDetail
+                {
+					Id=1,
+                    Name_Local = "تليفون سامسونج",
+                    Name_Global = "Samsung Phone",
+                    Description_Local = "تليفون سامسونج",
+                    Description_Global = "Samsung Phone",
+                    Price = 1000,
+                    Rating = 4.5m,
+                    Brand = "Samsung"
+                },
+                new ProductDetail
+                {
+
+					Id= 2,
+                    Name_Local = "تليفون ابل",
+                    Name_Global = "Apple Phone",
+                    Description_Local = "تليفون ابل",
+                    Description_Global = "Apple Phone",
+                    Price = 1500,
+                    Rating = 4.7m,
+                    Brand = "Apple"
+                },
+				new ProductDetail
+                {
+
+					Id	= 3,
+                    Name_Local = "تليفون شاومى",
+                    Name_Global = "xiaomi Phone",
+                    Description_Local = "تليفون شاومى",
+                    Description_Global = "xiaomi Phone",
+                    Price = 1000,
+                    Rating = 4.5m,
+                    Brand = "xiaomi"
+                }
+            );
+            db.SaveChanges();
+
+            // Users
+            // user has
+            // Id, FName, LName, Email, Password, Gender, Country, JoinDate, PhoneCode, PhoneNumber, DateOfBirth, Image, Role, SearchValues, Prods, Prods1, ProdsNavigation
+            //db.Users.AddRange(
+            //					new User
+            //					{
+            //						FName = "Ahmed",
+            //						LName = "Ali",
+            //						Email = "AhmedAli@gmail.com",
+            //						Password = "123456",
+            //						Gender = "Male",
+            //						Country = "Egypt",
+            //						JoinDate = new DateOnly(2021, 1, 1),
+            //						PhoneCode = "+20",
+            //						PhoneNumber = "123456789",
+            //						DateOfBirth = new DateOnly(1990, 1, 1),
+            //						Image = "AhmedAli.jpg",
+            //						Role = "User"
+            //					},
+            //					new User
+            //					{
+            //						FName = "Mohamed",
+            //						LName = "Ali",
+            //						Email = ""
+            //					}
+            //					);
 
 
 
 
-		}
+        }
 	}
 }
 /*
@@ -419,3 +537,4 @@ namespace PriceComparing.Models
 3	أدوات منزليه	Home Supplies	8	أدوات تنظيف	Cleaning Tools	3
 3	أدوات منزليه	Home Supplies	9	أدوات طبخ	Cooking Tools	3
 */
+
