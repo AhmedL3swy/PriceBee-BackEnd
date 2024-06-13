@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 
 using Microsoft.EntityFrameworkCore;
 
+
 namespace DataAccess.Models;
 
 public partial class DatabaseContext : IdentityDbContext<AuthUser>
@@ -42,7 +43,7 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
 
     public virtual DbSet<SubCategory> SubCategories { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<User> _Users { get; set; }
 
 
     
@@ -211,21 +212,8 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
                         j.HasIndex(new[] { "ProdId" }, "IX_UserFavProd_ProdId");
                     });
         });
-        modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = "Admin",
-            NormalizedName = "Admin".ToUpper(),
-            ConcurrencyStamp = Guid.NewGuid().ToString()
-        },
-            new IdentityRole
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "User",
-                NormalizedName = "User".ToUpper(),
-                ConcurrencyStamp = Guid.NewGuid().ToString()
-            }
-            );
+
+       
 
 
 

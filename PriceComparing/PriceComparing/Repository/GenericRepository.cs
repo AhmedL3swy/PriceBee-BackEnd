@@ -67,5 +67,17 @@ namespace PriceComparing.Repository
                 await _db.SaveChangesAsync();
             }
         }
+
+        internal async Task DeleteRange(object Item)
+        {
+            TEntity? obj = await _db.Set<TEntity>().FindAsync(Item);
+            if (obj != null)
+            {
+                _db.Set<TEntity>().RemoveRange(obj);
+                await _db.SaveChangesAsync();
+            }
+        }
+
+
     }
 }

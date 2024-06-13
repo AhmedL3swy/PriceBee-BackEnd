@@ -33,7 +33,7 @@ public partial class Product : ISoftDeletable
 
     public int SubCategoryId { get; set; }
 
-    public string bola;
+    
     public int? BrandId { get; set; }
 
     [ForeignKey("BrandId")]
