@@ -96,7 +96,8 @@ namespace PriceComparing.Controllers
 
 			ProductDetail productDetail = new ProductDetail()
 			{
-				Name_Local = productDetailDTO.Name_Local,
+				Id= productDetailDTO.Id,
+                Name_Local = productDetailDTO.Name_Local,
 				Name_Global = productDetailDTO.Name_Global,
 				Description_Local = productDetailDTO.Description_Local,
 				Description_Global = productDetailDTO.Description_Global,

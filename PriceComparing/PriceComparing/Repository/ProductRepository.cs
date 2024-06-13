@@ -65,14 +65,14 @@ namespace PriceComparing.Repository
             // Save changes after all ProductDetails have been added
             await _db.SaveChangesAsync();
         }
-        public async Task AppendProductImages(int productId, List<ProductImageDTO> images)
+        public async Task AppendProductImages(int productId, List<string> images)
         {
             foreach (var image in images)
             {
                 ProductImage productImage = new ProductImage()
                 {
                     ProdId = productId,
-                    Image = image.Image
+                    Image = image
                 };
                 await _db.ProductImages.AddAsync(productImage);
             }

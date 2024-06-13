@@ -26,7 +26,7 @@ namespace PriceComparing.Controllers
             // Append Product Details
             await _UnitOfWork.ProductRepo.AppendProductDetails(productID, productDTO.ProductDetailDTO);
             // Append Product Images
-            await _UnitOfWork.ProductRepo.AppendProductImages(productID, productDTO.ProductImageDTO);
+            await _UnitOfWork.ProductRepo.AppendProductImages(productID, productDTO.ProductDetailDTO[0].Images);
                
              _UnitOfWork.savechanges();
             return Ok(productID);

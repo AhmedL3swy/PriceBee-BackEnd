@@ -14,5 +14,6 @@ namespace DTO
 		public string? Description_Global { get; set; }
 		public int SubCategoryId { get; set; }
 		public int? BrandId { get; set; }
+		
 	}
 }

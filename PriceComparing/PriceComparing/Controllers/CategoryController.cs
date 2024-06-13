@@ -39,6 +39,26 @@ namespace PriceComparing.Controllers
                     //Brands = category.Brands,
                     //SubCategories = category.SubCategories
                 });
+                // using foreach for Brands and SubCategories
+                foreach (var brand in category.Brands)
+                {
+                    categoriesDTO[categoriesDTO.Count - 1].Brands.Add(new BrandPostDTO()
+                    {
+                        Name_Local = brand.Name_Local,
+                        Name_Global = brand.Name_Global,
+                        Description_Local = brand.Description_Local,
+                        Description_Global = brand.Description_Global,
+                    });
+                }
+
+                foreach (var subCategory in category.SubCategories)
+                {
+                    categoriesDTO[categoriesDTO.Count - 1].SubCategories.Add(new SubCategoryPostDTO()
+                    {
+                        Name_Local = subCategory.Name_Local,
+                        Name_global = subCategory.Name_Global,
+                    });
+                }
             }
             // return
             return Ok(categoriesDTO);
