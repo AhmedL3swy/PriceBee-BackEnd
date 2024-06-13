@@ -68,5 +68,35 @@ namespace PriceComparing.Controllers
 
 			return Ok(combinedProductDetails);
 		}
-	}
+
+        // Delete product, product detials and related data
+        [HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteProduct(int id)
+		{
+			var prodcut = await _unitOfWork.ProductRepository.SelectById(id);
+            if (prodcut == null) return NotFound();
+
+            // Delete related with the user (UserFavProd, UserAlertProd, UserHistoryProd)
+            // User Favorite Products
+            //await _unitOfWork.
+
+            // User Alert Products
+			// await _unitOfWork.ProductRepository.Delete(prodcut.Id);
+
+            // Delete related data
+			await _unitOfWork.PriceHistoryRepository.DeleteRange(prodcut.PriceHistories);
+            await _unitOfWork.ProductImageRepository.DeleteRange(prodcut.ProductImages);
+            await _unitOfWork.ProductDetailRepository.DeleteRange(prodcut.ProductLinks.Select(pl => pl.ProductDetail));
+			await _unitOfWork.ProductLinkRepository.DeleteRange(prodcut.ProductLinks);
+
+
+
+			await _unitOfWork.ProductRepository.Delete(prodcut.Id);
+
+
+
+            return Ok();
+        }
+
+    }
 }
