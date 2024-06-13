@@ -9,8 +9,8 @@ namespace DTO
 		public int Id { get; set; }
 		public required string Name_Local { get; set; }
 		public required string Name_Global { get; set; }
-		public virtual ICollection<Brand> Brands { get; set; } = new List<Brand>();
-		public virtual ICollection<SubCategory> SubCategories { get; set; } = new List<SubCategory>();
+		public virtual ICollection<BrandPostDTO> Brands { get; set; } = new List<BrandPostDTO>();
+		public virtual ICollection<SubCategoryPostDTO> SubCategories { get; set; } = new List<SubCategoryPostDTO>();
 	}
 }
 

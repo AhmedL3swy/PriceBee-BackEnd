@@ -13,7 +13,7 @@ namespace DTO
         //ProductLinkDTO   
         public List<ProductDetailPostDTO> ProductDetailDTO { get; set; }
 
-        public List<ProductImageDTO> ProductImageDTO { get; set; }
+       // public List<ProductImageDTO> ProductImageDTO { get; set; }
 
     }
 }
