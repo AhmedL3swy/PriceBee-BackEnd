@@ -664,57 +664,59 @@ namespace PriceComparing.Models
             db.SaveChanges();
             db.ProductImages.AddRange(
     new ProductImage
-    {
-        ProdId = 1, // Assuming this corresponds to a "Samsung Phone"
-        Image = "samsung_phone_01.jpg"
-    },
-    new ProductImage
-    {
-        ProdId = 1, // Multiple images for the same product
-        Image = "samsung_phone_02.jpg"
-    },
-    new ProductImage
-    {
-        ProdId = 2, // Assuming this corresponds to an "Apple Phone"
-        Image = "apple_phone_01.jpg"
-    },
-    new ProductImage
-    {
-        ProdId = 3, // Assuming this corresponds to a "HP Laptop"
-        Image = "hp_laptop_01.jpg"
-    },
-    new ProductImage
-    {
-        ProdId = 4, // Assuming this corresponds to a "HP Printer"
-        Image = "hp_printer_01.jpg"
-    },
-    new ProductImage
-    {
-        ProdId = 5, // Assuming this corresponds to a "Ballpoint Pen"
-        Image = "ballpoint_pen_01.jpg"
-    },
-    new ProductImage
-    {
-        ProdId = 6, // Assuming this corresponds to "A4 Paper"
-        Image = "a4_paper_01.jpg"
-    },
-    new ProductImage
-    {
-        ProdId = 7, // Assuming this corresponds to a "Novel Book"
-        Image = "novel_book_01.jpg"
-    },
-    new ProductImage
-    {
-        ProdId = 8, // Assuming this corresponds to a "Dishes Set"
-        Image = "dishes_set_01.jpg"
-    },
-    new ProductImage
-    {
-        ProdId = 9, // Assuming this corresponds to a "Frying Pan"
-        Image = "frying_pan_01.jpg"
-    }
-);
+            {
+                ProdId = 1, // Assuming this corresponds to a "Samsung Phone"
+                Image = "samsung_phone_01.jpg"
+            },
+            new ProductImage
+            {
+                ProdId = 1, // Multiple images for the same product
+                Image = "samsung_phone_02.jpg"
+            },
+            new ProductImage
+            {
+                ProdId = 2, // Assuming this corresponds to an "Apple Phone"
+                Image = "apple_phone_01.jpg"
+            },
+            new ProductImage
+            {
+                ProdId = 3, // Assuming this corresponds to a "HP Laptop"
+                Image = "hp_laptop_01.jpg"
+            },
+            new ProductImage
+            {
+                ProdId = 4, // Assuming this corresponds to a "HP Printer"
+                Image = "hp_printer_01.jpg"
+            },
+            new ProductImage
+            {
+                ProdId = 5, // Assuming this corresponds to a "Ballpoint Pen"
+                Image = "ballpoint_pen_01.jpg"
+            },
+            new ProductImage
+            {
+                ProdId = 6, // Assuming this corresponds to "A4 Paper"
+                Image = "a4_paper_01.jpg"
+            },
+            new ProductImage
+            {
+                ProdId = 7, // Assuming this corresponds to a "Novel Book"
+                Image = "novel_book_01.jpg"
+            },
+            new ProductImage
+            {
+                ProdId = 8, // Assuming this corresponds to a "Dishes Set"
+                Image = "dishes_set_01.jpg"
+            },
+            new ProductImage
+            {
+                ProdId = 9, // Assuming this corresponds to a "Frying Pan"
+                Image = "frying_pan_01.jpg"
+            }
+            );
             db.SaveChanges();
+
+
 
             // Users
             // user has

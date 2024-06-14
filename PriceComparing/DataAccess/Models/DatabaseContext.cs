@@ -158,7 +158,7 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
         {
             entity.HasKey(e => e.Id).HasName("PK__Users__3214EC07DA5FEBAD");
 
-            entity.HasMany(d => d.Prods).WithMany(p => p.Users)
+            entity.HasMany(d => d.ProdAlertUser).WithMany(p => p.UserAlertProd)
                 .UsingEntity<Dictionary<string, object>>(
                     "UserAlertProd",
                     r => r.HasOne<Product>().WithMany()
@@ -176,7 +176,7 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
                         j.HasIndex(new[] { "ProdId" }, "IX_UserAlertProd_ProdId");
                     });
 
-            entity.HasMany(d => d.Prods1).WithMany(p => p.Users1)
+            entity.HasMany(d => d.ProdHistoryUser).WithMany(p => p.UserHistoryProd)
                 .UsingEntity<Dictionary<string, object>>(
                     "UserHistoryProd",
                     r => r.HasOne<Product>().WithMany()
@@ -194,7 +194,7 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
                         j.HasIndex(new[] { "ProdId" }, "IX_UserHistoryProd_ProdId");
                     });
 
-            entity.HasMany(d => d.ProdsNavigation).WithMany(p => p.UsersNavigation)
+            entity.HasMany(d => d.ProdFavUser).WithMany(p => p.UserFavProd)
                 .UsingEntity<Dictionary<string, object>>(
                     "UserFavProd",
                     r => r.HasOne<Product>().WithMany()
