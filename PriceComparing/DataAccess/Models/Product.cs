@@ -64,4 +64,9 @@ public partial class Product : ISoftDeletable
     [ForeignKey("ProdId")]
     [InverseProperty("ProdFavUser")]
     public virtual ICollection<User> UserFavProd { get; set; } = new List<User>();
+
+    // test
+    public virtual IEnumerable<UserAlertProd> UserAlertProds { get; set; }
+    public virtual IEnumerable<UserHistoryProd> UserHistoryProds { get; set; }
+    public virtual IEnumerable<UserFavProd> UserFavProds { get; set; }
 }

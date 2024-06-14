@@ -1,5 +1,6 @@
 ﻿using DataAccess;
 using DataAccess.Models;
+using PriceComparing.Controllers;
 using PriceComparing.Repository;
 
 namespace PriceComparing.UnitOfWork
@@ -20,7 +21,9 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<SubCategory> subCategoryRepository;
 		GenericRepository<PriceHistory> priceHistoryRepository;
 		GenericRepository<AuthUser> authUserRepository;
-		ProductRepository productRepo;
+		GenericRepository<UserAlertProd> userAlertProdRepository;
+        GenericRepository<UserFavProd> userFavProdRepo;
+        ProductRepository productRepo;
 
 
 
@@ -168,9 +171,39 @@ namespace PriceComparing.UnitOfWork
             }
         }
 
-		public void savechanges()
+        // UserAlertProd
+        public GenericRepository<UserAlertProd> UserAlertProdRepo
+        {
+            get
+            {
+                if (userAlertProdRepository == null)
+                {
+                    userAlertProdRepository = new GenericRepository<UserAlertProd>(_db);
+                }
+                return userAlertProdRepository;
+            }
+        }
+
+        // UserFavProd
+        public GenericRepository<UserFavProd> UserFavProdRepo
+        {
+            get
+            {
+                if (userFavProdRepo == null)
+                {
+                    userFavProdRepo = new GenericRepository<UserFavProd>(_db);
+                }
+                return userFavProdRepo;
+            }
+        }
+
+        // 
+
+
+        public void savechanges()
         {
             _db.SaveChanges();
         }
     }
+
 }

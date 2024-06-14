@@ -154,66 +154,103 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
                 .HasConstraintName("FK__SubCatego__Categ__398D8EEE");
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<UserAlertProd>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC07DA5FEBAD");
+            entity.HasKey(e=>new {e.UserID, e.ProductId })
+                .HasName("PK__UserAler__57CAB4F28267EEDA");
 
-            entity.HasMany(d => d.ProdAlertUser).WithMany(p => p.UserAlertProd)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserAlertProd",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProdId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserAlert__ProdI__5AEE82B9"),
-                    l => l.HasOne<User>().WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserAlert__ProdI__59FA5E80"),
-                    j =>
-                    {
-                        j.HasKey("UserID", "ProdId").HasName("PK__UserAler__57CAB4F28267EEDA");
-                        j.ToTable("UserAlertProd");
-                        j.HasIndex(new[] { "ProdId" }, "IX_UserAlertProd_ProdId");
-                    });
+            entity.HasOne(d => d.Product).WithMany(p => p.UserAlertProds)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__UserAlert__ProdI__5AEE82B9");
 
-            entity.HasMany(d => d.ProdHistoryUser).WithMany(p => p.UserHistoryProd)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserHistoryProd",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProdId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserHisto__ProdI__5EBF139D"),
-                    l => l.HasOne<User>().WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserHisto__ProdI__5DCAEF64"),
-                    j =>
-                    {
-                        j.HasKey("UserID", "ProdId").HasName("PK__UserHist__57CAB4F28EC6E229");
-                        j.ToTable("UserHistoryProd");
-                        j.HasIndex(new[] { "ProdId" }, "IX_UserHistoryProd_ProdId");
-                    });
-
-            entity.HasMany(d => d.ProdFavUser).WithMany(p => p.UserFavProd)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserFavProd",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProdId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserFavPr__ProdI__571DF1D5"),
-                    l => l.HasOne<User>().WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserFavPr__ProdI__5629CD9C"),
-                    j =>
-                    {
-                        j.HasKey("UserID", "ProdId").HasName("PK__UserFavP__57CAB4F256C39848");
-                        j.ToTable("UserFavProd");
-                        j.HasIndex(new[] { "ProdId" }, "IX_UserFavProd_ProdId");
-                    });
         });
 
-       
+        modelBuilder.Entity<UserFavProd>(entity =>
+        {
+            entity.HasKey(e => new { e.UserID, e.ProductId })
+                .HasName("PK__UserFavP__57CAB4F256C39848");
+
+            entity.HasOne(d=>d.Product).WithMany(p=>p.UserFavProds)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__UserFavPr__ProdI__571DF1D5");
+
+
+        });
+
+        modelBuilder.Entity<UserHistoryProd>(entity =>
+        {
+            entity.HasKey(e => new { e.UserID, e.ProductId })
+                .HasName("PK__UserHist__57CAB4F28EC6E229");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.UserHistoryProds)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__UserHisto__ProdI__5EBF139D");
+
+        });
+
+        //modelBuilder.Entity<User>(entity =>
+        //{
+        //    entity.HasKey(e => e.Id).HasName("PK__Users__3214EC07DA5FEBAD");
+
+        //    entity.HasMany(d => d.ProdAlertUser).WithMany(p => p.UserAlertProd)
+        //        .UsingEntity<UserAlertProd>(
+        //            "UserAlertProd",
+        //            r => r.HasOne<Product>().WithMany()
+        //                .HasForeignKey("ProdId")
+        //                .OnDelete(DeleteBehavior.ClientSetNull)
+        //                .HasConstraintName("FK__UserAlert__ProdI__5AEE82B9"),
+        //            l => l.HasOne<User>().WithMany()
+        //                .HasForeignKey("UserID")
+        //                .OnDelete(DeleteBehavior.ClientSetNull)
+        //                .HasConstraintName("FK__UserAlert__ProdI__59FA5E80"),
+        //            j =>
+        //            {
+        //                j.HasKey("UserID", "ProdId").HasName("PK__UserAler__57CAB4F28267EEDA");
+        //                j.ToTable("UserAlertProd");
+        //                j.HasIndex(new[] { "ProdId" }, "IX_UserAlertProd_ProdId");
+        //            });
+
+        //    entity.HasMany(d => d.ProdHistoryUser).WithMany(p => p.UserHistoryProd)
+        //        .UsingEntity<UserHistoryProd>(
+        //            "UserHistoryProd",
+        //            r => r.HasOne<Product>().WithMany()
+        //                .HasForeignKey("ProdId")
+        //                .OnDelete(DeleteBehavior.ClientSetNull)
+        //                .HasConstraintName("FK__UserHisto__ProdI__5EBF139D"),
+        //            l => l.HasOne<User>().WithMany()
+        //                .HasForeignKey("UserID")
+        //                .OnDelete(DeleteBehavior.ClientSetNull)
+        //                .HasConstraintName("FK__UserHisto__ProdI__5DCAEF64"),
+        //            j =>
+        //            {
+        //                j.HasKey("UserID", "ProdId").HasName("PK__UserHist__57CAB4F28EC6E229");
+        //                j.ToTable("UserHistoryProd");
+        //                j.HasIndex(new[] { "ProdId" }, "IX_UserHistoryProd_ProdId");
+        //            });
+
+        //    entity.HasMany(d => d.ProdFavUser).WithMany(p => p.UserFavProd)
+        //        .UsingEntity<UserFavProd>(
+        //            "UserFavProd",
+        //            r => r.HasOne<Product>().WithMany()
+        //                .HasForeignKey("ProdId")
+        //                .OnDelete(DeleteBehavior.ClientSetNull)
+        //                .HasConstraintName("FK__UserFavPr__ProdI__571DF1D5"),
+        //            l => l.HasOne<User>().WithMany()
+        //                .HasForeignKey("UserID")
+        //                .OnDelete(DeleteBehavior.ClientSetNull)
+        //                .HasConstraintName("FK__UserFavPr__ProdI__5629CD9C"),
+        //            j =>
+        //            {
+        //                j.HasKey("UserID", "ProdId").HasName("PK__UserFavP__57CAB4F256C39848");
+        //                j.ToTable("UserFavProd");
+        //                j.HasIndex(new[] { "ProdId" }, "IX_UserFavProd_ProdId");
+        //            });
+        //});
+
+
 
 
 
