@@ -3,6 +3,7 @@ using DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PriceComparing.Repository;
+using PriceComparing.Services;
 using PriceComparing.UnitOfWork;
 using System.Collections;
 
@@ -14,11 +15,13 @@ namespace PriceComparing.Controllers
     {
         private readonly UnitOfWOrks unitOfWork;
         private readonly UserRepoNonGenric OnlyUser;
+        private readonly IAuthServices authServices; 
 
-        public UserController(UnitOfWOrks _unitOfWork, UserRepoNonGenric _onlyUser)
+        public UserController(UnitOfWOrks _unitOfWork, UserRepoNonGenric _onlyUser,IAuthServices _authserv)
         {
             unitOfWork = _unitOfWork;
             OnlyUser = _onlyUser;
+            authServices = _authserv;
         }
 
         [HttpGet]
@@ -109,6 +112,21 @@ namespace PriceComparing.Controllers
 
             return Ok(user);
         }
+        [HttpPost("AssignAdmin")]
+        public async Task<IActionResult> AssignAdminRole(string ID)
+        {
+            string message = await authServices.AssignAdminRole(ID);
+            return Ok(message);
+        }
+
+        [HttpPost("RemoveAdmin")]
+        public async Task<IActionResult> RemoveAdminRole(string ID)
+        {
+            string message = await authServices.AssignUserRoleAgain(ID);
+            return Ok(message);
+        }
+
+
     }
 
 }

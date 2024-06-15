@@ -142,5 +142,57 @@ namespace PriceComparing.Services
             return result.Succeeded ? string.Empty : "Sonething went wrong";
         }
 
+        public async Task<string> AssignAdminRole(string ID)
+        {
+            var user = await userManager.FindByIdAsync(ID);
+            if (user == null)
+            {
+                return "Invalid user .";
+            }
+
+            if (!await roleManager.RoleExistsAsync("Admin"))
+            {
+                return "Role does not exist.";
+            }
+
+            var currentRoles = await userManager.GetRolesAsync(user);
+            if (currentRoles.Contains("Admin"))
+            {
+                return "Already Assign To Admin Role";
+            }
+            var removeRolesResult = await userManager.RemoveFromRolesAsync(user, currentRoles);
+            if (!removeRolesResult.Succeeded)
+            {
+                return "Failed to remove existing roles.";
+            }
+
+            var result = await userManager.AddToRoleAsync(user, "Admin");
+            return result.Succeeded ? "Suceess Assign Admin Role To Current ser" : "Something went wrong.";
+        }
+
+        public async Task<string> AssignUserRoleAgain(string ID)
+        {
+            var user = await userManager.FindByIdAsync(ID);
+            if (user == null)
+            {
+                return "Invalid user .";
+            }
+
+            if (!await roleManager.RoleExistsAsync("Admin"))
+            {
+                return "Role does not exist.";
+            }
+            var UsersRole = await userManager.GetRolesAsync(user);
+            if (UsersRole.Contains("Admin"))
+            {
+               await userManager.RemoveFromRoleAsync(user, "Admin");
+               await userManager.AddToRoleAsync(user, "User");
+                return "Remove From Admin Role";
+            }
+            else
+                return "Already is User Role";
+            
+        }
+
     }
 }
