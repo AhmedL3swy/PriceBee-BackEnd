@@ -54,14 +54,19 @@ public partial class Product : ISoftDeletable
     public virtual SubCategory SubCategory { get; set; }
 
     [ForeignKey("ProdId")]
-    [InverseProperty("Prods")]
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    [InverseProperty("ProdAlertUser")]
+    public virtual ICollection<User> UserAlertProd { get; set; } = new List<User>();
 
     [ForeignKey("ProdId")]
-    [InverseProperty("Prods1")]
-    public virtual ICollection<User> Users1 { get; set; } = new List<User>();
+    [InverseProperty("ProdHistoryUser")]
+    public virtual ICollection<User> UserHistoryProd { get; set; } = new List<User>();
 
     [ForeignKey("ProdId")]
-    [InverseProperty("ProdsNavigation")]
-    public virtual ICollection<User> UsersNavigation { get; set; } = new List<User>();
+    [InverseProperty("ProdFavUser")]
+    public virtual ICollection<User> UserFavProd { get; set; } = new List<User>();
+
+    // test
+    public virtual IEnumerable<UserAlertProd> UserAlertProds { get; set; }
+    public virtual IEnumerable<UserHistoryProd> UserHistoryProds { get; set; }
+    public virtual IEnumerable<UserFavProd> UserFavProds { get; set; }
 }

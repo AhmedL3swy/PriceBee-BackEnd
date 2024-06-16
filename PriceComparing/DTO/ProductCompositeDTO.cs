@@ -2,6 +2,7 @@
 {
 	public class CombinedProductDetailDTO
 	{
+		public int ProductId { get; set; }
 		public string ProductName_Global { get; set; }
 		public string ProductDescription_Global { get; set; }
 		public string SubCategoryName { get; set; }

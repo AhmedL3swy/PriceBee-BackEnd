@@ -11,12 +11,11 @@ namespace PriceComparing.Repository
 		{
 			_db = db;
 		}
-
+		//ssssssssssssssssssssssss
 		public IQueryable<TEntity> SelectAllProduct()
 		{
 			return _db.Set<TEntity>().AsNoTracking();
 		}
-
 		public async Task<List<TEntity>> SelectAll()
 		{
 			return await _db.Set<TEntity>().AsNoTracking().ToListAsync();
@@ -67,5 +66,17 @@ namespace PriceComparing.Repository
                 await _db.SaveChangesAsync();
             }
         }
+
+        internal async Task DeleteRange(IEnumerable<object> entities)
+        {
+            //TEntity? obj = await _db.Set<TEntity>().FindAsync(entities);
+            _db.Set<TEntity>().RemoveRange(entities.Cast<TEntity>());
+            await _db.SaveChangesAsync();
+            //foreach (var item in Items)
+            //{
+            //}
+        }
+
+
     }
 }
