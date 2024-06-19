@@ -69,7 +69,7 @@ namespace DataAccess.Models
 
         // Added properties for paid product
         public bool IsPaid { get; set; }
-        public TimeSpan? Duration { get; set; }
+        public int? Duration { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public decimal? Budget { get; set; }

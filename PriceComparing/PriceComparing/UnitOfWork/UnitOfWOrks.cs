@@ -24,7 +24,7 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<UserAlertProd> userAlertProdRepository;
         GenericRepository<UserFavProd> userFavProdRepo;
         ProductRepository productRepo;
-        GenericRepository<PaidProduct> PaidProductRepository;
+        GenericRepository<PaidProduct> paidProductRepository;
 
 
 
@@ -198,7 +198,18 @@ namespace PriceComparing.UnitOfWork
             }
         }
 
-        // 
+        // PaidProductRepository
+        public GenericRepository<PaidProduct> PaidProductRepository
+        {
+            get
+            {
+                if (paidProductRepository == null)
+                {
+                    paidProductRepository = new GenericRepository<PaidProduct>(_db);
+                }
+                return paidProductRepository;
+            }
+        }
 
 
         public void savechanges()
