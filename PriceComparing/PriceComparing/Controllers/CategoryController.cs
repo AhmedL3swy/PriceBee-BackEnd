@@ -42,8 +42,9 @@ namespace PriceComparing.Controllers
                 // using foreach for Brands and SubCategories
                 foreach (var brand in category.Brands)
                 {
-                    categoriesDTO[categoriesDTO.Count - 1].Brands.Add(new BrandPostDTO()
+                    categoriesDTO[categoriesDTO.Count - 1].Brands.Add(new BrandDTO()
                     {
+                        id = brand.Id,
                         Name_Local = brand.Name_Local,
                         Name_Global = brand.Name_Global,
                         Description_Local = brand.Description_Local,
@@ -53,8 +54,9 @@ namespace PriceComparing.Controllers
 
                 foreach (var subCategory in category.SubCategories)
                 {
-                    categoriesDTO[categoriesDTO.Count - 1].SubCategories.Add(new SubCategoryPostDTO()
+                    categoriesDTO[categoriesDTO.Count - 1].SubCategories.Add(new SubCategoryDTO()
                     {
+                        id = subCategory.Id,
                         Name_Local = subCategory.Name_Local,
                         Name_global = subCategory.Name_Global,
                     });
