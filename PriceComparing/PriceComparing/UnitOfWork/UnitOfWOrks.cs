@@ -24,6 +24,7 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<UserAlertProd> userAlertProdRepository;
         GenericRepository<UserFavProd> userFavProdRepo;
         ProductRepository productRepo;
+        GenericRepository<PaidProduct> PaidProductRepository;
 
 
 
