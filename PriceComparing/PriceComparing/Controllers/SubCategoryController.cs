@@ -57,6 +57,7 @@ namespace PriceComparing.Controllers
         {
                 Name_Local = subCategoryPostDTO.Name_Local,
                 Name_Global = subCategoryPostDTO.Name_global,
+                CategoryId = subCategoryPostDTO.CategoryId
             };
             await _unitOfWork.SubCategoryRepository.Add(subCategory);
             return Ok();

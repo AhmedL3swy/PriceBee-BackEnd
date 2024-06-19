@@ -10,5 +10,6 @@ namespace DTO
     {
         public string Name_Local { get; set; }
         public string Name_global { get; set; }
+        public int CategoryId { get; set; }
     }
 }
