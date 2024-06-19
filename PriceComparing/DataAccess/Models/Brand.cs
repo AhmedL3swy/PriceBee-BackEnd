@@ -41,4 +41,7 @@ public partial class Brand : ISoftDeletable
 
     [InverseProperty("Brand")]
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+
+    public virtual ICollection<PaidProduct> PaidProducts { get; set; }
+
 }
