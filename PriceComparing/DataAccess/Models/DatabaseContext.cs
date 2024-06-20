@@ -43,14 +43,15 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
 
     public virtual DbSet<SubCategory> SubCategories { get; set; }
 
-    public virtual DbSet<User> _Users { get; set; }
+    public virtual DbSet<User> websiteUsers { get; set; }
+
+    public virtual DbSet<UserFavProd> SDUserFavProds { get; set; }
 
 
-    
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ProdCompDatabase;Integrated Security=True");
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ProdCompDatabase;Integrated Security=True");
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

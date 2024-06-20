@@ -492,8 +492,38 @@ namespace PriceComparing.Models
 
 
             db.Users.AddRange(users);
+            db.SaveChanges();
+            //add user fav products
 
+            var productIds = new List<int> { 1, 2, 3 };
 
+          
+            var products = db.Products
+                .Where(p => productIds.Contains(p.Id))
+                .Include(p => p.ProductImages) 
+                .ToList();
+
+            
+
+            var UserWebsite = new User()
+            {
+                AuthenticatedUser = authUser2,
+                ProdFavUser = products
+            };
+
+            db.websiteUsers.Add(UserWebsite);
+            db.SaveChanges();
+
+            List<UserFavProd> FavProd = new List<UserFavProd>() {
+             new UserFavProd()  {ProductId =1,UserID=UserWebsite.Id },
+             new UserFavProd()  {ProductId =2,UserID=UserWebsite.Id },
+             new UserFavProd()  {ProductId =3,UserID=UserWebsite.Id },
+
+        };
+
+            db.SDUserFavProds.AddRange(FavProd);
+            db.SaveChanges();
+            // Add Role
             db.Roles.AddRange(new IdentityRole
             {
                 Id = Guid.NewGuid().ToString(),
