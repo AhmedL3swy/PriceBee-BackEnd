@@ -106,8 +106,8 @@ namespace PriceComparing.Repository
                 {
                     id = sc.Id,
                     Name_Local = sc.Name_Local,
-                    Name_global = sc.Name_Global,
-                    Categoryid = sc.CategoryId,
+                    Name_Global = sc.Name_Global,
+                    CategoryId = sc.CategoryId,
                    
                 })
                 .ToListAsync();
