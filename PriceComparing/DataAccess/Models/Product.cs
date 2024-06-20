@@ -36,6 +36,8 @@ public partial class Product : ISoftDeletable
     
     public int? BrandId { get; set; }
 
+    public int NumberOfClicks { get; set; } = 0;
+
     [ForeignKey("BrandId")]
     [InverseProperty("Products")]
     public virtual Brand Brand { get; set; }

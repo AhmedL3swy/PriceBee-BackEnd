@@ -1,4 +1,7 @@
 ﻿using DataAccess.Models;
+using DTO;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 namespace PriceComparing.Repository
@@ -6,6 +9,13 @@ namespace PriceComparing.Repository
     public class UserRepoNonGenric
     {
         private readonly DatabaseContext _db;
+        private readonly UserManager<AuthUser> userManager;
+
+        public UserRepoNonGenric(DatabaseContext db, UserManager<AuthUser> _userManager)
+        {
+            _db = db;
+            userManager = _userManager;
+        }
 
         public UserRepoNonGenric(DatabaseContext db)
         {
@@ -58,6 +68,22 @@ namespace PriceComparing.Repository
         {
             var user = await _db.Users.FindAsync(id);
             return user;
+        }
+
+        public async Task UpdateUserAsync(AuthUser user, UpdateUserDTO UpdatedUser)
+        {
+            user.UserName = UpdatedUser.UserName;
+            user.Email= UpdatedUser.Email;
+            user.FName = UpdatedUser.FirstName;
+            user.LName = UpdatedUser.LastName;
+            user.Country =UpdatedUser.Country;
+            user.PhoneNumber = UpdatedUser.PhoneNumber;
+            user.PhoneCode=UpdatedUser.PhoneCode;
+            user.Gender = UpdatedUser.Gender; 
+          
+            await _db.SaveChangesAsync();
+          
+       
         }
     }
 }

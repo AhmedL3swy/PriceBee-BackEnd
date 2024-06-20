@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace PriceComparing.Repository
@@ -6,10 +7,12 @@ namespace PriceComparing.Repository
 	public class GenericRepository<TEntity> where TEntity : class
 	{
 		private readonly DatabaseContext _db;
+        private readonly UserManager<AuthUser> userManager;
 
-		public GenericRepository(DatabaseContext db)
+        public GenericRepository(DatabaseContext db)
 		{
 			_db = db;
+
 		}
 
 		public IQueryable<TEntity> SelectAllProduct()
@@ -46,6 +49,17 @@ namespace PriceComparing.Repository
 			return await _db.Set<TEntity>().FindAsync(id);
 		}
 
+        public async Task<TEntity?> SelectUserById(string id)
+        {
+            return await _db.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<TEntity?> SelectUserByEmail(string email)
+        {
+            return await _db.Set<TEntity>().FindAsync(email);
+        }
+
+     
         // Get by id ignoring filters
         public async Task<TEntity?> SelectByIdIgnoringFiltersAsync(int id)
         {
@@ -59,6 +73,17 @@ namespace PriceComparing.Repository
 
 
         public async Task Add(TEntity entity)
+        public async Task<TEntity?> SelectUserById(string id)
+        {
+            return await _db.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<TEntity?> SelectUserByEmail(string email)
+        {
+            return await _db.Set<TEntity>().FindAsync(email);
+        }
+
+        public async Task Add(TEntity entity)
 		{
 			await _db.Set<TEntity>().AddAsync(entity);
 			await _db.SaveChangesAsync();
@@ -70,7 +95,9 @@ namespace PriceComparing.Repository
 			await _db.SaveChangesAsync();
 		}
 
-		public async Task Delete(int id)
+       
+
+        public async Task Delete(int id)
 		{
 			TEntity? obj = await _db.Set<TEntity>().FindAsync(id);
 			if (obj != null)

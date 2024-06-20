@@ -117,30 +117,31 @@ namespace PriceComparing
             });
 
             builder.Services.AddScoped<UnitOfWOrks>();
+            builder.Services.AddScoped<IUserServices,UserService>();
 
-			#region Security code
-			//builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
-			//    .AddJwtBearer("myscheme",
-			//    //validate token
-			//    op =>
-			//    {
-			//        #region secret key
-			//        string key = "welcome to my secret key mohamed elshafie";
-			//        var secertkey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
-			//        #endregion
-			//        op.TokenValidationParameters = new TokenValidationParameters()
-			//        {
-			//            IssuerSigningKey = secertkey,
-			//            ValidateIssuer = false,
-			//            ValidateAudience = false
+            #region Security code
+            //builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
+            //    .AddJwtBearer("myscheme",
+            //    //validate token
+            //    op =>
+            //    {
+            //        #region secret key
+            //        string key = "welcome to my secret key mohamed elshafie";
+            //        var secertkey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+            //        #endregion
+            //        op.TokenValidationParameters = new TokenValidationParameters()
+            //        {
+            //            IssuerSigningKey = secertkey,
+            //            ValidateIssuer = false,
+            //            ValidateAudience = false
 
-			//        };
-			//    }
-			//    );
-			#endregion
+            //        };
+            //    }
+            //    );
+            #endregion
 
 
-			var app = builder.Build();
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
