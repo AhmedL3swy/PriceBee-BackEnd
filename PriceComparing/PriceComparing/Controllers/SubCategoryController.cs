@@ -40,7 +40,7 @@ namespace PriceComparing.Controllers
             var subCategory = await _unitOfWork.SubCategoryRepository.SelectById(id);
             if (subCategory == null) return NotFound();
             SubCategory subCategoryDTO = new SubCategory()
-    {
+            {
                 Id = subCategory.Id,
                 Name_Local = subCategory.Name_Local,
                 Name_Global = subCategory.Name_Global,
@@ -54,9 +54,9 @@ namespace PriceComparing.Controllers
         {
             if (subCategoryPostDTO == null) return BadRequest();
             SubCategory subCategory = new SubCategory()
-        {
+            {
                 Name_Local = subCategoryPostDTO.Name_Local,
-                Name_Global = subCategoryPostDTO.Name_global,
+                Name_Global = subCategoryPostDTO.Name_Global,
                 CategoryId = subCategoryPostDTO.CategoryId
             };
             await _unitOfWork.SubCategoryRepository.Add(subCategory);
@@ -65,15 +65,25 @@ namespace PriceComparing.Controllers
         }
             
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSubCategory(int id, [FromBody] SubCategory subCategory)
+        public async Task<IActionResult> UpdateSubCategory(int id, [FromBody] SubCategoryPostDTO subCategoryPostDTO)
         {
-            if (subCategory == null) return BadRequest();
+            // Check // Get // Check
+            if (subCategoryPostDTO == null) return BadRequest();
             var subCategoryToUpdate = await _unitOfWork.SubCategoryRepository.SelectById(id);
             if (subCategoryToUpdate == null) return NotFound();
-            subCategoryToUpdate.Name_Local = subCategory.Name_Local;
-            subCategoryToUpdate.Name_Global = subCategory.Name_Global;
-            subCategoryToUpdate.CategoryId = subCategory.CategoryId;
+
+            // Check // Get // Check (Category)
+            if (subCategoryPostDTO.CategoryId == null) return BadRequest();
+            var category = await _unitOfWork.CategoryRepository.SelectById(subCategoryPostDTO.CategoryId);
+            if (category == null) return NotFound();
+
+            // update 
+            subCategoryToUpdate.Name_Local  = subCategoryPostDTO.Name_Local;
+            subCategoryToUpdate.Name_Global = subCategoryPostDTO.Name_Global;
+            subCategoryToUpdate.CategoryId  = subCategoryPostDTO.CategoryId;
+
             await _unitOfWork.SubCategoryRepository.UpdateAsync(subCategoryToUpdate);
+
             return Ok();
         }
 
