@@ -78,6 +78,43 @@ namespace PriceComparing.Repository
             }
             await _db.SaveChangesAsync();
         }
+        // Get Brand By Category ID
+        public async Task<List<BrandDTO>> GetBrandsByCategoryId(int categoryId)
+        {
+            List<BrandDTO> brands = await _db.Brands
+                .Where(b => b.CategoryId==categoryId)
+                .Select(b => new BrandDTO()
+                {
+                    id = b.Id,
+                    Name_Local = b.Name_Local,
+                    Logo = b.Logo,
+                    CategiryId = b.CategoryId,
+                    Description_Local = b.Description_Local,
+                    Description_Global = b.Description_Global,
+                    Name_Global = b.Name_Global
+        
+                })
+                .ToListAsync();
+            return brands;
+        }
+        // Get SubCategory By Category ID
+        public async Task<List<SubCategoryDTO>> GetSubCategoriesByCategoryId(int categoryId)
+        {
+            List<SubCategoryDTO> subCategories = await _db.SubCategories
+                .Where(sc => sc.CategoryId == categoryId)
+                .Select(sc => new SubCategoryDTO()
+                {
+                    id = sc.Id,
+                    Name_Local = sc.Name_Local,
+                    Name_Global = sc.Name_Global,
+                    CategoryId = sc.CategoryId,
+                   
+                })
+                .ToListAsync();
+            return subCategories;
+        }
+        
+
 
 
     }

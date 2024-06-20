@@ -8,7 +8,9 @@ namespace DTO
 {
     public class SubCategoryPostDTO
     {
-        public string Name_Local { get; set; }
-        public string Name_global { get; set; }
+		    public int Id { get; set; }
+		    public string Name_Local { get; set; }
+        public string Name_Global { get; set; }
+        public int CategoryId { get; set; }
     }
 }

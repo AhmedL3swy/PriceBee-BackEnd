@@ -45,8 +45,10 @@ namespace PriceComparing.Controllers
 				var combinedProductDetail = new CombinedProductDetailDTO
 				{
 					ProductId = product.Id,
-					ProductName_Global = product.Name_Global,
-					ProductDescription_Global = product.Description_Global,
+                    ProductName_Local = product.Name_Local,
+                    ProductName_Global = product.Name_Global,
+                    ProductDescription_Local = product.Description_Local,
+                    ProductDescription_Global = product.Description_Global,
 					SubCategoryName = product.SubCategory?.Name_Global,
 					BrandName = product.Brand?.Name_Global,
 					// Ensure non-empty lists are handled
@@ -82,11 +84,11 @@ namespace PriceComparing.Controllers
             // await _unitOfWork.
 
             // User Alert Products
-            await _unitOfWork.ProductRepository.DeleteRange(prodcut.UserAlertProd);
+            await _unitOfWork.ProductRepository.DeleteRange(prodcut.UserAlertProds);
             // User History Products
-            await _unitOfWork.ProductRepository.DeleteRange(prodcut.UserHistoryProd);
+            await _unitOfWork.ProductRepository.DeleteRange(prodcut.UserHistoryProds);
             // User Favorite Products
-			await _unitOfWork.ProductRepository.DeleteRange(prodcut.UserFavProd);
+			await _unitOfWork.ProductRepository.DeleteRange(prodcut.UserFavProds);
 
             // Delete related data
             await _unitOfWork.PriceHistoryRepository.DeleteRange(prodcut.PriceHistories);
@@ -103,5 +105,99 @@ namespace PriceComparing.Controllers
             return Ok();
         }
 
-    }
+        public enum searchIn
+        {
+            featured,
+            mostPopular,
+            mostViewed,
+            all,
+        }
+        public enum SortedBy
+        {
+            LowToHighPrice,
+            HighToLowPrice,
+            New,
+            featured,
+            mostPopular,
+            mostViewed,
+            all
+        }
+
+        // Search product 
+   //     [HttpGet("search")]
+   //     public async Task<IActionResult> SearchProduct(
+			//string? searchValue = null, 
+			//Category? cat = null, 
+			//SubCategory? subCat = null, 
+			//Brand? brand = null, 
+			//int? minPrice = null, int? maxPrice = null, 
+			//List<Domain>? store = null, 
+			//searchIn searchIn = searchIn.all)
+   //     {
+   //         // Load products with related data using Eager Loading
+   //         var products = await _unitOfWork.ProductRepository
+   //             .SelectAllProduct()
+   //             .Include(p => p.SubCategory)
+   //             .Include(p => p.Brand)
+   //             .Include(p => p.ProductImages)
+   //             .Include(p => p.ProductLinks)
+   //                 .ThenInclude(pl => pl.Domain)
+   //             .Include(p => p.ProductLinks)
+   //                 .ThenInclude(pl => pl.ProductDetail)
+   //             .ToListAsync();
+
+   //         if (products == null || !products.Any()) return NotFound();
+
+   //         var combinedProductDetails = new List<CombinedProductDetailDTO>();
+
+   //         foreach (var product in products)
+   //         {
+   //             var combinedProductDetail = new CombinedProductDetailDTO
+   //             {
+   //                 ProductId = product.Id,
+   //                 ProductName_Local = product.Name_Local,
+   //                 ProductName_Global = product.Name_Global,
+   //                 ProductDescription_Local = product.Description_Local,
+   //                 ProductDescription_Global = product.Description_Global,
+   //                 SubCategoryName = product.SubCategory?.Name_Global,
+   //                 BrandName = product.Brand?.Name_Global,
+   //                 // Ensure non-empty lists are handled
+   //                 LastUpdated = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastUpdated) : DateTime.MinValue,
+   //                 LastScraped = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastScraped) : DateTime.MinValue,
+
+   //                 Images = product.ProductImages.Select(img => img.Image).ToList(),
+   //                 Links = product.ProductLinks.Select(link => new ProductLinkDTO2
+   //                 {
+   //                     DomainName = link.Domain.Name_Global,
+   //                     DomainLogo = link.Domain.Logo,
+   //                     ProductLink = link.ProductLink1,
+   //                     Price = link.ProductDetail?.Price ?? 0,
+   //                     Rating = link.ProductDetail?.Rating
+   //                 }).ToList()
+   //             };
+
+   //             combinedProductDetails.Add(combinedProductDetail);
+   //         }
+
+   //         // apply the search value in the product name, description
+   //         if (!string.IsNullOrEmpty(searchValue))
+   //         {
+   //             combinedProductDetails = combinedProductDetails.Where(p => 
+   //                 p.ProductName_Global.Contains(searchValue) 
+   //              || p.ProductDescription_Global.Contains(searchValue)
+   //              || p.ProductName_Local.Contains(searchValue)
+   //              || p.ProductDescription_Local.Contains(searchValue)).ToList();
+   //         }
+
+   //         return Ok(combinedProductDetails);
+
+   //     }
+
+
+
+		//public async Task<IActionResult> Search(string? searchValue = null, Category? cat = null, SubCategory? subCat = null, Brand? brand = null, int? minPrice = null, int? maxPrice = null, List<Domain>? store = null, searchIn searchIn)
+		//{
+
+		//}
+	}
 }

@@ -14,7 +14,7 @@ namespace PriceComparing.Repository
 			_db = db;
 
 		}
-		//ssssssssssssssssssssssss
+
 		public IQueryable<TEntity> SelectAllProduct()
 		{
 			return _db.Set<TEntity>().AsNoTracking();
@@ -31,12 +31,37 @@ namespace PriceComparing.Repository
                 .IgnoreQueryFilters()
                 .ToListAsync();
         }
+        internal async Task<List<TEntity>> SelectAllSoftDeletedAsync()
+        {
+            // throw new NotImplementedException();
+            return await _db.Set<TEntity>()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                // .Where(e => (bool)e.GetType().GetProperty("IsDeleted").GetValue(e))
+                .Where(s => EF.Property<bool>(s, "IsDeleted"))
+                .ToListAsync();
+
+        }
+
 
         public async Task<TEntity?> SelectById(int id)
 		{
 			return await _db.Set<TEntity>().FindAsync(id);
 		}
 
+        // Get by id ignoring filters
+        public async Task<TEntity?> SelectByIdIgnoringFiltersAsync(int id)
+        {
+            var entities = await _db.Set<TEntity>()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .ToListAsync();
+
+            return entities.FirstOrDefault(e => (int)e.GetType().GetProperty("Id").GetValue(e) == id);
+        }
+
+
+        public async Task Add(TEntity entity)
         public async Task<TEntity?> SelectUserById(string id)
         {
             return await _db.Set<TEntity>().FindAsync(id);
@@ -92,6 +117,19 @@ namespace PriceComparing.Repository
             //}
         }
 
+
+        internal async Task RestoreAsync(TEntity entity)
+        {
+            // check if Attached 
+            if (_db.Entry(entity).State == EntityState.Detached)
+                _db.Set<TEntity>().Attach(entity);
+            // update the state to modified
+            _db.Entry(entity).State = EntityState.Modified;
+            // set the IsDeleted property to false
+            _db.Entry(entity).Property("IsDeleted").CurrentValue = false;
+            // save the changes
+            await _db.SaveChangesAsync();
+        }
 
     }
 }
