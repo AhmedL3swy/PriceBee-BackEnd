@@ -83,7 +83,7 @@ namespace PriceComparing.Controllers
             brand.Logo = brandDTO.Logo;
             await _unitOfWork.BrandRepository.UpdateAsync(brand);
             
-            return Ok(brand);
+            return Ok(brandDTO);
             
         }
         [HttpDelete("{id}")]
@@ -95,6 +95,16 @@ namespace PriceComparing.Controllers
             _unitOfWork.savechanges();
             return Ok();
 
+        }
+
+        [HttpDelete("SoftDelete/{id}")]
+        public async Task<IActionResult> SoftDeleteBrand(int id)
+        {
+            var brand = await _unitOfWork.BrandRepository.SelectById(id);
+            if (brand == null) return NotFound();
+            await _unitOfWork.BrandRepository.SoftDelete(id);
+            _unitOfWork.savechanges();
+            return Ok();
         }
 
         

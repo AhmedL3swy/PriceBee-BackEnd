@@ -101,7 +101,9 @@ namespace PriceComparing.Controllers
             paidProduct.Name_Global = paidProductDTO.Name_Global;
             paidProduct.Description_Local = paidProductDTO.Description_Local;
             paidProduct.Description_Global = paidProductDTO.Description_Global;
-          
+            paidProduct.SubCategoryId = paidProductDTO.SubCategoryId;
+            paidProduct.BrandId = paidProductDTO.BrandId;
+            paidProduct.IsPaid = paidProductDTO.IsPaid;
             paidProduct.Duration = paidProductDTO.Duration;
             paidProduct.StartTime = paidProductDTO.StartTime;
             paidProduct.EndTime = paidProductDTO.EndTime;
