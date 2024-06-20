@@ -60,7 +60,8 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             entity.HasKey(e => e.Id).HasName("PK__Brands__3214EC070B848796");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Brands)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Brands__Category__06CD04F7");
         });
 
@@ -79,7 +80,8 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             entity.HasKey(e => e.Id).HasName("PK__PriceHis__3214EC0755FCD22C");
 
             entity.HasOne(d => d.Prod).WithMany(p => p.PriceHistories)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__PriceHist__ProdI__3F466844");
         });
 
@@ -90,7 +92,8 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             entity.HasOne(d => d.Brand).WithMany(p => p.Products).HasConstraintName("FK_Product_Brands");
 
             entity.HasOne(d => d.SubCategory).WithMany(p => p.Products)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Product__SubCate__3C69FB99");
         });
 
@@ -101,7 +104,8 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.HasOne(d => d.IdNavigation).WithOne(p => p.ProductDetail)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__ProductDe__Brand__47DBAE45");
         });
 
@@ -110,7 +114,8 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             entity.HasKey(e => e.Id).HasName("PK__ProductI__3214EC075506E1BC");
 
             entity.HasOne(d => d.Prod).WithMany(p => p.ProductImages)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_ProductImages_Product");
         });
 
@@ -119,11 +124,13 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             entity.HasKey(e => e.Id).HasName("PK__ProductL__3214EC07EA19D01C");
 
             entity.HasOne(d => d.Domain).WithMany(p => p.ProductLinks)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__ProductLi__Domai__44FF419A");
 
             entity.HasOne(d => d.Prod).WithMany(p => p.ProductLinks)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__ProductLi__ProdI__440B1D61");
         });
 
@@ -132,7 +139,8 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             entity.HasKey(e => e.Id).HasName("PK__ProductS__3214EC0736B50124");
 
             entity.HasOne(d => d.ProdDet).WithMany(p => p.ProductSponsoreds)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__ProductSp__ProdI__4D94879B");
         });
 
@@ -141,7 +149,8 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             entity.HasKey(e => e.Id).HasName("PK__SearchVa__3214EC075A6F0F8F");
 
             entity.HasOne(d => d.User).WithMany(p => p.SearchValues)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__SearchVal__UserI__534D60F1");
         });
 
@@ -150,72 +159,50 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
             entity.HasKey(e => e.Id).HasName("PK__SubCateg__3214EC07F20DA768");
 
             entity.HasOne(d => d.Category).WithMany(p => p.SubCategories)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__SubCatego__Categ__398D8EEE");
         });
 
-        modelBuilder.Entity<User>(entity =>
+        modelBuilder.Entity<UserAlertProd>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC07DA5FEBAD");
+            entity.HasKey(e=>new {e.UserID, e.ProductId })
+                .HasName("PK__UserAler__57CAB4F28267EEDA");
 
-            entity.HasMany(d => d.Prods).WithMany(p => p.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserAlertProd",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProdId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserAlert__ProdI__5AEE82B9"),
-                    l => l.HasOne<User>().WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserAlert__ProdI__59FA5E80"),
-                    j =>
-                    {
-                        j.HasKey("UserID", "ProdId").HasName("PK__UserAler__57CAB4F28267EEDA");
-                        j.ToTable("UserAlertProd");
-                        j.HasIndex(new[] { "ProdId" }, "IX_UserAlertProd_ProdId");
-                    });
+            entity.HasOne(d => d.Product).WithMany(p => p.UserAlertProds)
+                .HasForeignKey(d => d.ProductId)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__UserAlert__ProdI__5AEE82B9");
 
-            entity.HasMany(d => d.Prods1).WithMany(p => p.Users1)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserHistoryProd",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProdId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserHisto__ProdI__5EBF139D"),
-                    l => l.HasOne<User>().WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserHisto__ProdI__5DCAEF64"),
-                    j =>
-                    {
-                        j.HasKey("UserID", "ProdId").HasName("PK__UserHist__57CAB4F28EC6E229");
-                        j.ToTable("UserHistoryProd");
-                        j.HasIndex(new[] { "ProdId" }, "IX_UserHistoryProd_ProdId");
-                    });
-
-            entity.HasMany(d => d.ProdsNavigation).WithMany(p => p.UsersNavigation)
-                .UsingEntity<Dictionary<string, object>>(
-                    "UserFavProd",
-                    r => r.HasOne<Product>().WithMany()
-                        .HasForeignKey("ProdId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserFavPr__ProdI__571DF1D5"),
-                    l => l.HasOne<User>().WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__UserFavPr__ProdI__5629CD9C"),
-                    j =>
-                    {
-                        j.HasKey("UserID", "ProdId").HasName("PK__UserFavP__57CAB4F256C39848");
-                        j.ToTable("UserFavProd");
-                        j.HasIndex(new[] { "ProdId" }, "IX_UserFavProd_ProdId");
-                    });
         });
 
-       
+        modelBuilder.Entity<UserFavProd>(entity =>
+        {
+            entity.HasKey(e => new { e.UserID, e.ProductId })
+                .HasName("PK__UserFavP__57CAB4F256C39848");
+
+            entity.HasOne(d=>d.Product).WithMany(p=>p.UserFavProds)
+                .HasForeignKey(d => d.ProductId)
+                // .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__UserFavPr__ProdI__571DF1D5");
 
 
+        });
+
+        modelBuilder.Entity<UserHistoryProd>(entity =>
+        {
+            entity.HasKey(e => new { e.UserID, e.ProductId })
+                .HasName("PK__UserHist__57CAB4F28EC6E229");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.UserHistoryProds)
+                .HasForeignKey(d => d.ProductId)
+                // .OnDelete(DeleteBehavior.ClientSetNull)-
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK__UserHisto__ProdI__5EBF139D");
+
+        });
 
         base.OnModelCreating(modelBuilder);
         // OnModelCreatingPartial(modelBuilder);

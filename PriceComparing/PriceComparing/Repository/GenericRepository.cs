@@ -11,7 +11,7 @@ namespace PriceComparing.Repository
 		{
 			_db = db;
 		}
-		//ssssssssssssssssssssssss
+
 		public IQueryable<TEntity> SelectAllProduct()
 		{
 			return _db.Set<TEntity>().AsNoTracking();
@@ -28,13 +28,37 @@ namespace PriceComparing.Repository
                 .IgnoreQueryFilters()
                 .ToListAsync();
         }
+        internal async Task<List<TEntity>> SelectAllSoftDeletedAsync()
+        {
+            // throw new NotImplementedException();
+            return await _db.Set<TEntity>()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                // .Where(e => (bool)e.GetType().GetProperty("IsDeleted").GetValue(e))
+                .Where(s => EF.Property<bool>(s, "IsDeleted"))
+                .ToListAsync();
+
+        }
+
 
         public async Task<TEntity?> SelectById(int id)
 		{
 			return await _db.Set<TEntity>().FindAsync(id);
 		}
 
-		public async Task Add(TEntity entity)
+        // Get by id ignoring filters
+        public async Task<TEntity?> SelectByIdIgnoringFiltersAsync(int id)
+        {
+            var entities = await _db.Set<TEntity>()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .ToListAsync();
+
+            return entities.FirstOrDefault(e => (int)e.GetType().GetProperty("Id").GetValue(e) == id);
+        }
+
+
+        public async Task Add(TEntity entity)
 		{
 			await _db.Set<TEntity>().AddAsync(entity);
 			await _db.SaveChangesAsync();
@@ -67,16 +91,29 @@ namespace PriceComparing.Repository
             }
         }
 
-        internal async Task DeleteRange(object Item)
+        internal async Task DeleteRange(IEnumerable<object> entities)
         {
-            TEntity? obj = await _db.Set<TEntity>().FindAsync(Item);
-            if (obj != null)
-            {
-                _db.Set<TEntity>().RemoveRange(obj);
-                await _db.SaveChangesAsync();
-            }
+            //TEntity? obj = await _db.Set<TEntity>().FindAsync(entities);
+            _db.Set<TEntity>().RemoveRange(entities.Cast<TEntity>());
+            await _db.SaveChangesAsync();
+            //foreach (var item in Items)
+            //{
+            //}
         }
 
+
+        internal async Task RestoreAsync(TEntity entity)
+        {
+            // check if Attached 
+            if (_db.Entry(entity).State == EntityState.Detached)
+                _db.Set<TEntity>().Attach(entity);
+            // update the state to modified
+            _db.Entry(entity).State = EntityState.Modified;
+            // set the IsDeleted property to false
+            _db.Entry(entity).Property("IsDeleted").CurrentValue = false;
+            // save the changes
+            await _db.SaveChangesAsync();
+        }
 
     }
 }

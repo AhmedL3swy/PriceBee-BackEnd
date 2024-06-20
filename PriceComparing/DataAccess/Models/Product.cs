@@ -53,15 +53,26 @@ public partial class Product : ISoftDeletable
     [InverseProperty("Products")]
     public virtual SubCategory SubCategory { get; set; }
 
-    [ForeignKey("ProdId")]
-    [InverseProperty("Prods")]
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdAlertUser")]
+    //public virtual ICollection<User> UserAlertProd { get; set; } = new List<User>();
 
-    [ForeignKey("ProdId")]
-    [InverseProperty("Prods1")]
-    public virtual ICollection<User> Users1 { get; set; } = new List<User>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdHistoryUser")]
+    //public virtual ICollection<User> UserHistoryProd { get; set; } = new List<User>();
 
-    [ForeignKey("ProdId")]
-    [InverseProperty("ProdsNavigation")]
-    public virtual ICollection<User> UsersNavigation { get; set; } = new List<User>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdFavUser")]
+    //public virtual ICollection<User> UserFavProd { get; set; } = new List<User>();
+
+    // test
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdAlertUser")]
+    public virtual ICollection<UserAlertProd> UserAlertProds { get; set; } = new List<UserAlertProd>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdHistoryUser")]
+    public virtual ICollection<UserHistoryProd> UserHistoryProds { get; set; } = new List<UserHistoryProd>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdFavUser")]
+    public virtual ICollection<UserFavProd> UserFavProds { get; set; } = new List<UserFavProd>();
 }

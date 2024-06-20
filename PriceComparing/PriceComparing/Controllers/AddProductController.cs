@@ -31,5 +31,23 @@ namespace PriceComparing.Controllers
              _UnitOfWork.savechanges();
             return Ok(productID);
         }
+        // get Brands By Category
+        [HttpGet]
+        [Route("GetBrandsByCategory/{id}")]
+        public async Task<IActionResult> GetBrandsByCategory(int id)
+        {
+            var brands = await _UnitOfWork.ProductRepo.GetBrandsByCategoryId(id);
+            if (brands == null) return NotFound();
+            return Ok(brands);
+        }
+        // get SubCategories By Category
+        [HttpGet]
+        [Route("GetSubCategoriesByCategory/{id}")]
+        public async Task<IActionResult> GetSubCategoriesByCategory(int id)
+        {
+            var subCategories = await _UnitOfWork.ProductRepo.GetSubCategoriesByCategoryId(id);
+            if (subCategories == null) return NotFound();
+            return Ok(subCategories);
+        }
     }
 }

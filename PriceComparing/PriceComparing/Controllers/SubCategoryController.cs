@@ -34,6 +34,50 @@ namespace PriceComparing.Controllers
             }
             return Ok(subCategoriesDTO);
         }
+
+        // get all ignore filters
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllSubCategoriesIgnoringFilters()
+        {
+            var subCategories = await _unitOfWork.SubCategoryRepository.SelectAllIgnoringFiltersAsync();
+            if (subCategories == null) return NotFound();
+            List<SubCategory> subCategoriesDTO = new List<SubCategory>();
+            foreach (var subCategory in subCategories)
+            {
+                subCategoriesDTO.Add(new SubCategory()
+                {
+                    Id = subCategory.Id,
+                    Name_Local = subCategory.Name_Local,
+                    Name_Global = subCategory.Name_Global,
+
+                    CategoryId = subCategory.CategoryId
+                });
+            }
+            return Ok(subCategoriesDTO);
+        }
+
+        // get all soft deleted
+        [HttpGet("softDeleted")]
+        public async Task<IActionResult> GetAllSoftDeletedSubCategories()
+        {
+            var subCategories = await _unitOfWork.SubCategoryRepository.SelectAllSoftDeletedAsync();
+            if (subCategories == null) return NotFound();
+            List<SubCategory> subCategoriesDTO = new List<SubCategory>();
+            foreach (var subCategory in subCategories)
+            {
+                subCategoriesDTO.Add(new SubCategory()
+                {
+                    Id = subCategory.Id,
+                    Name_Local = subCategory.Name_Local,
+                    Name_Global = subCategory.Name_Global,
+
+                    CategoryId = subCategory.CategoryId
+                });
+            }
+            return Ok(subCategoriesDTO);
+        }
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSubCategoryById(int id)
         {
@@ -49,6 +93,24 @@ namespace PriceComparing.Controllers
             };
             return Ok(subCategoryDTO);
         }
+
+        // get by id ignore filters
+        [HttpGet("ignore/{id}")]
+        public async Task<IActionResult> GetSubCategoryByIdIgnoringFilters(int id)
+        {
+            var subCategory = await _unitOfWork.SubCategoryRepository.SelectByIdIgnoringFiltersAsync(id);
+            if (subCategory == null) return NotFound();
+            SubCategory subCategoryDTO = new SubCategory()
+            {
+                Id = subCategory.Id,
+                Name_Local = subCategory.Name_Local,
+                Name_Global = subCategory.Name_Global,
+
+                CategoryId = subCategory.CategoryId
+            };
+            return Ok(subCategoryDTO);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddSubCategory(SubCategoryPostDTO subCategoryPostDTO)
         {
@@ -57,6 +119,7 @@ namespace PriceComparing.Controllers
         {
                 Name_Local = subCategoryPostDTO.Name_Local,
                 Name_Global = subCategoryPostDTO.Name_global,
+                CategoryId = subCategoryPostDTO.CategoryId
             };
             await _unitOfWork.SubCategoryRepository.Add(subCategory);
             return Ok();
@@ -83,6 +146,32 @@ namespace PriceComparing.Controllers
             if (subCategory == null) return NotFound();
             await _unitOfWork.SubCategoryRepository.Delete(id);
             return Ok();
+        }
+
+        // Soft Delete 
+        [HttpDelete("soft/{id}")]
+        public async Task<IActionResult> SoftDeleteSubCategory(int id)
+        {
+            var subCategory = await _unitOfWork.SubCategoryRepository.SelectById(id);
+            if (subCategory == null) return NotFound();
+            await _unitOfWork.SubCategoryRepository.SoftDelete(id);
+            return Ok();
+        }
+
+        [HttpPost("restore/{id}")]
+        public async Task<IActionResult> RestoreSubCategory(int id)
+        {
+            var subCategory = await _unitOfWork.SubCategoryRepository
+                .SelectByIdIgnoringFiltersAsync(id); // Method to include soft-deleted items
+
+            if (subCategory == null )// || !subCategory.IsDeleted)
+            {
+                return NotFound("SubCategory not found or already active.");
+            }
+
+
+            await _unitOfWork.SubCategoryRepository.RestoreAsync(subCategory);
+            return Ok($"SubCategory with Id {subCategory.Id} has been restored.");
         }
     }
 }
