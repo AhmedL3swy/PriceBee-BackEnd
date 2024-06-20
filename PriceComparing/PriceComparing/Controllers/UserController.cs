@@ -155,6 +155,14 @@ namespace PriceComparing.Controllers
         }
 
 
+        [HttpGet("History")]
+        public async Task<IActionResult> getHisroty(string id)
+        {
+            var x = await userServices.getUserFavProd(id);
+            return Ok(x);
+        }
+
+
     }
 
 }
