@@ -59,7 +59,7 @@ namespace PriceComparing.Repository
             return await _db.Set<TEntity>().FindAsync(email);
         }
 
-        public async Task Add(TEntity entity)
+     
         // Get by id ignoring filters
         public async Task<TEntity?> SelectByIdIgnoringFiltersAsync(int id)
         {
