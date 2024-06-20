@@ -11,7 +11,7 @@ namespace PriceComparing.Repository
 		{
 			_db = db;
 		}
-		//ssssssssssssssssssssssss
+
 		public IQueryable<TEntity> SelectAllProduct()
 		{
 			return _db.Set<TEntity>().AsNoTracking();
@@ -34,7 +34,19 @@ namespace PriceComparing.Repository
 			return await _db.Set<TEntity>().FindAsync(id);
 		}
 
-		public async Task Add(TEntity entity)
+        // Get by id ignoring filters
+        public async Task<TEntity?> SelectByIdIgnoringFiltersAsync(int id)
+        {
+            var entities = await _db.Set<TEntity>()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .ToListAsync();
+
+            return entities.FirstOrDefault(e => (int)e.GetType().GetProperty("Id").GetValue(e) == id);
+        }
+
+
+        public async Task Add(TEntity entity)
 		{
 			await _db.Set<TEntity>().AddAsync(entity);
 			await _db.SaveChangesAsync();
@@ -76,7 +88,6 @@ namespace PriceComparing.Repository
             //{
             //}
         }
-
 
     }
 }

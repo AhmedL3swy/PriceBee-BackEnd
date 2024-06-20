@@ -34,6 +34,28 @@ namespace PriceComparing.Controllers
             }
             return Ok(subCategoriesDTO);
         }
+
+        // get all ignore filters
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllSubCategoriesIgnoringFilters()
+        {
+            var subCategories = await _unitOfWork.SubCategoryRepository.SelectAllIgnoringFiltersAsync();
+            if (subCategories == null) return NotFound();
+            List<SubCategory> subCategoriesDTO = new List<SubCategory>();
+            foreach (var subCategory in subCategories)
+            {
+                subCategoriesDTO.Add(new SubCategory()
+                {
+                    Id = subCategory.Id,
+                    Name_Local = subCategory.Name_Local,
+                    Name_Global = subCategory.Name_Global,
+
+                    CategoryId = subCategory.CategoryId
+                });
+            }
+            return Ok(subCategoriesDTO);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSubCategoryById(int id)
         {
@@ -49,6 +71,24 @@ namespace PriceComparing.Controllers
             };
             return Ok(subCategoryDTO);
         }
+
+        // get by id ignore filters
+        [HttpGet("ignore/{id}")]
+        public async Task<IActionResult> GetSubCategoryByIdIgnoringFilters(int id)
+        {
+            var subCategory = await _unitOfWork.SubCategoryRepository.SelectByIdIgnoringFiltersAsync(id);
+            if (subCategory == null) return NotFound();
+            SubCategory subCategoryDTO = new SubCategory()
+            {
+                Id = subCategory.Id,
+                Name_Local = subCategory.Name_Local,
+                Name_Global = subCategory.Name_Global,
+
+                CategoryId = subCategory.CategoryId
+            };
+            return Ok(subCategoryDTO);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddSubCategory(SubCategoryPostDTO subCategoryPostDTO)
         {
@@ -93,6 +133,16 @@ namespace PriceComparing.Controllers
             var subCategory = await _unitOfWork.SubCategoryRepository.SelectById(id);
             if (subCategory == null) return NotFound();
             await _unitOfWork.SubCategoryRepository.Delete(id);
+            return Ok();
+        }
+
+        // Soft Delete 
+        [HttpDelete("soft/{id}")]
+        public async Task<IActionResult> SoftDeleteSubCategory(int id)
+        {
+            var subCategory = await _unitOfWork.SubCategoryRepository.SelectById(id);
+            if (subCategory == null) return NotFound();
+            await _unitOfWork.SubCategoryRepository.SoftDelete(id);
             return Ok();
         }
     }
