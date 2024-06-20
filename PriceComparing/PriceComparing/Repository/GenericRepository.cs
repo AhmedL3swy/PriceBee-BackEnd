@@ -49,6 +49,17 @@ namespace PriceComparing.Repository
 			return await _db.Set<TEntity>().FindAsync(id);
 		}
 
+        public async Task<TEntity?> SelectUserById(string id)
+        {
+            return await _db.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<TEntity?> SelectUserByEmail(string email)
+        {
+            return await _db.Set<TEntity>().FindAsync(email);
+        }
+
+     
         // Get by id ignoring filters
         public async Task<TEntity?> SelectByIdIgnoringFiltersAsync(int id)
         {
