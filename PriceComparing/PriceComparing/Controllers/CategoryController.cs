@@ -58,7 +58,7 @@ namespace PriceComparing.Controllers
                     {
                         id = subCategory.Id,
                         Name_Local = subCategory.Name_Local,
-                        Name_Global = subCategory.Name_Global,
+                        Name_global = subCategory.Name_Global,
                     });
                 }
             }
