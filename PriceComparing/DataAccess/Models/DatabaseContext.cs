@@ -47,6 +47,10 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
 
     public virtual DbSet<UserFavProd> SDUserFavProds { get; set; }
 
+    public virtual DbSet<UserHistoryProd> UserHistoryProds { get; set; }
+
+    public virtual DbSet<UserAlertProd> UserAlertProds { get; set; }
+
 
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

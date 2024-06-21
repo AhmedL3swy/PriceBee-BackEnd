@@ -523,6 +523,31 @@ namespace PriceComparing.Models
 
             db.SDUserFavProds.AddRange(FavProd);
             db.SaveChanges();
+
+            List<UserHistoryProd> ClickedProd = new List<UserHistoryProd>() {
+             new UserHistoryProd()  {ProductId =1,UserID=UserWebsite.Id },
+             new UserHistoryProd()  {ProductId =2,UserID=UserWebsite.Id },
+             new UserHistoryProd()  {ProductId =3,UserID=UserWebsite.Id },
+
+        };
+
+            db.UserHistoryProds.AddRange(ClickedProd);
+            db.SaveChanges();
+
+
+
+            List<UserAlertProd> AlertProd = new List<UserAlertProd>() {
+             new UserAlertProd()  {ProductId =3,UserID=UserWebsite.Id },
+             new UserAlertProd()  {ProductId =4,UserID=UserWebsite.Id },
+
+        };
+
+            db.UserAlertProds.AddRange(AlertProd);
+            db.SaveChanges();
+
+
+
+
             // Add Role
             db.Roles.AddRange(new IdentityRole
             {
@@ -693,11 +718,11 @@ namespace PriceComparing.Models
             );
             db.SaveChanges();
             db.ProductImages.AddRange(
-    new ProductImage
+             new ProductImage
             {
                 ProdId = 1, // Assuming this corresponds to a "Samsung Phone"
                 Image = "https://f.nooncdn.com/p/pnsku/N70029832V/45/_/1706601417/c68be273-1532-4459-a8fc-19392b1b3521.jpg?format=avif&width=240"
-    },
+             },
             new ProductImage
             {
                 ProdId = 1, // Multiple images for the same product

@@ -23,6 +23,10 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<AuthUser> authUserRepository;
 		GenericRepository<UserAlertProd> userAlertProdRepository;
         GenericRepository<UserFavProd> userFavProdRepo;
+        GenericRepository<UserHistoryProd> userHisProdRepo;
+        
+
+
         ProductRepository productRepo;
         UserRepoNonGenric userRepoNonGenric;
         GenericRepository<User> webUserRepository;
@@ -35,6 +39,21 @@ namespace PriceComparing.UnitOfWork
         {
             _db = db;
         }
+
+        public GenericRepository<UserHistoryProd> UserHisProdRepo
+        {
+            get
+            {
+                if (userHisProdRepo == null)
+                {
+                    userHisProdRepo = new GenericRepository<UserHistoryProd>(_db);
+                }
+                return userHisProdRepo;
+            }
+        }
+
+
+      
 
         public GenericRepository<Product> ProductRepository
         {

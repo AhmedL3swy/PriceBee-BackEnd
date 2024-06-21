@@ -155,11 +155,34 @@ namespace PriceComparing.Controllers
         }
 
 
-        [HttpGet("History")]
+        [HttpGet("HistoryProduct")]
         public async Task<IActionResult> getHisroty(string id)
         {
-            var x = await userServices.getUserFavProd(id);
+            var x = await userServices.getUserHistoryProd(id);
             return Ok(x);
+        }
+
+        [HttpPost("HistoryProduct")]
+        public async Task<IActionResult> AddHistoryProds(int id, string Userid)
+        {
+            await userServices.AddUserHistoryProd(id, Userid);
+            return Ok();
+        }
+
+
+        [HttpGet("AlertProduct")]
+        public async Task<IActionResult> getAlertProd(string id)
+        {
+            var x = await userServices.getUserAlert(id);
+            return Ok(x);
+        }
+
+
+        [HttpPost("AlertProduct")]
+        public async Task<IActionResult> AddAlertProd(int id, string Userid)
+        {
+            await userServices.AddUserAlertProd(id, Userid);
+            return Ok();
         }
 
 
