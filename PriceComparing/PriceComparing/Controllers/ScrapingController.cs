@@ -17,9 +17,9 @@ namespace PriceComparing.Controllers
         }
         // get as ScrapingResult
         [HttpGet]
-        public async Task<List<ScrapingDTO>> Get([FromQuery] string url)
+        public async Task<ScrapingDTO> Get([FromQuery] string url)
         {
-            List<ScrapingDTO> result = await _scrapingService.Get("SingleScrape", url);
+            ScrapingDTO result = await _scrapingService.Get("SingleScrape", url);
             return result;
         }
 

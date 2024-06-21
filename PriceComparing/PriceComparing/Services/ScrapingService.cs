@@ -12,7 +12,7 @@ namespace PriceComparing.Services
             client = httpClientFactory.CreateClient("ScrapingClient");
         }
 
-        public async Task<List<ScrapingDTO>> Get(string api, string url)
+        public async Task<ScrapingDTO> Get(string api, string url)
         {
             var response = await client.GetAsync($"/{api}/?url={url}");
 
@@ -20,7 +20,7 @@ namespace PriceComparing.Services
 
             var jsonResponse = await response.Content.ReadAsStreamAsync();
 
-            return JsonSerializer.Deserialize<List<ScrapingDTO>>(jsonResponse);
+            return JsonSerializer.Deserialize<ScrapingDTO>(jsonResponse);
         }
     }
 }
