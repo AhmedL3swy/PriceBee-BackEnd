@@ -2,12 +2,14 @@
 using DataAccess.Models;
 using PriceComparing.Controllers;
 using PriceComparing.Repository;
+using PriceComparing.Services;
 
 namespace PriceComparing.UnitOfWork
 {
     public class UnitOfWOrks
     {
         DatabaseContext _db;
+        ScrapingService _scrapingService;
         //WE Will change code Here After the Models is Done 
 
 		GenericRepository<Product> productRepository;
@@ -24,12 +26,17 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<UserAlertProd> userAlertProdRepository;
         GenericRepository<UserFavProd> userFavProdRepo;
         ProductRepository productRepo;
+        UserRepoNonGenric userRepoNonGenric;
+        GenericRepository<User> webUserRepository;
 
 
 
-        public UnitOfWOrks(DatabaseContext db)
+
+
+        public UnitOfWOrks(DatabaseContext db, ScrapingService scrapingService)
         {
             _db = db;
+            _scrapingService = scrapingService;
         }
 
         public GenericRepository<Product> ProductRepository
@@ -41,6 +48,30 @@ namespace PriceComparing.UnitOfWork
                     productRepository = new GenericRepository<Product>(_db);
                 }
                 return productRepository;
+            }
+        }
+
+        public GenericRepository<User> WebUserRepository
+        {
+            get
+            {
+                if (webUserRepository == null)
+                {
+                    webUserRepository = new GenericRepository<User>(_db);
+                }
+                return webUserRepository;
+            }
+        }
+
+        public UserRepoNonGenric UserRepoNonGenric
+        {
+            get
+            {
+                if (userRepoNonGenric == null)
+                {
+                    userRepoNonGenric = new UserRepoNonGenric(_db);
+                }
+                return userRepoNonGenric;
             }
         }
 
@@ -165,7 +196,7 @@ namespace PriceComparing.UnitOfWork
 			{
                 if (productRepo == null)
 				{
-                    productRepo = new ProductRepository(_db);
+                    productRepo = new ProductRepository(_db, _scrapingService);
                 }
                 return productRepo;
             }
