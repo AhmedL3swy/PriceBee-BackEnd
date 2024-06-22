@@ -16,6 +16,8 @@ namespace PriceComparing.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+
+        // 1- Get all active brands
         [HttpGet]
         public async Task<IActionResult> GetAllBrands()
         {
@@ -36,6 +38,52 @@ namespace PriceComparing.Controllers
             }
             return Ok(brandsDTO);
         }
+
+        // 2- Get all brands ignoring filters
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllBrandsIgnoringFilters()
+        {
+            var brands = await _unitOfWork.BrandRepository.SelectAllIgnoringFiltersAsync();
+            if (brands == null) return NotFound();
+            List<Brand> brandsDTO = new List<Brand>();
+            foreach (var brand in brands)
+            {
+                brandsDTO.Add(new Brand()
+                {
+                    Id = brand.Id,
+                    Name_Local = brand.Name_Local,
+                    Name_Global = brand.Name_Global,
+                    Description_Local = brand.Description_Local,
+                    Description_Global = brand.Description_Global,
+                    Logo = brand.Logo
+                });
+            }
+            return Ok(brandsDTO);
+        }
+
+        // 3- Get all soft deleted brands
+        [HttpGet("softdeleted")]
+        public async Task<IActionResult> GetAllSoftDeletedBrands()
+        {
+            var brands = await _unitOfWork.BrandRepository.SelectAllSoftDeletedAsync();
+            if (brands == null) return NotFound();
+            List<Brand> brandsDTO = new List<Brand>();
+            foreach (var brand in brands)
+            {
+                brandsDTO.Add(new Brand()
+                {
+                    Id = brand.Id,
+                    Name_Local = brand.Name_Local,
+                    Name_Global = brand.Name_Global,
+                    Description_Local = brand.Description_Local,
+                    Description_Global = brand.Description_Global,
+                    Logo = brand.Logo
+                });
+            }
+            return Ok(brandsDTO);
+        }
+
+        // 4- Get brand by id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBrandById(int id)
         {
@@ -52,40 +100,65 @@ namespace PriceComparing.Controllers
             };
             return Ok(brandDTO);
         }
-        [HttpPost]
-        public async Task<IActionResult> AddBrand(BrandPostDTO brandpostDTo)
+
+        // 5- Get brand by id ignoring filters
+        [HttpGet("ignore/{id}")]
+        public async Task<IActionResult> GetBrandByIdIgnoringFilters(int id)
         {
-            if (brandpostDTo == null) return BadRequest();
+            var brand = await _unitOfWork.BrandRepository.SelectByIdIgnoringFiltersAsync(id);
+            if (brand == null) return NotFound();
+            Brand brandDTO = new Brand()
+            {
+                Id = brand.Id,
+                Name_Local = brand.Name_Local,
+                Name_Global = brand.Name_Global,
+                Description_Local = brand.Description_Local,
+                Description_Global = brand.Description_Global,
+                Logo = brand.Logo
+            };
+            return Ok(brandDTO);
+        }
+
+        // 6- Add brand
+        [HttpPost]
+        public async Task<IActionResult> AddBrand(BrandPostDTO brandPostDTO)
+        {
+            if (brandPostDTO == null) return BadRequest();
             Brand brand = new Brand()
             {
-                Name_Local = brandpostDTo.Name_Local,
-                Name_Global = brandpostDTo.Name_Global,
-                Description_Local = brandpostDTo.Description_Local,
-                Description_Global = brandpostDTo.Description_Global,
-                Logo = brandpostDTo.Logo
-               
+                Name_Local = brandPostDTO.Name_Local,
+                Name_Global = brandPostDTO.Name_Global,
+                Description_Local = brandPostDTO.Description_Local,
+                Description_Global = brandPostDTO.Description_Global,
+                Logo = brandPostDTO.Logo,
+                CategoryId = brandPostDTO.CategoryId
             };
             await _unitOfWork.BrandRepository.Add(brand);
            
             return Ok(brand);
-
         }
+
+        // 7- Update brand
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBrand(int id,[FromBody] BrandPostDTO brandDTO)
+        public async Task<IActionResult> UpdateBrand(int id,[FromBody] BrandPostDTO brandPostDTO)
         {
-            if (brandDTO == null) return BadRequest();
+            if (brandPostDTO == null) return BadRequest();
             var brand = await _unitOfWork.BrandRepository.SelectById(id);
             if (brand == null) return NotFound();
-            brand.Name_Local = brandDTO.Name_Local;
-            brand.Name_Global = brandDTO.Name_Global;
-            brand.Description_Local = brandDTO.Description_Local;
-            brand.Description_Global = brandDTO.Description_Global;
-            brand.Logo = brandDTO.Logo;
+            brand.Name_Local = brandPostDTO.Name_Local;
+            brand.Name_Global = brandPostDTO.Name_Global;
+            brand.Description_Local = brandPostDTO.Description_Local;
+            brand.Description_Global = brandPostDTO.Description_Global;
+            brand.Logo = brandPostDTO.Logo;
+            brand.CategoryId = brandPostDTO.CategoryId;
+
             await _unitOfWork.BrandRepository.UpdateAsync(brand);
             
             return Ok(brand);
             
         }
+
+        // 8- Delete brand
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBrand(int id)
         {
@@ -94,11 +167,28 @@ namespace PriceComparing.Controllers
             await _unitOfWork.BrandRepository.Delete(id);
             _unitOfWork.savechanges();
             return Ok();
-
         }
 
-        
-      
+        // 9- Soft delete brand
+        [HttpDelete("soft/{id}")]
+        public async Task<IActionResult> SoftDeleteBrand(int id)
+        {
+            var brand = await _unitOfWork.BrandRepository.SelectById(id);
+            if (brand == null) return NotFound();
+            await _unitOfWork.BrandRepository.SoftDelete(id);
+            _unitOfWork.savechanges();
+            return Ok();
+        }
 
+        // 10- Restore brand
+        [HttpPut("restore/{id}")]
+        public async Task<IActionResult> RestoreBrand(int id)
+        {
+            var brand = await _unitOfWork.BrandRepository.SelectByIdIgnoringFiltersAsync(id);
+            if (brand == null) return NotFound();
+            await _unitOfWork.BrandRepository.RestoreAsync(brand);
+            _unitOfWork.savechanges();
+            return Ok();
+        }
     }
 }
