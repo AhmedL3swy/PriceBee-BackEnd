@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using DTO;
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PriceComparing.UnitOfWork;
@@ -30,6 +31,16 @@ namespace PriceComparing.Controllers
                
              _UnitOfWork.savechanges();
             return Ok(productID);
+        }
+        [HttpPost("HangFireTriggerOn")]
+        public async Task HangFireTriggerOn()
+        {
+            RecurringJob.AddOrUpdate( "UpdateProductPrice",() => _UnitOfWork.ProductRepo.UpdateProductPrice(), Cron.Minutely);
+        }
+        [HttpPost("HangFireTriggerOff")]
+        public async Task HangFireTriggerOff()
+        {
+            RecurringJob.RemoveIfExists("UpdateProductPrice");
         }
     }
 }
