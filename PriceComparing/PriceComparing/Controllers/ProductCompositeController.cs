@@ -79,10 +79,6 @@ namespace PriceComparing.Controllers
 			var prodcut = await _unitOfWork.ProductRepository.SelectById(id);
             if (prodcut == null) return NotFound();
 
-            // Delete related with the user (UserFavProd, UserAlertProd, UserHistoryProd)
-            // User Favorite Products
-            // await _unitOfWork.
-
             // User Alert Products
             await _unitOfWork.ProductRepository.DeleteRange(prodcut.UserAlertProds);
             // User History Products
@@ -95,15 +91,37 @@ namespace PriceComparing.Controllers
             await _unitOfWork.ProductImageRepository.DeleteRange(prodcut.ProductImages);
             await _unitOfWork.ProductDetailRepository.DeleteRange(prodcut.ProductLinks.Select(pl => pl.ProductDetail));
 			await _unitOfWork.ProductLinkRepository.DeleteRange(prodcut.ProductLinks);
-
-
-
 			await _unitOfWork.ProductRepository.Delete(prodcut.Id);
+            return Ok();
+        }
 
+        // Delete multiple products, products detials and related data
+        [HttpDelete("bulk-delete")]
+        public async Task<IActionResult> BulkDeleteProducts([FromBody] List<int> ids)
+        {
+            foreach (var id in ids)
+            {
+                var product = await _unitOfWork.ProductRepository.SelectById(id);
+                if (product == null) continue;
 
+                // User Alert Products
+                await _unitOfWork.ProductRepository.DeleteRange(product.UserAlertProds);
+                // User History Products
+                await _unitOfWork.ProductRepository.DeleteRange(product.UserHistoryProds);
+                // User Favorite Products
+                await _unitOfWork.ProductRepository.DeleteRange(product.UserFavProds);
+
+                // Delete related data
+                await _unitOfWork.PriceHistoryRepository.DeleteRange(product.PriceHistories);
+                await _unitOfWork.ProductImageRepository.DeleteRange(product.ProductImages);
+                await _unitOfWork.ProductDetailRepository.DeleteRange(product.ProductLinks.Select(pl => pl.ProductDetail));
+                await _unitOfWork.ProductLinkRepository.DeleteRange(product.ProductLinks);
+                await _unitOfWork.ProductRepository.Delete(product.Id);
+            }
 
             return Ok();
         }
+
 
         public enum searchIn
         {
