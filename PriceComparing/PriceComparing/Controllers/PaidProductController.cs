@@ -110,7 +110,7 @@ namespace PriceComparing.Controllers
             paidProduct.Budget = paidProductDTO.Budget;
 
             await _unitOfWork.PaidProductRepository.UpdateAsync(paidProduct);
-            return Ok(paidProduct);
+            return Ok(paidProductDTO);
         }
 
         [HttpDelete("{id}")]

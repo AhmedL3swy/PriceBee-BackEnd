@@ -184,5 +184,14 @@ namespace PriceComparing.Controllers
 			return Ok(category.Brands);
 		}
 
+        //make one to get the category count 
+        [HttpGet("Count")]
+        public async Task<IActionResult> GetCategoriesCount()
+        {
+            var categories = await _unitOfWork.CategoryRepository.SelectAll();
+            if (categories == null) { return NotFound(); }
+            return Ok(categories.Count());
+        }
+
 	}
 }

@@ -106,6 +106,14 @@ namespace PriceComparing.Controllers
             _unitOfWork.savechanges();
             return Ok();
         }
+        //make one to get the count of the brands 
+        [HttpGet("count")]  
+        public async Task<IActionResult> GetBrandsCount()
+        {
+            var brands = await _unitOfWork.BrandRepository.SelectAll();
+            if (brands == null) return NotFound();
+            return Ok(brands.Count());
+        }
 
         
       
