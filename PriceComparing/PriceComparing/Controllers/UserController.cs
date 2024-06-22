@@ -125,7 +125,14 @@ namespace PriceComparing.Controllers
             string message = await authServices.AssignUserRoleAgain(ID);
             return Ok(message);
         }
-      
+        //make one to get the category count 
+        [HttpGet("count")]
+        public async Task<IActionResult> GetUserCount()
+        {
+            var users = await unitOfWork.AuthUserRepository.SelectAll();
+            if(users == null ) return NotFound();
+            return Ok(users.Count());
+        }
 
 
     }
