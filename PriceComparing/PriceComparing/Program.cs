@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Hangfire;
+using Hangfire.SqlServer;
 
 namespace PriceComparing
 {
@@ -140,7 +142,17 @@ namespace PriceComparing
             //    );
             #endregion
 
-
+            builder.Services.AddHangfire(configuration => configuration
+               .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+               .UseSimpleAssemblyNameTypeSerializer()
+               .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangFire"),
+                new SqlServerStorageOptions
+                {
+                    PrepareSchemaIfNecessary = true,
+                }
+             ));
+            builder.Services.AddHangfireServer();
             var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
@@ -159,7 +171,8 @@ namespace PriceComparing
 			app.UseCors(corsTxt);
 
             app.MapControllers();
-            app.CreateDbIfNotExists();
+            //app.CreateDbIfNotExists();
+            app.UseHangfireDashboard();
             app.Run();
         }
     }
