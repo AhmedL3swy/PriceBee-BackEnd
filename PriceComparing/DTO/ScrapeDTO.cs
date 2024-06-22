@@ -8,7 +8,7 @@ namespace DTO
 {
     public class ScrapingDTO
     {
-        public double price { get; set; }
+        public decimal price { get; set; }
         public bool is_available { get; set; }
     }
 }
