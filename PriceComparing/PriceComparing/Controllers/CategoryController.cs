@@ -44,7 +44,7 @@ namespace PriceComparing.Controllers
                 {
                     categoriesDTO[categoriesDTO.Count - 1].Brands.Add(new BrandDTO()
                     {
-                        id = brand.Id,
+                        Id = brand.Id,
                         Name_Local = brand.Name_Local,
                         Name_Global = brand.Name_Global,
                         Description_Local = brand.Description_Local,
