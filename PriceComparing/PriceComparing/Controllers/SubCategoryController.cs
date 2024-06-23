@@ -163,7 +163,7 @@ namespace PriceComparing.Controllers
             var subCategory = await _unitOfWork.SubCategoryRepository
                 .SelectByIdIgnoringFiltersAsync(id); // Method to include soft-deleted items
 
-            if (subCategory == null )// || !subCategory.IsDeleted)
+            if (subCategory == null)// || !subCategory.IsDeleted)
             {
                 return NotFound("SubCategory not found or already active.");
             }
@@ -171,6 +171,8 @@ namespace PriceComparing.Controllers
 
             await _unitOfWork.SubCategoryRepository.RestoreAsync(subCategory);
             return Ok($"SubCategory with Id {subCategory.Id} has been restored.");
+
+        }
        //make one to get the count 
        [HttpGet("count")]
         public async Task<IActionResult> GetSubCategoryCount()
