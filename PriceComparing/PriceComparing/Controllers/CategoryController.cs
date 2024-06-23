@@ -203,7 +203,7 @@ namespace PriceComparing.Controllers
 
             var categoriesBrandsCountList = categories.Select(category => new CategoryBrandsCountDTO
             {
-                CategoryName = category.Name_Local, // or Name_Global, depending on your requirement
+                CategoryName = category.Name_Global, // or Name_Global, depending on your requirement
                 BrandsCount = category.Brands.Count
             }).ToList();
 
