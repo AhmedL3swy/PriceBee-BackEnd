@@ -43,13 +43,20 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
 
     public virtual DbSet<SubCategory> SubCategories { get; set; }
 
-    public virtual DbSet<User> websiteUsers { get; set; }
+    // public virtual DbSet<User> websiteUsers { get; set; }
 
     public virtual DbSet<UserFavProd> SDUserFavProds { get; set; }
 
     public virtual DbSet<UserHistoryProd> UserHistoryProds { get; set; }
 
     public virtual DbSet<UserAlertProd> UserAlertProds { get; set; }
+
+
+
+    public virtual DbSet<User> _Users { get; set; }
+    public DbSet<PaidProduct> PaidProducts { get; set; }
+
+
 
 
 
@@ -101,6 +108,22 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Product__SubCate__3C69FB99");
         });
+
+        modelBuilder.Entity<PaidProduct>(entity =>
+{
+    entity.HasKey(e => e.Id).HasName("PK__PaidProduct__3214EC073BC2FE02");
+
+    entity.HasOne(d => d.Brand).WithMany(p => p.PaidProducts).HasConstraintName("FK_PaidProduct_Brands");
+
+    entity.HasOne(d => d.SubCategory).WithMany(p => p.PaidProducts)
+          .OnDelete(DeleteBehavior.ClientSetNull)
+          .HasConstraintName("FK__PaidProduct__SubCate__3C69FB99");
+
+    // Additional configurations for PaidProduct specific properties
+    // For example, setting a default value for IsPaid
+    entity.Property(e => e.IsPaid).HasDefaultValue(true);
+});
+
 
         modelBuilder.Entity<ProductDetail>(entity =>
         {

@@ -1,14 +1,18 @@
 ﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using DTO;
+using PriceComparing.Services;
+using System.Security.Policy;
 namespace PriceComparing.Repository
 {
     public class ProductRepository
     {
         private readonly DatabaseContext _db;
-        public ProductRepository(DatabaseContext db)
+        private readonly ScrapingService _scrapingService;
+        public ProductRepository(DatabaseContext db, ScrapingService scrapingService)
         {
             _db = db;
+            _scrapingService = scrapingService;
         }
         public async Task<int> Add(ProductPostDTO productDTO)
         {
@@ -85,7 +89,7 @@ namespace PriceComparing.Repository
                 .Where(b => b.CategoryId==categoryId)
                 .Select(b => new BrandDTO()
                 {
-                    id = b.Id,
+                    Id = b.Id,
                     Name_Local = b.Name_Local,
                     Logo = b.Logo,
                     CategiryId = b.CategoryId,
@@ -113,8 +117,44 @@ namespace PriceComparing.Repository
                 .ToListAsync();
             return subCategories;
         }
-        
 
+        public async Task UpdateProductPrice()
+        {
+            
+            // Get ProductLink which has the least Scraped date
+            var productLink = _db.ProductLinks.OrderBy(p => p.LastScraped).FirstOrDefault();
+            if (productLink == null)
+            {
+                return;
+            }
+            productLink.LastScraped = DateTime.Now;
+
+            // Get the ProductDetail of the ProductLink
+            var productDetail = _db.ProductDetails.Find(productLink.Id);
+
+            try
+            {
+                // get the latest price from the scraping service
+                ScrapingDTO result = await _scrapingService.Get("SingleScrape", productLink.ProductLink1);
+                // if the price is different from the current price update the price and Set LastUpdated to the current date
+                if (productDetail.Price != result.price)
+                {
+                    productDetail.Price = result.price;
+                    productLink.LastUpdated = DateTime.Now;
+                }               
+            }
+            // if Exception Set Status to false
+            catch (Exception)
+            {
+                productLink.Status = "Failed";
+            }
+            finally
+            {
+                await _db.SaveChangesAsync();
+
+            }
+
+        }
 
 
     }

@@ -2,12 +2,14 @@
 using DataAccess.Models;
 using PriceComparing.Controllers;
 using PriceComparing.Repository;
+using PriceComparing.Services;
 
 namespace PriceComparing.UnitOfWork
 {
     public class UnitOfWOrks
     {
         DatabaseContext _db;
+        ScrapingService _scrapingService;
         //WE Will change code Here After the Models is Done 
 
 		GenericRepository<Product> productRepository;
@@ -30,14 +32,16 @@ namespace PriceComparing.UnitOfWork
         ProductRepository productRepo;
         UserRepoNonGenric userRepoNonGenric;
         GenericRepository<User> webUserRepository;
+        GenericRepository<PaidProduct> paidProductRepository;
 
 
 
 
 
-        public UnitOfWOrks(DatabaseContext db)
+        public UnitOfWOrks(DatabaseContext db, ScrapingService scrapingService)
         {
             _db = db;
+            _scrapingService = scrapingService;
         }
 
         public GenericRepository<UserHistoryProd> UserHisProdRepo
@@ -212,7 +216,7 @@ namespace PriceComparing.UnitOfWork
 			{
                 if (productRepo == null)
 				{
-                    productRepo = new ProductRepository(_db);
+                    productRepo = new ProductRepository(_db, _scrapingService);
                 }
                 return productRepo;
             }
@@ -244,7 +248,18 @@ namespace PriceComparing.UnitOfWork
             }
         }
 
-        // 
+        // PaidProductRepository
+        public GenericRepository<PaidProduct> PaidProductRepository
+        {
+            get
+            {
+                if (paidProductRepository == null)
+                {
+                    paidProductRepository = new GenericRepository<PaidProduct>(_db);
+                }
+                return paidProductRepository;
+            }
+        }
 
 
         public void savechanges()

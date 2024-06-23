@@ -1,5 +1,9 @@
-﻿namespace PriceComparing.Services
+﻿using DTO;
+using System.Net.Http;
+using System.Text.Json;
+namespace PriceComparing.Services
 {
+    
     public class ScrapingService
     {
         HttpClient client;
@@ -8,11 +12,15 @@
             client = httpClientFactory.CreateClient("ScrapingClient");
         }
 
-        public async Task<string> Get(string api , string url)
+        public async Task<ScrapingDTO> Get(string api, string url)
         {
-
             var response = await client.GetAsync($"/{api}/?url={url}");
-            return await response.Content.ReadAsStringAsync(); ;
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStreamAsync();
+
+            return JsonSerializer.Deserialize<ScrapingDTO>(jsonResponse);
         }
     }
 }

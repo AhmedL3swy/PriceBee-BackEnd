@@ -19,11 +19,12 @@ namespace PriceComparing.Repository
 		{
 			return _db.Set<TEntity>().AsNoTracking();
 		}
-		public async Task<List<TEntity>> SelectAll()
+		// when using this funtion global filteration is applied
+        public async Task<List<TEntity>> SelectAll()
 		{
 			return await _db.Set<TEntity>().AsNoTracking().ToListAsync();
 		}
-
+        // when using this funtion global filteration not is applied
         public async Task<List<TEntity>> SelectAllIgnoringFiltersAsync()
         {
             return await _db.Set<TEntity>()
@@ -31,6 +32,7 @@ namespace PriceComparing.Repository
                 .IgnoreQueryFilters()
                 .ToListAsync();
         }
+        // when using this funtion only softdeleted is returned
         internal async Task<List<TEntity>> SelectAllSoftDeletedAsync()
         {
             // throw new NotImplementedException();
