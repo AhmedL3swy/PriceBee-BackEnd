@@ -140,5 +140,35 @@ namespace PriceComparing.Controllers
             await _unitOfWork.DomainRepository.SoftDelete(id);
             return Ok();
         }
+
+		[HttpGet("count")]
+		public async Task<IActionResult> GetDomainCount()
+		{
+			var count = await _unitOfWork.DomainRepository.SelectAll();
+			if (count == null) return NotFound();
+			return Ok(count.Count());
+		}
+
+        [HttpGet("productscount")]
+        public async Task<IActionResult> GetDomainsProductsCount()
+        {
+            var domains = await _unitOfWork.DomainRepository.SelectAll();
+            if (domains == null) return NotFound();
+
+            List<DomainProductsCountDTO> domainProductsCountList = domains.Select(domain => new DomainProductsCountDTO
+            {
+                DomainName = domain.Name_Global, // Assuming each domain has a Name property
+                ProductCount = domain.ProductLinks.Count() // Assuming each domain has a Products collection
+            }).ToList();
+
+            return Ok(domainProductsCountList);
+        }
+
+
+
+
+
+
+
     }
 }

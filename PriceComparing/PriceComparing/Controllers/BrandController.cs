@@ -115,8 +115,28 @@ namespace PriceComparing.Controllers
             return Ok(brands.Count());
         }
 
-        
-      
+        [HttpGet("productscount")]
+        public async Task<IActionResult> GetProductsCount()
+        {
+            var brands = await _unitOfWork.BrandRepository.SelectAll();
+            if (brands == null) return NotFound();
+
+            List<BrandProductsCountDTO> productsCountList = new List<BrandProductsCountDTO>();
+            foreach (var brand in brands)
+            {
+                productsCountList.Add(new BrandProductsCountDTO
+                {
+                    BrandName = brand.Name_Global, // Assuming you want to use the global name; adjust as needed
+                    ProductCount = brand.Products.Count()
+                });
+            }
+
+            return Ok(productsCountList);
+        }
+
+
+
+
 
     }
 }
