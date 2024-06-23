@@ -47,6 +47,9 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
 
     public virtual DbSet<UserFavProd> SDUserFavProds { get; set; }
 
+    public virtual DbSet<UserHistoryProd> UserHistoryProds { get; set; }
+
+    public virtual DbSet<UserAlertProd> UserAlertProds { get; set; }
 
 
     public virtual DbSet<User> websiteUsers { get; set; }

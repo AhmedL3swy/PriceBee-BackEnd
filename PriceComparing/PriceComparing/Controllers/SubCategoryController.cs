@@ -171,6 +171,7 @@ namespace PriceComparing.Controllers
 
             await _unitOfWork.SubCategoryRepository.RestoreAsync(subCategory);
             return Ok($"SubCategory with Id {subCategory.Id} has been restored.");
+
         }
        //make one to get the count 
        [HttpGet("count")]
