@@ -23,10 +23,10 @@ namespace PriceComparing.Controllers
         {
             var brands = await _unitOfWork.BrandRepository.SelectAll();
             if (brands == null) return NotFound();
-            List<Brand> brandsDTO = new List<Brand>();
+            List<BrandDTO> brandsDTO = new List<BrandDTO>();
             foreach (var brand in brands)
             {
-                brandsDTO.Add(new Brand()
+                brandsDTO.Add(new BrandDTO()
                 {
                     Id = brand.Id,
                     Name_Local = brand.Name_Local,
@@ -45,10 +45,10 @@ namespace PriceComparing.Controllers
         {
             var brands = await _unitOfWork.BrandRepository.SelectAllIgnoringFiltersAsync();
             if (brands == null) return NotFound();
-            List<Brand> brandsDTO = new List<Brand>();
+            List<BrandDTO> brandsDTO = new List<BrandDTO>();
             foreach (var brand in brands)
             {
-                brandsDTO.Add(new Brand()
+                brandsDTO.Add(new BrandDTO()
                 {
                     Id = brand.Id,
                     Name_Local = brand.Name_Local,
@@ -67,10 +67,10 @@ namespace PriceComparing.Controllers
         {
             var brands = await _unitOfWork.BrandRepository.SelectAllSoftDeletedAsync();
             if (brands == null) return NotFound();
-            List<Brand> brandsDTO = new List<Brand>();
+            List<BrandDTO> brandsDTO = new List<BrandDTO>();
             foreach (var brand in brands)
             {
-                brandsDTO.Add(new Brand()
+                brandsDTO.Add(new BrandDTO()
                 {
                     Id = brand.Id,
                     Name_Local = brand.Name_Local,
@@ -89,7 +89,7 @@ namespace PriceComparing.Controllers
         {
             var brand = await _unitOfWork.BrandRepository.SelectById(id);
             if (brand == null) return NotFound();
-            Brand brandDTO = new Brand()
+            BrandDTO brandDTO = new BrandDTO()
             {
                 Id = brand.Id,
                 Name_Local = brand.Name_Local,
@@ -107,7 +107,7 @@ namespace PriceComparing.Controllers
         {
             var brand = await _unitOfWork.BrandRepository.SelectByIdIgnoringFiltersAsync(id);
             if (brand == null) return NotFound();
-            Brand brandDTO = new Brand()
+            BrandDTO brandDTO = new BrandDTO()
             {
                 Id = brand.Id,
                 Name_Local = brand.Name_Local,
@@ -134,8 +134,19 @@ namespace PriceComparing.Controllers
                 CategoryId = brandPostDTO.CategoryId
             };
             await _unitOfWork.BrandRepository.Add(brand);
-           
-            return Ok(brand);
+
+            BrandDTO brandDTO = new BrandDTO()
+            {
+                Id = brand.Id,
+                Name_Local = brand.Name_Local,
+                Name_Global = brand.Name_Global,
+                Description_Local = brand.Description_Local,
+                Description_Global = brand.Description_Global,
+                Logo = brand.Logo
+            };
+
+
+            return Ok(brandDTO);
         }
 
         // 7- Update brand
@@ -153,8 +164,19 @@ namespace PriceComparing.Controllers
             brand.CategoryId = brandPostDTO.CategoryId;
 
             await _unitOfWork.BrandRepository.UpdateAsync(brand);
-            
-            return Ok(brand);
+
+            BrandDTO brandDTO = new BrandDTO()
+            {
+                Id = brand.Id,
+                Name_Local = brand.Name_Local,
+                Name_Global = brand.Name_Global,
+                Description_Local = brand.Description_Local,
+                Description_Global = brand.Description_Global,
+                Logo = brand.Logo
+            };
+
+
+            return Ok(brandDTO);
             
         }
 
@@ -166,6 +188,7 @@ namespace PriceComparing.Controllers
             if (brand == null) return NotFound();
             await _unitOfWork.BrandRepository.Delete(id);
             _unitOfWork.savechanges();
+
             return Ok();
         }
 

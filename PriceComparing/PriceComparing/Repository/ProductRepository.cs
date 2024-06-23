@@ -89,7 +89,7 @@ namespace PriceComparing.Repository
                 .Where(b => b.CategoryId==categoryId)
                 .Select(b => new BrandDTO()
                 {
-                    id = b.Id,
+                    Id = b.Id,
                     Name_Local = b.Name_Local,
                     Logo = b.Logo,
                     CategiryId = b.CategoryId,
