@@ -145,11 +145,11 @@ namespace PriceComparing.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> SearchProduct(
             [FromQuery] string? searchValue = null,
-			[FromQuery] int categoryID = 0 ,
-			[FromQuery] int? subCatID = 0,
+			[FromQuery] int? categoryID = null ,
+			[FromQuery] int? subCatID = null,
 			[FromQuery] List<int>? brandID = null,
-			[FromQuery] int? minPrice = 0,
-		    [FromQuery] int? maxPrice = 0,
+			[FromQuery] int? minPrice = null,
+		    [FromQuery] int? maxPrice = null,
 			[FromQuery] List<int>? domainID = null
 			//[FromQuery] searchIn searchIn = searchIn.all
 			)
@@ -159,55 +159,139 @@ namespace PriceComparing.Controllers
                 .SelectAllProduct()
                 .Include(p => p.SubCategory)
                 .Include(p => p.Brand)
+                .Include(p=>p.PriceHistories)
                 .Include(p => p.ProductImages)
                 .Include(p => p.ProductLinks)
-                    .ThenInclude(pl => pl.Domain)
-                .Include(p => p.ProductLinks)
-                    .ThenInclude(pl => pl.ProductDetail)
+                    .ThenInclude(pd => pd.ProductDetail)
+                
+                //.Include(p => p.SubCategory)
+                //    .ThenInclude(SubCatCatId => SubCatCatId.Category.Id)
+                //.Include(p => p.Brand)
+                //.Include(p => p.ProductImages)
+                //.Include(p => p.ProductLinks)
+                //    .ThenInclude(pl => pl.Domain)
+                //.Include(p => p.ProductLinks)
+                //    .ThenInclude(pl => pl.ProductDetail)
                 .ToListAsync();
 
             if (products == null || !products.Any()) return NotFound();
 
-            var combinedProductDetails = new List<CombinedProductDetailDTO>();
+            //var combinedProductDetails = new List<CombinedProductDetailDTO>();
+            List<SearchProductDTO> searchProductDTOs = new List<SearchProductDTO>();
 
             foreach (var product in products)
             {
-                var combinedProductDetail = new CombinedProductDetailDTO
+                SearchProductDTO searchProduct = new SearchProductDTO()
                 {
-                    ProductId = product.Id,
-                    ProductName_Local = product.Name_Local,
-                    ProductName_Global = product.Name_Global,
-                    ProductDescription_Local = product.Description_Local,
-                    ProductDescription_Global = product.Description_Global,
-                    SubCategoryName = product.SubCategory?.Name_Global,
-                    BrandName = product.Brand?.Name_Global,
-                    // Ensure non-empty lists are handled
-                    LastUpdated = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastUpdated) : DateTime.MinValue,
-                    LastScraped = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastScraped) : DateTime.MinValue,
-
-                    Images = product.ProductImages.Select(img => img.Image).ToList(),
-                    Links = product.ProductLinks.Select(link => new ProductLinkDTO2
+                    Product_Id = product.Id,
+                    Product_Name_Local = product.Name_Local,
+                    Product_Name_Global = product.Name_Global,
+                    Product_Description_Local = product.Description_Local,
+                    Product_Description_Global = product.Description_Global,
+                    brandPostDTO = new BrandPostDTO()
                     {
-                        DomainName = link.Domain.Name_Global,
-                        DomainLogo = link.Domain.Logo,
-                        ProductLink = link.ProductLink1,
-                        Price = link.ProductDetail?.Price ?? 0,
-                        Rating = link.ProductDetail?.Rating
+                        // Id = product.Brand.Id,
+                        Name_Local = product.Brand.Name_Local,
+                        Name_Global = product.Brand.Name_Global,
+                        Description_Local = product.Brand.Description_Local,
+                        Description_Global = product.Brand.Description_Global,
+                        Logo = product.Brand.Logo,
+                        CategoryId = product.Brand.Category.Id
+
+                    },
+                    subCategoryPostDTO = new SubCategoryPostDTO()
+                    {
+                        Id = product.SubCategory.Id,
+                        Name_Local = product.SubCategory.Name_Local,
+                        Name_Global = product.SubCategory.Name_Global,
+                        CategoryId = product.SubCategory.Category.Id
+                    },
+                    // Lists priceHistoryDTOs, productImageDTOs, productLinkDTOs
+                    // public List<PriceHistoryDTO> priceHistoryDTOs { get; set; }
+                    //priceHistoryDTOs = product.PriceHistories.Select(ph => new PriceHistoryDTO()
+                    //{
+                    //    Id = ph.Id,
+                    //    Price = ph.Price,
+                    //    Date = ph.Date
+                    //}).ToList(),
+                    productImageDTOs = product.ProductImages.Select(pi => new ProductImageDTO()
+                    {
+                        Id = pi.Id,
+                        ProdId = pi.ProdId,
+                        Image = pi.Image
+
+                    }).ToList(),
+                    productLinkDTOs = product.ProductLinks.Select(pl => new ProudctLinkWithDetailsDTO()
+                    {
+                        Link_Id = pl.Id,
+                        Link_DomainId = pl.Domain.Id,
+                        ProductLink = pl.ProductLink1,
+                        ProductDet_Name_Local = pl.ProductDetail.Name_Local,
+                        ProductDet_Name_Global = pl.ProductDetail.Name_Global,
+                        ProductDet_Description_Local = pl.ProductDetail.Description_Local,
+                        ProductDet_Description_Global = pl.ProductDetail.Description_Global,
+                        ProductDet_Price = pl.ProductDetail.Price,
+                        ProductDet_Rating = pl.ProductDetail.Rating,
+                        ProductDet_isAvailable = pl.ProductDetail.isAvailable
                     }).ToList()
+
+
+
+                    //SubCategoryName = product.SubCategory?.Name_Global,
+                    //BrandName = product.Brand?.Name_Global,
+                    //// Ensure non-empty lists are handled
+                    //LastUpdated = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastUpdated) : DateTime.MinValue,
+                    //LastScraped = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastScraped) : DateTime.MinValue,
+                    //Images = product.ProductImages.Select(img => img.Image).ToList(),
+                    //Links = product.ProductLinks.Select(link => new ProductLinkDTO2
+                    //{
+                    //    DomainName = link.Domain.Name_Global,
+                    //    DomainLogo = link.Domain.Logo,
+                    //    ProductLink = link.ProductLink1,
+                    //    Price = link.ProductDetail?.Price ?? 0,
+                    //    Rating = link.ProductDetail?.Rating
+                    //}).ToList()
                 };
 
-                combinedProductDetails.Add(combinedProductDetail);
+                // adding the searchProduct to the list searchProductDTOs
+                searchProductDTOs.Add(searchProduct);
             }
 
-            // apply the search value in the product name, description
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                combinedProductDetails = combinedProductDetails.Where(p =>
-                    p.ProductName_Global.Contains(searchValue)
-                 || p.ProductDescription_Global.Contains(searchValue)
-                 || p.ProductName_Local.Contains(searchValue)
-                 || p.ProductDescription_Local.Contains(searchValue)).ToList();
-            }
+            //foreach (var product in products)
+            //{
+            //    var combinedProductDetail = new CombinedProductDetailDTO
+            //    {
+            //        ProductId = product.Id,
+            //        ProductName_Local = product.Name_Local,
+            //        ProductName_Global = product.Name_Global,
+            //        ProductDescription_Local = product.Description_Local,
+            //        ProductDescription_Global = product.Description_Global,
+            //        SubCategoryName = product.SubCategory?.Name_Global,
+            //        BrandName = product.Brand?.Name_Global,
+            //        // Ensure non-empty lists are handled
+            //        LastUpdated = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastUpdated) : DateTime.MinValue,
+            //        LastScraped = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastScraped) : DateTime.MinValue,
+
+            //        Images = product.ProductImages.Select(img => img.Image).ToList(),
+            //        Links = product.ProductLinks.Select(link => new ProductLinkDTO2
+            //        {
+            //            DomainName = link.Domain.Name_Global,
+            //            DomainLogo = link.Domain.Logo,
+            //            ProductLink = link.ProductLink1,
+            //            Price = link.ProductDetail?.Price ?? 0,
+            //            Rating = link.ProductDetail?.Rating
+            //        }).ToList()
+            //    };
+
+            //    combinedProductDetails.Add(combinedProductDetail);
+            //}
+
+            //// apply the category filter
+            //if (categoryID != null)
+            //{
+            //    combinedProductDetails = combinedProductDetails.Where(p => p.sub == categoryID).ToList();
+            //}
+
 
             return Ok(combinedProductDetails);
 
