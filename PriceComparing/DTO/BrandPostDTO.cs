@@ -8,7 +8,7 @@ namespace DTO
 {
     public class BrandPostDTO
     {
-        // public int Id { get; set; }
+        public int Id { get; set; }
         public string Name_Local { get; set; }
         public string Name_Global { get; set; }
         public string Description_Local { get; set; }

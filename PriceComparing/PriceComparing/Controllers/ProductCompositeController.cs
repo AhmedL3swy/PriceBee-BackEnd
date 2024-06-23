@@ -292,8 +292,59 @@ namespace PriceComparing.Controllers
             //    combinedProductDetails = combinedProductDetails.Where(p => p.sub == categoryID).ToList();
             //}
 
+            // apply the search value in the product name, description
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchProductDTOs = searchProductDTOs.Where(p =>
+                        p.Product_Name_Global.Contains(searchValue)
+                    || p.Product_Description_Global.Contains(searchValue)
+                    || p.Product_Name_Local.Contains(searchValue)
+                    || p.Product_Description_Local.Contains(searchValue)).ToList();
+            }
 
-            return Ok(combinedProductDetails);
+            // apply the search value in the product name, description
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchProductDTOs = searchProductDTOs.Where(p =>
+                    p.Product_Name_Global.Contains(searchValue)
+                    || p.Product_Description_Global.Contains(searchValue)
+                    || p.Product_Name_Local.Contains(searchValue)
+                    || p.Product_Description_Local.Contains(searchValue)).ToList();
+            }
+
+            // apply the category filter
+            if (categoryID != null)
+            {
+                searchProductDTOs = searchProductDTOs.Where(p => p.subCategoryPostDTO.CategoryId == categoryID).ToList();
+                // or using brand
+                // searchProductDTOs = searchProductDTOs.Where(p => p.brandPostDTO.CategoryId == categoryID).ToList();
+            }
+
+            // apply the sub category filter
+            if (subCatID != null)
+            {
+                searchProductDTOs = searchProductDTOs.Where(p => p.subCategoryPostDTO.Id == subCatID).ToList();
+            }
+
+            // apply the brand filter
+            if (brandID != null)
+            {
+                searchProductDTOs = searchProductDTOs.Where(p => brandID.Contains(p.brandPostDTO.Id)).ToList();
+            }
+
+            // apply the price filter // between min and max price
+            if (minPrice != null && maxPrice != null)
+            {
+                searchProductDTOs = searchProductDTOs.Where(p => p.productLinkDTOs.Any(pl => pl.ProductDet_Price >= minPrice && pl.ProductDet_Price <= maxPrice)).ToList();
+            }
+
+            // apply the domain filter
+            if (domainID != null)
+            {
+                searchProductDTOs = searchProductDTOs.Where(p => p.productLinkDTOs.Any(pl => domainID.Contains(pl.Link_DomainId))).ToList();
+            }
+
+            return Ok(searchProductDTOs);
 
         }
 
