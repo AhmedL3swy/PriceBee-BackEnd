@@ -16,44 +16,44 @@ namespace PriceComparing.Services
 
         public UserService(UnitOfWOrks _unitOfWork, UserManager<AuthUser> _userManager)
         {
-            unitOfWork= _unitOfWork;
-            userManager = _userManager; 
+            unitOfWork = _unitOfWork;
+            userManager = _userManager;
         }
 
-        
-       
+
+
 
         public async Task<UpdateUserModel> UpdateUserAsync(UpdateUserDTO user, string id)
         {
             string Message = string.Empty;
-            if (id == null) return new UpdateUserModel { message = "NO Id was Sent" } ;
+            if (id == null) return new UpdateUserModel { message = "NO Id was Sent" };
             var OldUser = await userManager.FindByIdAsync(id);
-            if (OldUser == null) return new UpdateUserModel { message = "NOT exist Such User"};
+            if (OldUser == null) return new UpdateUserModel { message = "NOT exist Such User" };
 
-           
 
-                if (await userManager.GetEmailAsync(OldUser) != user.Email){ 
-                    if(await userManager.FindByEmailAsync(user.Email) != null)
-                    {
-                        return new UpdateUserModel { message = "User Email already Exist" };
-                    }
-                }
 
-                if (OldUser.UserName != user.UserName)
+            if (await userManager.GetEmailAsync(OldUser) != user.Email) {
+                if (await userManager.FindByEmailAsync(user.Email) != null)
                 {
-                    if (await userManager.FindByNameAsync(user.UserName) != null)
-                    {
-                        return new UpdateUserModel { message = "User Name already Exist" };
-                    }
+                    return new UpdateUserModel { message = "User Email already Exist" };
                 }
+            }
 
-           await unitOfWork.UserRepoNonGenric.UpdateUserAsync(OldUser, user); 
-            return new UpdateUserModel { message = "Update Successfully",IsUpdated =true };
+            if (OldUser.UserName != user.UserName)
+            {
+                if (await userManager.FindByNameAsync(user.UserName) != null)
+                {
+                    return new UpdateUserModel { message = "User Name already Exist" };
+                }
+            }
+
+            await unitOfWork.UserRepoNonGenric.UpdateUserAsync(OldUser, user);
+            return new UpdateUserModel { message = "Update Successfully", IsUpdated = true };
         }
 
         public async Task<List<UserFavProdDTO>> getUserFavProd(string id)
         {
-            var Auser = await userManager.FindByIdAsync(id); 
+            var Auser = await userManager.FindByIdAsync(id);
             if (Auser == null) return new List<UserFavProdDTO>();
             var user = Auser.User;
             if (user == null) return new List<UserFavProdDTO>();
@@ -69,10 +69,10 @@ namespace PriceComparing.Services
 
                 products.Add(new UserFavProdDTO()
                 {
-                    UserId=id,
+                    UserId = id,
                     ProductId = product.Id,
                     ProductName = product.Name_Global,
-                    ProductImage = productImage ?? string.Empty 
+                    ProductImage = productImage ?? string.Empty
                 });
             }
 
@@ -93,7 +93,7 @@ namespace PriceComparing.Services
             var userFavProdExists = await unitOfWork.UserFavProdRepo.SelectAll();
             var newUserFavProd = new UserFavProd() { ProductId = id, UserID = user.Id };
             await unitOfWork.UserFavProdRepo.Add(newUserFavProd);
-           
+
 
 
         }
@@ -111,12 +111,12 @@ namespace PriceComparing.Services
             var userHistProds = HistoryProd.Where(a => a.UserID == user.Id).Select(x => x.Product).ToList();
             List<UserProdHistoryDto> products = new List<UserProdHistoryDto>();
             List<ProductImage> ProductImages = await unitOfWork.ProductImageRepository.SelectAll();
-           // List<ProductLink> Productlinks = await unitOfWork.ProductLinkRepository.SelectAll();
-           // List<ProductImage> ProductImages = await unitOfWork.ProductImageRepository.SelectAll();
+            // List<ProductLink> Productlinks = await unitOfWork.ProductLinkRepository.SelectAll();
+            // List<ProductImage> ProductImages = await unitOfWork.ProductImageRepository.SelectAll();
 
             foreach (var product in userHistProds)
             {
-                var productImage = ProductImages.Where(a => a.ProdId == product.Id).FirstOrDefault()?.Image; 
+                var productImage = ProductImages.Where(a => a.ProdId == product.Id).FirstOrDefault()?.Image;
                 products.Add(new UserProdHistoryDto()
                 {
                     UserId = id,
@@ -155,10 +155,10 @@ namespace PriceComparing.Services
 
             var AlertProd = await unitOfWork.UserAlertProdRepo.SelectAll();
 
-            var userAlertProds = AlertProd.Where(a => a.UserID == user.Id).Select(x => x.Product).ToList();
+            var userAlertProds = AlertProd.Where(a => a.UserID == user.Id ).Select(x => x.Product ).ToList();
             List<UserAlertProdDTO> products = new List<UserAlertProdDTO>();
             List<ProductImage> ProductImages = await unitOfWork.ProductImageRepository.SelectAll();
-            
+
             foreach (var product in userAlertProds)
             {
                 var productImage = ProductImages.Where(a => a.ProdId == product.Id).FirstOrDefault()?.Image;
@@ -190,6 +190,65 @@ namespace PriceComparing.Services
             var newUserFavProd = new UserAlertProd() { ProductId = id, UserID = user.Id };
             await unitOfWork.UserAlertProdRepo.Add(newUserFavProd);
         }
+
+
+        public async Task RemoveUserAlertProd(int id, string Userid)
+        {
+            var Auser = await userManager.FindByIdAsync(Userid);
+            if (Auser == null)
+                return;
+            var user = Auser.User;
+            if (user == null)
+                return;
+            var AlertProduct = await unitOfWork.UserAlertProdRepo.SelectAll();
+            var userAlertProd = AlertProduct.FirstOrDefault(a => a.UserID == user.Id && a.ProductId == id);
+            
+            if (userAlertProd != null)
+            {
+                await unitOfWork.UserRepoNonGenric.SoftDelete<UserAlertProd>(userAlertProd.ProductId,userAlertProd.UserID);
+            }
+          
+        }
+
+
+        public async Task RemoveUserFavProd(int id, string Userid)
+        {
+            var Auser = await userManager.FindByIdAsync(Userid);
+            if (Auser == null)
+                return;
+            var user = Auser.User;
+            if (user == null)
+                return;
+            var AlertProduct = await unitOfWork.UserFavProdRepo.SelectAll();
+            var userAlertProd = AlertProduct.FirstOrDefault(a => a.UserID == user.Id && a.ProductId == id);
+
+            if (userAlertProd != null)
+            {
+                await unitOfWork.UserRepoNonGenric.SoftDelete<UserFavProd>(userAlertProd.ProductId, userAlertProd.UserID);
+            }
+
+        }
+
+
+        public async Task RemoveUserHisProd(int id, string Userid)
+        {
+            var Auser = await userManager.FindByIdAsync(Userid);
+            if (Auser == null)
+                return;
+            var user = Auser.User;
+            if (user == null)
+                return;
+            var AlertProduct = await unitOfWork.UserHisProdRepo.SelectAll();
+            var userAlertProd = AlertProduct.FirstOrDefault(a => a.UserID == user.Id && a.ProductId == id);
+
+            if (userAlertProd != null)
+            {
+                await unitOfWork.UserRepoNonGenric.SoftDelete<UserHistoryProd>(userAlertProd.ProductId, userAlertProd.UserID);
+            }
+
+        }
+
+
 
 
 

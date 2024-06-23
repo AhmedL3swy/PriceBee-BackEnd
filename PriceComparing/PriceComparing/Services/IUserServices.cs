@@ -15,5 +15,11 @@ namespace PriceComparing.Services
         Task<List<UserAlertProdDTO>> getUserAlert(string id);
 
         Task AddUserAlertProd(int id, string Userid);
+
+        Task RemoveUserAlertProd(int id, string userId);
+
+        Task RemoveUserFavProd(int id, string Userid);
+
+        Task RemoveUserHisProd(int id, string Userid);
     }
 }
