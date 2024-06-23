@@ -110,7 +110,9 @@ namespace PriceComparing.Models
                     Name_Global = "Samsung",
                     Description_Local = "سامسونج",
                     Description_Global = "Samsung",
-                    CategoryId = 1
+                    Logo = "samsung.jpg",
+					LogoUrl = "samsung",
+					CategoryId = 1
                 },
                 new Brand
                 {
@@ -119,7 +121,10 @@ namespace PriceComparing.Models
                     Name_Global = "Apple",
                     Description_Local = "ابل",
                     Description_Global = "Apple",
-                    CategoryId = 1
+					Logo = "apple.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 1
                 },
                 new Brand
                 {
@@ -128,7 +133,10 @@ namespace PriceComparing.Models
                     Name_Global = "HP",
                     Description_Local = "اتش بي",
                     Description_Global = "HP",
-                    CategoryId = 1
+					Logo = "hp.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 1
                 },
                 // Office Supplies:Pens
                 new Brand
@@ -138,7 +146,10 @@ namespace PriceComparing.Models
                     Name_Global = "Bic",
                     Description_Local = "بيك",
                     Description_Global = "Bic",
-                    CategoryId = 2
+                    Logo = "bic.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 2
                 },
                 new Brand
                 {
@@ -147,7 +158,10 @@ namespace PriceComparing.Models
                     Name_Global = "Max",
                     Description_Local = "ماكس",
                     Description_Global = "Max",
-                    CategoryId = 2
+					Logo = "max.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 2
                 },
                 new Brand
                 {
@@ -156,7 +170,10 @@ namespace PriceComparing.Models
                     Name_Global = "Dar El Nashr",
                     Description_Local = "دار النشر",
                     Description_Global = "Dar El Nashr",
-                    CategoryId = 2
+					Logo = "dar_el_nashr.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 2
                 },
                 new Brand
                 {
@@ -165,7 +182,10 @@ namespace PriceComparing.Models
                     Name_Global = "Pyrex",
                     Description_Local = "بيركس",
                     Description_Global = "Pyrex",
-                    CategoryId = 3
+					Logo = "pyrex.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 3
                 },
                 new Brand
                 {
@@ -174,7 +194,10 @@ namespace PriceComparing.Models
                     Name_Global = "Vic",
                     Description_Local = "فيك",
                     Description_Global = "Vic",
-                    CategoryId = 3
+					Logo = "vic.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 3
                 },
                 new Brand
                 {
@@ -183,7 +206,10 @@ namespace PriceComparing.Models
                     Name_Global = "Tefal",
                     Description_Local = "تيفال",
                     Description_Global = "Tefal",
-                    CategoryId = 3
+					Logo = "tefal.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 3
                 }
 
 

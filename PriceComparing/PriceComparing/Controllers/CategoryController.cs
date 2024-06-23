@@ -49,7 +49,10 @@ namespace PriceComparing.Controllers
                         Name_Global = brand.Name_Global,
                         Description_Local = brand.Description_Local,
                         Description_Global = brand.Description_Global,
-                    });
+						Logo = brand.Logo,
+						LogoUrl = brand.LogoUrl,
+						CategoryId = brand.CategoryId
+					});
                 }
 
                 foreach (var subCategory in category.SubCategories)

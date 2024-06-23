@@ -92,7 +92,8 @@ namespace PriceComparing.Repository
                     Id = b.Id,
                     Name_Local = b.Name_Local,
                     Logo = b.Logo,
-                    CategiryId = b.CategoryId,
+					LogoUrl = b.LogoUrl,
+					CategoryId = b.CategoryId,
                     Description_Local = b.Description_Local,
                     Description_Global = b.Description_Global,
                     Name_Global = b.Name_Global

@@ -33,8 +33,10 @@ namespace PriceComparing.Controllers
                     Name_Global = brand.Name_Global,
                     Description_Local = brand.Description_Local,
                     Description_Global = brand.Description_Global,
-                    Logo = brand.Logo
-                });
+                    Logo = brand.Logo,
+					LogoUrl = brand.LogoUrl,
+					CategoryId = brand.CategoryId
+				});
             }
             return Ok(brandsDTO);
         }
@@ -55,8 +57,10 @@ namespace PriceComparing.Controllers
                     Name_Global = brand.Name_Global,
                     Description_Local = brand.Description_Local,
                     Description_Global = brand.Description_Global,
-                    Logo = brand.Logo
-                });
+                    Logo = brand.Logo,
+					LogoUrl = brand.LogoUrl,
+					CategoryId = brand.CategoryId
+				});
             }
             return Ok(brandsDTO);
         }
@@ -77,8 +81,10 @@ namespace PriceComparing.Controllers
                     Name_Global = brand.Name_Global,
                     Description_Local = brand.Description_Local,
                     Description_Global = brand.Description_Global,
-                    Logo = brand.Logo
-                });
+                    Logo = brand.Logo,
+					LogoUrl = brand.LogoUrl,
+					CategoryId = brand.CategoryId
+				});
             }
             return Ok(brandsDTO);
         }
@@ -96,8 +102,9 @@ namespace PriceComparing.Controllers
                 Name_Global = brand.Name_Global,
                 Description_Local = brand.Description_Local,
                 Description_Global = brand.Description_Global,
-                Logo = brand.Logo
-            };
+                Logo = brand.Logo,
+				LogoUrl = brand.LogoUrl,
+			};
             return Ok(brandDTO);
         }
 
@@ -114,8 +121,9 @@ namespace PriceComparing.Controllers
                 Name_Global = brand.Name_Global,
                 Description_Local = brand.Description_Local,
                 Description_Global = brand.Description_Global,
-                Logo = brand.Logo
-            };
+                Logo = brand.Logo,
+				LogoUrl = brand.LogoUrl
+			};
             return Ok(brandDTO);
         }
 
@@ -131,7 +139,8 @@ namespace PriceComparing.Controllers
                 Description_Local = brandPostDTO.Description_Local,
                 Description_Global = brandPostDTO.Description_Global,
                 Logo = brandPostDTO.Logo,
-                CategoryId = brandPostDTO.CategoryId
+                LogoUrl = brandPostDTO.LogoUrl,
+				CategoryId = brandPostDTO.CategoryId
             };
             await _unitOfWork.BrandRepository.Add(brand);
 
@@ -142,8 +151,9 @@ namespace PriceComparing.Controllers
                 Name_Global = brand.Name_Global,
                 Description_Local = brand.Description_Local,
                 Description_Global = brand.Description_Global,
-                Logo = brand.Logo
-            };
+                Logo = brand.Logo,
+				LogoUrl = brand.LogoUrl
+			};
 
 
             return Ok(brandDTO);
@@ -161,7 +171,8 @@ namespace PriceComparing.Controllers
             brand.Description_Local = brandPostDTO.Description_Local;
             brand.Description_Global = brandPostDTO.Description_Global;
             brand.Logo = brandPostDTO.Logo;
-            brand.CategoryId = brandPostDTO.CategoryId;
+			brand.LogoUrl = brandPostDTO.LogoUrl;
+			brand.CategoryId = brandPostDTO.CategoryId;
 
             await _unitOfWork.BrandRepository.UpdateAsync(brand);
 
@@ -172,8 +183,9 @@ namespace PriceComparing.Controllers
                 Name_Global = brand.Name_Global,
                 Description_Local = brand.Description_Local,
                 Description_Global = brand.Description_Global,
-                Logo = brand.Logo
-            };
+                Logo = brand.Logo,
+				LogoUrl = brand.LogoUrl
+			};
 
 
             return Ok(brandDTO);
