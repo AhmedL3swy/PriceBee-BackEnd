@@ -148,18 +148,95 @@ namespace PriceComparing.Controllers
         }
 
         [HttpPost("FavProduct")]
-        public async Task<IActionResult> GetFavProds(int id, string Userid)
+        public async Task<IActionResult> AddFavProds(int id, string Userid)
         {
             await userServices.AddUserFavProd(id, Userid);
             return Ok();
         }
 
 
-        [HttpGet("History")]
+        [HttpGet("HistoryProduct")]
         public async Task<IActionResult> getHisroty(string id)
         {
-            var x = await userServices.getUserFavProd(id);
+            var x = await userServices.getUserHistoryProd(id);
             return Ok(x);
+        }
+        //make one to get the category count 
+        [HttpGet("count")]
+        public async Task<IActionResult> GetUserCount()
+        {
+            var users = await unitOfWork.AuthUserRepository.SelectAll();
+            if(users == null ) return NotFound();
+            return Ok(users.Count());
+        }
+
+        //make one to return number of the user for the same date 
+        [HttpGet("countByJoinDate")]
+        public async Task<IActionResult> GetUserCountByJoinDate()
+        {
+            var users = await unitOfWork.AuthUserRepository.SelectAll();
+            if (users == null) return NotFound();
+
+            // Group users by JoinDate and count them
+            var dateCounts = users
+                .GroupBy(user => user.JoinDate)
+                .Select(group => new
+                {
+                    Date = group.Key,
+                    UserCount = group.Count()
+                })
+                .ToList();
+
+            return Ok(dateCounts);
+        }
+
+
+
+
+
+
+        [HttpPost("HistoryProduct")]
+        public async Task<IActionResult> AddHistoryProds(int id, string Userid)
+        {
+            await userServices.AddUserHistoryProd(id, Userid);
+            return Ok();
+        }
+
+
+        [HttpGet("AlertProduct")]
+        public async Task<IActionResult> getAlertProd(string id)
+        {
+            var x = await userServices.getUserAlert(id);
+            return Ok(x);
+        }
+
+
+        [HttpPost("AlertProduct")]
+        public async Task<IActionResult> AddAlertProd(int id, string Userid)
+        {
+            await userServices.AddUserAlertProd(id, Userid);
+            return Ok();
+        }
+
+        [HttpDelete("RemoveAlertProduct")]
+        public async Task<IActionResult> RemoveAlertProd(int id, string Userid)
+        {
+            await userServices.RemoveUserAlertProd(id, Userid);
+            return Ok();
+        }
+
+        [HttpDelete("RemoveHistoryProduct")]
+        public async Task<IActionResult> RemoveHistProd(int id, string Userid)
+        {
+            await userServices.RemoveUserHisProd(id, Userid);
+            return Ok();
+        }
+
+        [HttpDelete("RemoveFavProduct")]
+        public async Task<IActionResult> RemoveFavProd(int id, string Userid)
+        {
+            await userServices.RemoveUserFavProd(id, Userid);
+            return Ok();
         }
 
 

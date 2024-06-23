@@ -122,102 +122,142 @@ namespace PriceComparing.Controllers
             return Ok();
         }
 
-
-        public enum searchIn
-        {
-            featured,
-            mostPopular,
-            mostViewed,
-            all,
-        }
-        public enum SortedBy
-        {
-            LowToHighPrice,
-            HighToLowPrice,
-            New,
-            featured,
-            mostPopular,
-            mostViewed,
-            all
-        }
-
-        // Search product 
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchProduct(
-            [FromQuery] string? searchValue = null,
-			[FromQuery] int categoryID = 0 ,
-			[FromQuery] int? subCatID = 0,
-			[FromQuery] List<int>? brandID = null,
-			[FromQuery] int? minPrice = 0,
-		    [FromQuery] int? maxPrice = 0,
-			[FromQuery] List<int>? domainID = null
-			//[FromQuery] searchIn searchIn = searchIn.all
-			)
+		public enum SearchIn
 		{
-            // Load products with related data using Eager Loading
-            var products = await _unitOfWork.ProductRepository
-                .SelectAllProduct()
-                .Include(p => p.SubCategory)
-                .Include(p => p.Brand)
-                .Include(p => p.ProductImages)
-                .Include(p => p.ProductLinks)
-                    .ThenInclude(pl => pl.Domain)
-                .Include(p => p.ProductLinks)
-                    .ThenInclude(pl => pl.ProductDetail)
-                .ToListAsync();
+			Featured,
+			MostPopular,
+			MostViewed,
+			All
+		}
 
-            if (products == null || !products.Any()) return NotFound();
-
-            var combinedProductDetails = new List<CombinedProductDetailDTO>();
-
-            foreach (var product in products)
-            {
-                var combinedProductDetail = new CombinedProductDetailDTO
-                {
-                    ProductId = product.Id,
-                    ProductName_Local = product.Name_Local,
-                    ProductName_Global = product.Name_Global,
-                    ProductDescription_Local = product.Description_Local,
-                    ProductDescription_Global = product.Description_Global,
-                    SubCategoryName = product.SubCategory?.Name_Global,
-                    BrandName = product.Brand?.Name_Global,
-                    // Ensure non-empty lists are handled
-                    LastUpdated = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastUpdated) : DateTime.MinValue,
-                    LastScraped = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastScraped) : DateTime.MinValue,
-
-                    Images = product.ProductImages.Select(img => img.Image).ToList(),
-                    Links = product.ProductLinks.Select(link => new ProductLinkDTO2
-                    {
-                        DomainName = link.Domain.Name_Global,
-                        DomainLogo = link.Domain.Logo,
-                        ProductLink = link.ProductLink1,
-                        Price = link.ProductDetail?.Price ?? 0,
-                        Rating = link.ProductDetail?.Rating
-                    }).ToList()
-                };
-
-                combinedProductDetails.Add(combinedProductDetail);
-            }
-
-            // apply the search value in the product name, description
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                combinedProductDetails = combinedProductDetails.Where(p =>
-                    p.ProductName_Global.Contains(searchValue)
-                 || p.ProductDescription_Global.Contains(searchValue)
-                 || p.ProductName_Local.Contains(searchValue)
-                 || p.ProductDescription_Local.Contains(searchValue)).ToList();
-            }
-
-            return Ok(combinedProductDetails);
-
-        }
+		public enum SortedBy
+		{
+			LowToHighPrice,
+			HighToLowPrice,
+			New,
+			Featured,
+			MostPopular,
+			MostViewed,
+			All
+		}
 
 
+		[HttpGet("search")]
+		public async Task<IActionResult> SearchProduct(
+	[FromQuery] string? searchValue = null,
+	[FromQuery] int? categoryID = null,
+	[FromQuery] int? subCatID = null,
+	[FromQuery] List<int>? brandID = null,
+	[FromQuery] int? minPrice = null,
+	[FromQuery] int? maxPrice = null,
+	[FromQuery] List<int>? domainID = null,
+	[FromQuery] SearchIn searchIn = SearchIn.All
+)
+		{
+			// Build the base query with necessary includes
+			var query = _unitOfWork.ProductRepository
+				.SelectAllProduct()
+				.Include(p => p.SubCategory)
+				.Include(p => p.Brand)
+				.Include(p => p.PriceHistories)
+				.Include(p => p.ProductImages)
+				.Include(p => p.ProductLinks)
+					.ThenInclude(pl => pl.ProductDetail)
+				.AsQueryable();
 
-        //public async Task<IActionResult> Search(string? searchValue = null, Category? cat = null, SubCategory? subCat = null, Brand? brand = null, int? minPrice = null, int? maxPrice = null, List<Domain>? store = null, searchIn searchIn)
-        //{
+			// Apply filters to the query
+			if (!string.IsNullOrEmpty(searchValue))
+			{
+				query = query.Where(p =>
+					p.Name_Global.Contains(searchValue) ||
+					p.Description_Global.Contains(searchValue) ||
+					p.Name_Local.Contains(searchValue) ||
+					p.Description_Local.Contains(searchValue));
+			}
 
-        //}
-    }
+			if (categoryID.HasValue)
+			{
+				query = query.Where(p => p.SubCategory.CategoryId == categoryID.Value);
+			}
+
+			if (subCatID.HasValue)
+			{
+				query = query.Where(p => p.SubCategory.Id == subCatID.Value);
+			}
+
+			if (brandID != null && brandID.Any())
+			{
+				query = query.Where(p => brandID.Contains(p.Brand.Id));
+			}
+
+			if (minPrice.HasValue && maxPrice.HasValue)
+			{
+				query = query.Where(p => p.ProductLinks.Any(pl => pl.ProductDetail.Price >= minPrice.Value && pl.ProductDetail.Price <= maxPrice.Value));
+			}
+
+			if (domainID != null && domainID.Any())
+			{
+				query = query.Where(p => p.ProductLinks.Any(pl => domainID.Contains(pl.Domain.Id)));
+			}
+
+			// Execute the query and project to DTOs
+			var products = await query
+				.Select(product => new SearchProductDTO
+				{
+					Product_Id = product.Id,
+					Product_Name_Local = product.Name_Local,
+					Product_Name_Global = product.Name_Global,
+					Product_Description_Local = product.Description_Local,
+					Product_Description_Global = product.Description_Global,
+					brandPostDTO = new BrandPostDTO
+					{
+						Name_Local = product.Brand.Name_Local,
+						Name_Global = product.Brand.Name_Global,
+						Description_Local = product.Brand.Description_Local,
+						Description_Global = product.Brand.Description_Global,
+						Logo = product.Brand.Logo,
+						CategoryId = product.Brand.Category.Id
+					},
+					subCategoryPostDTO = new SubCategoryPostDTO
+					{
+						Id = product.SubCategory.Id,
+						Name_Local = product.SubCategory.Name_Local,
+						Name_Global = product.SubCategory.Name_Global,
+						CategoryId = product.SubCategory.Category.Id
+					},
+					productImageDTOs = product.ProductImages.Select(pi => new ProductImageDTO
+					{
+						Id = pi.Id,
+						ProdId = pi.ProdId,
+						Image = pi.Image
+					}).ToList(),
+					productLinkDTOs = product.ProductLinks.Select(pl => new ProudctLinkWithDetailsDTO
+					{
+						Link_Id = pl.Id,
+						Link_DomainId = pl.Domain.Id,
+						ProductLink = pl.ProductLink1,
+						ProductDet_Name_Local = pl.ProductDetail.Name_Local,
+						ProductDet_Name_Global = pl.ProductDetail.Name_Global,
+						ProductDet_Description_Local = pl.ProductDetail.Description_Local,
+						ProductDet_Description_Global = pl.ProductDetail.Description_Global,
+						ProductDet_Price = pl.ProductDetail.Price,
+						ProductDet_Rating = pl.ProductDetail.Rating,
+						ProductDet_isAvailable = pl.ProductDetail.isAvailable
+					}).ToList()
+				})
+				.ToListAsync();
+
+			if (!products.Any()) return NotFound();
+
+			return Ok(products);
+		}
+
+
+
+
+		//public async Task<IActionResult> Search(string? searchValue = null, Category? cat = null, SubCategory? subCat = null, Brand? brand = null, int? minPrice = null, int? maxPrice = null, List<Domain>? store = null, searchIn searchIn)
+		//{
+
+		//}
+	}
 }

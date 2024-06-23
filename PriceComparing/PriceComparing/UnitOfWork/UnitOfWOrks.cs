@@ -25,9 +25,14 @@ namespace PriceComparing.UnitOfWork
 		GenericRepository<AuthUser> authUserRepository;
 		GenericRepository<UserAlertProd> userAlertProdRepository;
         GenericRepository<UserFavProd> userFavProdRepo;
+        GenericRepository<UserHistoryProd> userHisProdRepo;
+        
+
+
         ProductRepository productRepo;
         UserRepoNonGenric userRepoNonGenric;
         GenericRepository<User> webUserRepository;
+        GenericRepository<PaidProduct> paidProductRepository;
 
 
 
@@ -38,6 +43,21 @@ namespace PriceComparing.UnitOfWork
             _db = db;
             _scrapingService = scrapingService;
         }
+
+        public GenericRepository<UserHistoryProd> UserHisProdRepo
+        {
+            get
+            {
+                if (userHisProdRepo == null)
+                {
+                    userHisProdRepo = new GenericRepository<UserHistoryProd>(_db);
+                }
+                return userHisProdRepo;
+            }
+        }
+
+
+      
 
         public GenericRepository<Product> ProductRepository
         {
@@ -228,7 +248,18 @@ namespace PriceComparing.UnitOfWork
             }
         }
 
-        // 
+        // PaidProductRepository
+        public GenericRepository<PaidProduct> PaidProductRepository
+        {
+            get
+            {
+                if (paidProductRepository == null)
+                {
+                    paidProductRepository = new GenericRepository<PaidProduct>(_db);
+                }
+                return paidProductRepository;
+            }
+        }
 
 
         public void savechanges()

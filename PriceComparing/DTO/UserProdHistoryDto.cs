@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-    public class UserFavProdDTO
+    public class UserProdHistoryDto
     {
         public string UserId { get; set; }
 
@@ -16,5 +16,8 @@ namespace DTO
 
         public string ProductImage { get; set; }
 
+        public int Price { get; set; }
+
+        public string ProductLink { get; set; }
     }
 }

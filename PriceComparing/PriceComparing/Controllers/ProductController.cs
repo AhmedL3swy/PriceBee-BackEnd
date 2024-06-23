@@ -135,5 +135,13 @@ namespace PriceComparing.Controllers
             await _UnitOfWork.ProductRepository.SoftDelete(id);
             return Ok();
         }
+		//make one to retrive the count of the products 
+		[HttpGet("Count")]
+		public async Task<IActionResult> GetProductsCount()
+		{
+			var products = await _UnitOfWork.ProductRepository.SelectAll();
+			if (products == null) { return NotFound(); }
+			return Ok(products.Count());
+		}
     }
 }

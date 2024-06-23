@@ -44,7 +44,7 @@ namespace PriceComparing.Controllers
                 {
                     categoriesDTO[categoriesDTO.Count - 1].Brands.Add(new BrandDTO()
                     {
-                        id = brand.Id,
+                        Id = brand.Id,
                         Name_Local = brand.Name_Local,
                         Name_Global = brand.Name_Global,
                         Description_Local = brand.Description_Local,
@@ -184,5 +184,32 @@ namespace PriceComparing.Controllers
 			return Ok(category.Brands);
 		}
 
-	}
+        //make one to get the category count 
+        [HttpGet("Count")]
+        public async Task<IActionResult> GetCategoriesCount()
+        {
+            var categories = await _unitOfWork.CategoryRepository.SelectAll();
+            if (categories == null) { return NotFound(); }
+            return Ok(categories.Count());
+        }
+
+
+        [HttpGet("CategoriesBrandsCount")]
+        public async Task<IActionResult> GetCategoriesBrandsCount()
+        {
+            // Assuming each brand has a Category property and each category has a Name property
+            var categories = await _unitOfWork.CategoryRepository.SelectAll();
+            if (categories == null) { return NotFound(); }
+
+            var categoriesBrandsCountList = categories.Select(category => new CategoryBrandsCountDTO
+            {
+                CategoryName = category.Name_Global, // or Name_Global, depending on your requirement
+                BrandsCount = category.Brands.Count
+            }).ToList();
+
+            return Ok(categoriesBrandsCountList);
+        }
+
+
+    }
 }
