@@ -150,5 +150,39 @@ namespace PriceComparing.Controllers
             await _unitOfWork.ProductDetailRepository.SoftDelete(id);
             return Ok();
         }
+        [HttpGet("ProductDetailsComponent/{id}")]
+        public async Task<IActionResult> GetProductDetailsByProductId(int id)
+        {
+            var productDetail = await _unitOfWork.ProductDetailRepository.SelectById(id);
+            if (productDetail == null) return NotFound();
+
+            // Assuming you have methods or ways to fetch these additional details
+            // For demonstration, these are fetched directly. Adjust based on your actual data access strategy.
+            var prices = new List<decimal>(); // Fetch prices for the product
+            var images = new List<string>(); // Fetch image URLs or paths for the product
+            var domains = new List<DomainDTO>(); // Convert or fetch domain data related to the product
+            var productLinks = new List<ProductLinkDTO>(); // Convert or fetch product link data related to the product
+
+            ProductDetailsComponentDetailsDTO productDetailDTO = new ProductDetailsComponentDetailsDTO
+            {
+                Id = productDetail.Id,
+                Name_Local = productDetail.Name_Local,
+                Name_Global = productDetail.Name_Global,
+                Description_Local = productDetail.Description_Local,
+                Description_Global = productDetail.Description_Global,
+                Prices = prices, // Assuming you have a way to populate this list based on the product ID
+                Rating = productDetail.Rating,
+                isAvailable = productDetail.isAvailable,
+                Brand = productDetail.Brand,
+                Images = images, // Assuming you have a way to populate this list based on the product ID
+                Domains = domains, // Populate this list with relevant domain data
+                ProductLinks = productLinks // Populate this list with relevant product link data
+            };
+
+            return Ok(productDetailDTO);
+        }
+
+
+
     }
 }

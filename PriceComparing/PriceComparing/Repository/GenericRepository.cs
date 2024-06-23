@@ -33,8 +33,13 @@ namespace PriceComparing.Repository
 		{
 			return await _db.Set<TEntity>().FindAsync(id);
 		}
+        public IQueryable<TEntity> SelectionById(int id)
+        {
+            return _db.Set<TEntity>().Where(entity => EF.Property<int>(entity, "Id") == id);
+        }
 
-		public async Task Add(TEntity entity)
+
+        public async Task Add(TEntity entity)
 		{
 			await _db.Set<TEntity>().AddAsync(entity);
 			await _db.SaveChangesAsync();
