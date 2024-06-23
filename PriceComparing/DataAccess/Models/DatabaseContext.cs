@@ -49,7 +49,7 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
 
 
 
-    public virtual DbSet<User> _Users { get; set; }
+    public virtual DbSet<User> websiteUsers { get; set; }
     public DbSet<PaidProduct> PaidProducts { get; set; }
 
 
