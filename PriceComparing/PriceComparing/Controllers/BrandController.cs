@@ -192,8 +192,7 @@ namespace PriceComparing.Controllers
             return Ok();
         }
 
-        // 9- Soft delete brand
-        [HttpDelete("soft/{id}")]
+        [HttpDelete("SoftDelete/{id}")]
         public async Task<IActionResult> SoftDeleteBrand(int id)
         {
             var brand = await _unitOfWork.BrandRepository.SelectById(id);
@@ -202,6 +201,37 @@ namespace PriceComparing.Controllers
             _unitOfWork.savechanges();
             return Ok();
         }
+        //make one to get the count of the brands 
+        [HttpGet("count")]  
+        public async Task<IActionResult> GetBrandsCount()
+        {
+            var brands = await _unitOfWork.BrandRepository.SelectAll();
+            if (brands == null) return NotFound();
+            return Ok(brands.Count());
+        }
+
+        [HttpGet("productscount")]
+        public async Task<IActionResult> GetProductsCount()
+        {
+            var brands = await _unitOfWork.BrandRepository.SelectAll();
+            if (brands == null) return NotFound();
+
+            List<BrandProductsCountDTO> productsCountList = new List<BrandProductsCountDTO>();
+            foreach (var brand in brands)
+            {
+                productsCountList.Add(new BrandProductsCountDTO
+                {
+                    BrandName = brand.Name_Global, // Assuming you want to use the global name; adjust as needed
+                    ProductCount = brand.Products.Count()
+                });
+            }
+
+            return Ok(productsCountList);
+        }
+
+
+
+
 
         // 10- Restore brand
         [HttpPut("restore/{id}")]

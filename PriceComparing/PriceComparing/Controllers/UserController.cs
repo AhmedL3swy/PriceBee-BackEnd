@@ -161,6 +161,39 @@ namespace PriceComparing.Controllers
             var x = await userServices.getUserFavProd(id);
             return Ok(x);
         }
+        //make one to get the category count 
+        [HttpGet("count")]
+        public async Task<IActionResult> GetUserCount()
+        {
+            var users = await unitOfWork.AuthUserRepository.SelectAll();
+            if(users == null ) return NotFound();
+            return Ok(users.Count());
+        }
+
+        //make one to return number of the user for the same date 
+        [HttpGet("countByJoinDate")]
+        public async Task<IActionResult> GetUserCountByJoinDate()
+        {
+            var users = await unitOfWork.AuthUserRepository.SelectAll();
+            if (users == null) return NotFound();
+
+            // Group users by JoinDate and count them
+            var dateCounts = users
+                .GroupBy(user => user.JoinDate)
+                .Select(group => new
+                {
+                    Date = group.Key,
+                    UserCount = group.Count()
+                })
+                .ToList();
+
+            return Ok(dateCounts);
+        }
+
+
+
+
+
 
 
     }

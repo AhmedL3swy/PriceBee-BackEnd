@@ -28,6 +28,7 @@ namespace PriceComparing.UnitOfWork
         ProductRepository productRepo;
         UserRepoNonGenric userRepoNonGenric;
         GenericRepository<User> webUserRepository;
+        GenericRepository<PaidProduct> paidProductRepository;
 
 
 
@@ -228,7 +229,18 @@ namespace PriceComparing.UnitOfWork
             }
         }
 
-        // 
+        // PaidProductRepository
+        public GenericRepository<PaidProduct> PaidProductRepository
+        {
+            get
+            {
+                if (paidProductRepository == null)
+                {
+                    paidProductRepository = new GenericRepository<PaidProduct>(_db);
+                }
+                return paidProductRepository;
+            }
+        }
 
 
         public void savechanges()
