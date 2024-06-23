@@ -248,6 +248,11 @@ namespace PriceComparing.Services
 
         }
 
+        public string hamada()
+        {
+            return "re";
+        }
+
 
 
 
