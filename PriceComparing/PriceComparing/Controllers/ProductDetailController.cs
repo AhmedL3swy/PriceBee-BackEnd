@@ -2,6 +2,7 @@
 using DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PriceComparing.UnitOfWork;
 
 namespace PriceComparing.Controllers
@@ -150,37 +151,68 @@ namespace PriceComparing.Controllers
             await _unitOfWork.ProductDetailRepository.SoftDelete(id);
             return Ok();
         }
+
         [HttpGet("ProductDetailsComponent/{id}")]
         public async Task<IActionResult> GetProductDetailsByProductId(int id)
         {
-            var productDetail = await _unitOfWork.ProductDetailRepository.SelectById(id);
-            if (productDetail == null) return NotFound();
+            var product = await _unitOfWork.ProductRepository
+                .SelectAllProduct()
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.PriceHistories)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.ProductDetail)
+                .Where(p => p.Id == id) // Filter by the given product ID
+                .Select(product => new
+                {
+                    Product_Id = product.Id,
+                    Product_Name_Local = product.Name_Local,
+                    Product_Name_Global = product.Name_Global,
+                    Product_Description_Local = product.Description_Local,
+                    Product_Description_Global = product.Description_Global,
+                    BrandLogo = product.Brand.Logo,
+                    MinPrice = product.PriceHistories.Min(ph => ph.Price), // Calculate the minimum price
+                    ProductImages = product.ProductImages.Select(pi => pi.Image).ToList(), // Select all product images
+                    ProductDomains = product.ProductLinks.GroupBy(pl => pl.Domain).Select(g => new
+                    {
+                        DomainId = g.Key.Id,
+                        DomainNameLocal = g.Key.Name_Local,
+						DomainNameGlobal = g.Key.Name_Global,
+                        DomainDescriptionLocal = g.Key.Description_Local,
+						DomainDescriptionGlobal = g.Key.Description_Global,
+                        LinkDetails = g.Select(pl => new
+                        {
+                            LinkId = pl.Id,
+                            LinkName = pl.ProductLink1,
+                            Price = pl.ProductDetail.Price,
+                            Name = pl.ProductDetail.Name_Local // Assuming you want the local name of the product detail
+                        }).ToList()
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync(); // Since we're filtering by ID, we expect at most one result
 
-            // Assuming you have methods or ways to fetch these additional details
-            // For demonstration, these are fetched directly. Adjust based on your actual data access strategy.
-            var prices = new List<decimal>(); // Fetch prices for the product
-            var images = new List<string>(); // Fetch image URLs or paths for the product
-            var domains = new List<DomainDTO>(); // Convert or fetch domain data related to the product
-            var productLinks = new List<ProductLinkDTO>(); // Convert or fetch product link data related to the product
+            if (product == null) return NotFound();
 
-            ProductDetailsComponentDetailsDTO productDetailDTO = new ProductDetailsComponentDetailsDTO
+            // Construct the DTO to include the minimum price, domain details, product images, and product domains
+            var productDetailDTO = new
             {
-                Id = productDetail.Id,
-                Name_Local = productDetail.Name_Local,
-                Name_Global = productDetail.Name_Global,
-                Description_Local = productDetail.Description_Local,
-                Description_Global = productDetail.Description_Global,
-                Prices = prices, // Assuming you have a way to populate this list based on the product ID
-                Rating = productDetail.Rating,
-                isAvailable = productDetail.isAvailable,
-                Brand = productDetail.Brand,
-                Images = images, // Assuming you have a way to populate this list based on the product ID
-                Domains = domains, // Populate this list with relevant domain data
-                ProductLinks = productLinks // Populate this list with relevant product link data
+                product.Product_Id,
+                product.Product_Name_Local,
+                product.Product_Name_Global,
+                product.Product_Description_Local,
+                product.Product_Description_Global,
+                product.BrandLogo,
+                MinPrice = product.MinPrice,
+                ProductImages = product.ProductImages,
+                ProductDomains = product.ProductDomains
             };
 
             return Ok(productDetailDTO);
         }
+
 
 
 
