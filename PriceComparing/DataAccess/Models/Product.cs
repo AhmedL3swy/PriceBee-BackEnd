@@ -36,6 +36,8 @@ public partial class Product : ISoftDeletable
     
     public int? BrandId { get; set; }
 
+    public int NumberOfClicks { get; set; } = 0;
+
     [ForeignKey("BrandId")]
     [InverseProperty("Products")]
     public virtual Brand Brand { get; set; }
@@ -53,20 +55,26 @@ public partial class Product : ISoftDeletable
     [InverseProperty("Products")]
     public virtual SubCategory SubCategory { get; set; }
 
-    [ForeignKey("ProdId")]
-    [InverseProperty("ProdAlertUser")]
-    public virtual ICollection<User> UserAlertProd { get; set; } = new List<User>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdAlertUser")]
+    //public virtual ICollection<User> UserAlertProd { get; set; } = new List<User>();
 
-    [ForeignKey("ProdId")]
-    [InverseProperty("ProdHistoryUser")]
-    public virtual ICollection<User> UserHistoryProd { get; set; } = new List<User>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdHistoryUser")]
+    //public virtual ICollection<User> UserHistoryProd { get; set; } = new List<User>();
 
-    [ForeignKey("ProdId")]
-    [InverseProperty("ProdFavUser")]
-    public virtual ICollection<User> UserFavProd { get; set; } = new List<User>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdFavUser")]
+    //public virtual ICollection<User> UserFavProd { get; set; } = new List<User>();
 
     // test
-    public virtual IEnumerable<UserAlertProd> UserAlertProds { get; set; }
-    public virtual IEnumerable<UserHistoryProd> UserHistoryProds { get; set; }
-    public virtual IEnumerable<UserFavProd> UserFavProds { get; set; }
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdAlertUser")]
+    public virtual ICollection<UserAlertProd> UserAlertProds { get; set; } = new List<UserAlertProd>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdHistoryUser")]
+    public virtual ICollection<UserHistoryProd> UserHistoryProds { get; set; } = new List<UserHistoryProd>();
+    //[ForeignKey("ProdId")]
+    //[InverseProperty("ProdFavUser")]
+    public virtual ICollection<UserFavProd> UserFavProds { get; set; } = new List<UserFavProd>();
 }

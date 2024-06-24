@@ -492,8 +492,63 @@ namespace PriceComparing.Models
 
 
             db.Users.AddRange(users);
+            db.SaveChanges();
+            //add user fav products
+
+            var productIds = new List<int> { 1, 2, 3 };
+
+          
+            var products = db.Products
+                .Where(p => productIds.Contains(p.Id))
+                .Include(p => p.ProductImages) 
+                .ToList();
+
+            
+
+            var UserWebsite = new User()
+            {
+                AuthenticatedUser = authUser2,
+                ProdFavUser = products
+            };
+
+            db.websiteUsers.Add(UserWebsite);
+            db.SaveChanges();
+
+            List<UserFavProd> FavProd = new List<UserFavProd>() {
+             new UserFavProd()  {ProductId =1,UserID=UserWebsite.Id },
+             new UserFavProd()  {ProductId =2,UserID=UserWebsite.Id },
+             new UserFavProd()  {ProductId =3,UserID=UserWebsite.Id },
+
+        };
+
+            db.SDUserFavProds.AddRange(FavProd);
+            db.SaveChanges();
+
+            List<UserHistoryProd> ClickedProd = new List<UserHistoryProd>() {
+             new UserHistoryProd()  {ProductId =1,UserID=UserWebsite.Id },
+             new UserHistoryProd()  {ProductId =2,UserID=UserWebsite.Id },
+             new UserHistoryProd()  {ProductId =3,UserID=UserWebsite.Id },
+
+        };
+
+            db.UserHistoryProds.AddRange(ClickedProd);
+            db.SaveChanges();
 
 
+
+            List<UserAlertProd> AlertProd = new List<UserAlertProd>() {
+             new UserAlertProd()  {ProductId =3,UserID=UserWebsite.Id },
+             new UserAlertProd()  {ProductId =4,UserID=UserWebsite.Id },
+
+        };
+
+            db.UserAlertProds.AddRange(AlertProd);
+            db.SaveChanges();
+
+
+
+
+            // Add Role
             db.Roles.AddRange(new IdentityRole
             {
                 Id = Guid.NewGuid().ToString(),
@@ -663,55 +718,55 @@ namespace PriceComparing.Models
             );
             db.SaveChanges();
             db.ProductImages.AddRange(
-    new ProductImage
+             new ProductImage
             {
                 ProdId = 1, // Assuming this corresponds to a "Samsung Phone"
-                Image = "samsung_phone_01.jpg"
-            },
+                Image = "https://f.nooncdn.com/p/pnsku/N70029832V/45/_/1706601417/c68be273-1532-4459-a8fc-19392b1b3521.jpg?format=avif&width=240"
+             },
             new ProductImage
             {
                 ProdId = 1, // Multiple images for the same product
-                Image = "samsung_phone_02.jpg"
+                Image = "https://f.nooncdn.com/p/pnsku/N70029832V/45/_/1706601420/5cbd768c-b32c-4445-8653-1cb453c2da45.jpg?format=avif&width=240"
             },
             new ProductImage
             {
                 ProdId = 2, // Assuming this corresponds to an "Apple Phone"
-                Image = "apple_phone_01.jpg"
+                Image = "https://f.nooncdn.com/p/v1687521109/N53393905A_1.jpg?format=avif&width=240"
             },
             new ProductImage
             {
                 ProdId = 3, // Assuming this corresponds to a "HP Laptop"
-                Image = "hp_laptop_01.jpg"
+                Image = "https://f.nooncdn.com/p/v1656599539/N53259583A_1.jpg?format=avif&width=240"
             },
             new ProductImage
             {
                 ProdId = 4, // Assuming this corresponds to a "HP Printer"
-                Image = "hp_printer_01.jpg"
+                Image = "https://f.nooncdn.com/p/v1668778811/N31082847A_1.jpg?format=avif&width=240"
             },
             new ProductImage
             {
                 ProdId = 5, // Assuming this corresponds to a "Ballpoint Pen"
-                Image = "ballpoint_pen_01.jpg"
+                Image = "https://f.nooncdn.com/p/pzsku/ZF0766B35C43A3199B987Z/45/_/1648049845/6f23b0d0-2eb3-47fa-9086-b53ac2a505c9.jpg?format=avif&width=240"
             },
             new ProductImage
             {
                 ProdId = 6, // Assuming this corresponds to "A4 Paper"
-                Image = "a4_paper_01.jpg"
+                Image = "https://f.nooncdn.com/p/v1666971960/N14159731A_1.jpg?format=avif&width=240"
             },
             new ProductImage
             {
                 ProdId = 7, // Assuming this corresponds to a "Novel Book"
-                Image = "novel_book_01.jpg"
+                Image = "https://f.nooncdn.com/p/v1561099741/N26857366A_1.jpg?format=avif&width=240"
             },
             new ProductImage
             {
                 ProdId = 8, // Assuming this corresponds to a "Dishes Set"
-                Image = "dishes_set_01.jpg"
+                Image = "https://f.nooncdn.com/p/pzsku/ZF7D4E63461E9F320EF8DZ/45/_/1703788112/6dee7961-4305-410e-8499-8ec3857b4408.jpg?format=avif&width=240"
             },
             new ProductImage
             {
                 ProdId = 9, // Assuming this corresponds to a "Frying Pan"
-                Image = "frying_pan_01.jpg"
+                Image = "https://f.nooncdn.com/p/pnsku/N16319317A/45/_/1717011397/fa606981-bd92-474f-bf35-930d030622f7.jpg?format=avif&width=240"
             }
             );
             db.SaveChanges();

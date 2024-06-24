@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace PriceComparing.Repository
@@ -6,21 +7,24 @@ namespace PriceComparing.Repository
 	public class GenericRepository<TEntity> where TEntity : class
 	{
 		private readonly DatabaseContext _db;
+        private readonly UserManager<AuthUser> userManager;
 
-		public GenericRepository(DatabaseContext db)
+        public GenericRepository(DatabaseContext db)
 		{
 			_db = db;
+
 		}
-		//ssssssssssssssssssssssss
+
 		public IQueryable<TEntity> SelectAllProduct()
 		{
 			return _db.Set<TEntity>().AsNoTracking();
 		}
-		public async Task<List<TEntity>> SelectAll()
+		// when using this funtion global filteration is applied
+        public async Task<List<TEntity>> SelectAll()
 		{
 			return await _db.Set<TEntity>().AsNoTracking().ToListAsync();
 		}
-
+        // when using this funtion global filteration not is applied
         public async Task<List<TEntity>> SelectAllIgnoringFiltersAsync()
         {
             return await _db.Set<TEntity>()
@@ -28,6 +32,19 @@ namespace PriceComparing.Repository
                 .IgnoreQueryFilters()
                 .ToListAsync();
         }
+        // when using this funtion only softdeleted is returned
+        internal async Task<List<TEntity>> SelectAllSoftDeletedAsync()
+        {
+            // throw new NotImplementedException();
+            return await _db.Set<TEntity>()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                // .Where(e => (bool)e.GetType().GetProperty("IsDeleted").GetValue(e))
+                .Where(s => EF.Property<bool>(s, "IsDeleted"))
+                .ToListAsync();
+
+        }
+
 
         public async Task<TEntity?> SelectById(int id)
 		{
@@ -38,7 +55,30 @@ namespace PriceComparing.Repository
             return _db.Set<TEntity>().Where(entity => EF.Property<int>(entity, "Id") == id);
         }
 
+        public async Task<TEntity?> SelectUserById(string id)
+        {
+            return await _db.Set<TEntity>().FindAsync(id);
+        }
 
+        public async Task<TEntity?> SelectUserByEmail(string email)
+        {
+            return await _db.Set<TEntity>().FindAsync(email);
+        }
+
+     
+        // Get by id ignoring filters
+        public async Task<TEntity?> SelectByIdIgnoringFiltersAsync(int id)
+        {
+            var entities = await _db.Set<TEntity>()
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .ToListAsync();
+
+            return entities.FirstOrDefault(e => (int)e.GetType().GetProperty("Id").GetValue(e) == id);
+        }
+
+
+       
         public async Task Add(TEntity entity)
 		{
 			await _db.Set<TEntity>().AddAsync(entity);
@@ -51,7 +91,9 @@ namespace PriceComparing.Repository
 			await _db.SaveChangesAsync();
 		}
 
-		public async Task Delete(int id)
+       
+
+        public async Task Delete(int id)
 		{
 			TEntity? obj = await _db.Set<TEntity>().FindAsync(id);
 			if (obj != null)
@@ -72,6 +114,8 @@ namespace PriceComparing.Repository
             }
         }
 
+
+       
         internal async Task DeleteRange(IEnumerable<object> entities)
         {
             //TEntity? obj = await _db.Set<TEntity>().FindAsync(entities);
@@ -82,6 +126,19 @@ namespace PriceComparing.Repository
             //}
         }
 
+
+        internal async Task RestoreAsync(TEntity entity)
+        {
+            // check if Attached 
+            if (_db.Entry(entity).State == EntityState.Detached)
+                _db.Set<TEntity>().Attach(entity);
+            // update the state to modified
+            _db.Entry(entity).State = EntityState.Modified;
+            // set the IsDeleted property to false
+            _db.Entry(entity).Property("IsDeleted").CurrentValue = false;
+            // save the changes
+            await _db.SaveChangesAsync();
+        }
 
     }
 }

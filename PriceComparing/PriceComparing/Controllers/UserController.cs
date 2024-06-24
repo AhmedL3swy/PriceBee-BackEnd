@@ -2,6 +2,7 @@
 using DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PriceComparing.Repository;
 using PriceComparing.Services;
 using PriceComparing.UnitOfWork;
@@ -15,13 +16,16 @@ namespace PriceComparing.Controllers
     {
         private readonly UnitOfWOrks unitOfWork;
         private readonly UserRepoNonGenric OnlyUser;
-        private readonly IAuthServices authServices; 
+        private readonly IAuthServices authServices;
+        private readonly IUserServices userServices;
 
-        public UserController(UnitOfWOrks _unitOfWork, UserRepoNonGenric _onlyUser,IAuthServices _authserv)
+
+        public UserController(UnitOfWOrks _unitOfWork, UserRepoNonGenric _onlyUser,IAuthServices _authserv, IUserServices _userServ)
         {
             unitOfWork = _unitOfWork;
             OnlyUser = _onlyUser;
             authServices = _authserv;
+            userServices = _userServ;
         }
 
         [HttpGet]
@@ -49,7 +53,7 @@ namespace PriceComparing.Controllers
         [HttpGet("user")]
         public async Task<IActionResult> GetUserOnly()
         {
-            List<AuthUser> AuthUsers = OnlyUser.GetOnlyUser();
+            List<AuthUser> AuthUsers = unitOfWork.UserRepoNonGenric.GetOnlyUser();
             if (AuthUsers == null) return NotFound();
 
             var users = AuthUsers.Select(a => new
@@ -72,7 +76,7 @@ namespace PriceComparing.Controllers
         [HttpGet("admin")]
         public async Task<IActionResult> GetAdminOnly()
         {
-            List<AuthUser> AuthUsers = OnlyUser.GetOnlyAdmin();
+            List<AuthUser> AuthUsers = unitOfWork.UserRepoNonGenric.GetOnlyAdmin();
             if (AuthUsers == null) return NotFound();
 
             var users = AuthUsers.Select(a => new
@@ -94,7 +98,7 @@ namespace PriceComparing.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            AuthUser AuthUser = await OnlyUser.GetById(id);
+            AuthUser AuthUser = await unitOfWork.UserRepoNonGenric.GetById(id);
             if (AuthUser == null) return NotFound();
 
             var user = new 
@@ -124,6 +128,38 @@ namespace PriceComparing.Controllers
         {
             string message = await authServices.AssignUserRoleAgain(ID);
             return Ok(message);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(UpdateUserDTO user, string id)
+        {
+            var result = await userServices.UpdateUserAsync(user, id);
+            if(!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (result.IsUpdated == false)
+                return BadRequest(result.message); 
+            else return Ok(result.message);
+        }
+
+        [HttpGet("FavProduct")]
+        public async Task<IActionResult> GetFavProds ( string id)
+        {
+            var x= await userServices.getUserFavProd(id);
+            return Ok(x);
+        }
+
+        [HttpPost("FavProduct")]
+        public async Task<IActionResult> AddFavProds(int id, string Userid)
+        {
+            await userServices.AddUserFavProd(id, Userid);
+            return Ok();
+        }
+
+
+        [HttpGet("HistoryProduct")]
+        public async Task<IActionResult> getHisroty(string id)
+        {
+            var x = await userServices.getUserHistoryProd(id);
+            return Ok(x);
         }
         //make one to get the category count 
         [HttpGet("count")]
@@ -158,6 +194,50 @@ namespace PriceComparing.Controllers
 
 
 
+
+        [HttpPost("HistoryProduct")]
+        public async Task<IActionResult> AddHistoryProds(int id, string Userid)
+        {
+            await userServices.AddUserHistoryProd(id, Userid);
+            return Ok();
+        }
+
+
+        [HttpGet("AlertProduct")]
+        public async Task<IActionResult> getAlertProd(string id)
+        {
+            var x = await userServices.getUserAlert(id);
+            return Ok(x);
+        }
+
+
+        [HttpPost("AlertProduct")]
+        public async Task<IActionResult> AddAlertProd(int id, string Userid)
+        {
+            await userServices.AddUserAlertProd(id, Userid);
+            return Ok();
+        }
+
+        [HttpDelete("RemoveAlertProduct")]
+        public async Task<IActionResult> RemoveAlertProd(int id, string Userid)
+        {
+            await userServices.RemoveUserAlertProd(id, Userid);
+            return Ok();
+        }
+
+        [HttpDelete("RemoveHistoryProduct")]
+        public async Task<IActionResult> RemoveHistProd(int id, string Userid)
+        {
+            await userServices.RemoveUserHisProd(id, Userid);
+            return Ok();
+        }
+
+        [HttpDelete("RemoveFavProduct")]
+        public async Task<IActionResult> RemoveFavProd(int id, string Userid)
+        {
+            await userServices.RemoveUserFavProd(id, Userid);
+            return Ok();
+        }
 
 
     }

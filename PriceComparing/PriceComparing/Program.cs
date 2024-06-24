@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Hangfire;
+using Hangfire.SqlServer;
 
 namespace PriceComparing
 {
@@ -117,30 +119,41 @@ namespace PriceComparing
             });
 
             builder.Services.AddScoped<UnitOfWOrks>();
+            builder.Services.AddScoped<IUserServices,UserService>();
 
-			#region Security code
-			//builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
-			//    .AddJwtBearer("myscheme",
-			//    //validate token
-			//    op =>
-			//    {
-			//        #region secret key
-			//        string key = "welcome to my secret key mohamed elshafie";
-			//        var secertkey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
-			//        #endregion
-			//        op.TokenValidationParameters = new TokenValidationParameters()
-			//        {
-			//            IssuerSigningKey = secertkey,
-			//            ValidateIssuer = false,
-			//            ValidateAudience = false
+            #region Security code
+            //builder.Services.AddAuthentication(option => option.DefaultAuthenticateScheme = "myscheme")
+            //    .AddJwtBearer("myscheme",
+            //    //validate token
+            //    op =>
+            //    {
+            //        #region secret key
+            //        string key = "welcome to my secret key mohamed elshafie";
+            //        var secertkey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key));
+            //        #endregion
+            //        op.TokenValidationParameters = new TokenValidationParameters()
+            //        {
+            //            IssuerSigningKey = secertkey,
+            //            ValidateIssuer = false,
+            //            ValidateAudience = false
 
-			//        };
-			//    }
-			//    );
-			#endregion
+            //        };
+            //    }
+            //    );
+            #endregion
 
-
-			var app = builder.Build();
+            builder.Services.AddHangfire(configuration => configuration
+               .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+               .UseSimpleAssemblyNameTypeSerializer()
+               .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangFire"),
+                new SqlServerStorageOptions
+                {
+                    PrepareSchemaIfNecessary = true,
+                }
+             ));
+            builder.Services.AddHangfireServer();
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
@@ -159,6 +172,7 @@ namespace PriceComparing
 
             app.MapControllers();
             app.CreateDbIfNotExists();
+            app.UseHangfireDashboard();
             app.Run();
         }
     }

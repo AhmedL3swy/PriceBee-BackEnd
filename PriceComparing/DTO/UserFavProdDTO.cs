@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-    public class UserAlertProdDTO
+    public class UserFavProdDTO
     {
-        public int ProdId { get; set; }
-        public string UserID { get; set; }
+        public string UserId { get; set; }
+
+        public int ProductId { get; set; }
 
         public string ProductName { get; set; }
 
         public string ProductImage { get; set; }
-
 
     }
 }

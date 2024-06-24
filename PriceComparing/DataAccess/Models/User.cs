@@ -30,16 +30,16 @@ public partial class User : ISoftDeletable
     [InverseProperty("User")]
     public virtual ICollection<SearchValue> SearchValues { get; set; } = new List<SearchValue>();
 
-    [ForeignKey("UserID")]
-    [InverseProperty("UserAlertProd")]
+    //[ForeignKey("UserID")]
+    //[InverseProperty("UserAlertProd")]
     public virtual ICollection<Product> ProdAlertUser { get; set; } = new List<Product>();
 
-    [ForeignKey("UserID")]
-    [InverseProperty("UserHistoryProd")]
+    //[ForeignKey("UserID")]
+    //[InverseProperty("UserHistoryProd")]
     public virtual ICollection<Product> ProdHistoryUser { get; set; } = new List<Product>();
 
-    [ForeignKey("UserID")]
-    [InverseProperty("UserFavProd")]
+    //[ForeignKey("UserID")]
+    //[InverseProperty("UserFavProd")]
     public virtual ICollection<Product> ProdFavUser { get; set; } = new List<Product>();
 
 }

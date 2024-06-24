@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using DTO;
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PriceComparing.UnitOfWork;
@@ -31,23 +32,15 @@ namespace PriceComparing.Controllers
              _UnitOfWork.savechanges();
             return Ok(productID);
         }
-        // get Brands By Category
-        [HttpGet]
-        [Route("GetBrandsByCategory/{id}")]
-        public async Task<IActionResult> GetBrandsByCategory(int id)
+        [HttpPost("HangFireTriggerOn")]
+        public async Task HangFireTriggerOn()
         {
-            var brands = await _UnitOfWork.ProductRepo.GetBrandsByCategoryId(id);
-            if (brands == null) return NotFound();
-            return Ok(brands);
+            RecurringJob.AddOrUpdate( "UpdateProductPrice",() => _UnitOfWork.ProductRepo.UpdateProductPrice(), Cron.Minutely);
         }
-        // get SubCategories By Category
-        [HttpGet]
-        [Route("GetSubCategoriesByCategory/{id}")]
-        public async Task<IActionResult> GetSubCategoriesByCategory(int id)
+        [HttpPost("HangFireTriggerOff")]
+        public async Task HangFireTriggerOff()
         {
-            var subCategories = await _UnitOfWork.ProductRepo.GetSubCategoriesByCategoryId(id);
-            if (subCategories == null) return NotFound();
-            return Ok(subCategories);
+            RecurringJob.RemoveIfExists("UpdateProductPrice");
         }
     }
 }
