@@ -8,9 +8,12 @@ namespace DTO
 {
     public class UserAlertProdDTO
     {
-        public int Id { get; set; }
-        public int UserID { get; set; }
-        // public int ProductID { get; set; }
+        public int ProdId { get; set; }
+        public string UserID { get; set; }
+
+        public string ProductName { get; set; }
+
+        public string ProductImage { get; set; }
 
 
     }

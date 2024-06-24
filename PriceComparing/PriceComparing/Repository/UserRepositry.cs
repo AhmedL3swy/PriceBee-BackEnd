@@ -85,5 +85,18 @@ namespace PriceComparing.Repository
           
        
         }
+
+        public async Task SoftDelete<TEntity>(int id, int UserID) where TEntity : class
+        {
+            var obj = await _db.Set<TEntity>().FirstOrDefaultAsync(a => EF.Property<int>(a, "UserID") == UserID && EF.Property<int>(a, "ProductId") == id);
+            // Console.WriteLine(UserID + " before if " + id); 
+            if (obj != null)
+            {
+                _db.Entry(obj).Property("IsDeleted").CurrentValue = true;
+                await _db.SaveChangesAsync();
+               // Console.WriteLine(UserID + " end if " + id); 
+            }
+        }
+
     }
 }

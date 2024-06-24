@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-    public class BrandPostDTO
+    public class PaidProductDTO
     {
         public int Id { get; set; }
         public string Name_Local { get; set; }
         public string Name_Global { get; set; }
         public string Description_Local { get; set; }
         public string Description_Global { get; set; }
-        public string Logo { get; set; }
-        public string LogoUrl { get; set; }
-		public int CategoryId { get; set; }
+        public int SubCategoryId { get; set; }
+        public int? BrandId { get; set; }
+        public bool IsPaid { get; set; }
+        public int? Duration { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public decimal? Budget { get; set; }
 
     }
 }
