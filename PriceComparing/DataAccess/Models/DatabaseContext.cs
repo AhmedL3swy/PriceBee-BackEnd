@@ -100,7 +100,9 @@ public partial class DatabaseContext : IdentityDbContext<AuthUser>
         {
             entity.HasKey(e => e.Id).HasName("PK__Product__3214EC073BC2FE02");
 
-            entity.HasOne(d => d.Brand).WithMany(p => p.Products).HasConstraintName("FK_Product_Brands");
+            entity.HasOne(d => d.Brand).WithMany(p => p.Products)
+                // .OnDelete(DeleteBehavior.Cascade)
+				.HasConstraintName("FK_Product_Brands");
 
             entity.HasOne(d => d.SubCategory).WithMany(p => p.Products)
                 // .OnDelete(DeleteBehavior.ClientSetNull)
