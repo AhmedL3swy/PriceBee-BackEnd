@@ -16,6 +16,7 @@
 		public decimal MinPrice { get; set; }
 		public string MinPriceDomainLogo { get; set; }
 		public string MinPriceBrandName { get; set; }
+		public int DomainCount { get; set; }
 
 
             public CombinedProductDetailDTO()

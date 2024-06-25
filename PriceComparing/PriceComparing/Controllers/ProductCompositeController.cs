@@ -11,69 +11,69 @@ using System.Runtime.Serialization;
 
 namespace PriceComparing.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class CombinedProductController : ControllerBase
-	{
-		private readonly UnitOfWOrks _unitOfWork;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CombinedProductController : ControllerBase
+    {
+        private readonly UnitOfWOrks _unitOfWork;
 
-		public CombinedProductController(UnitOfWOrks unitOfWork)
-		{
-			_unitOfWork = unitOfWork;
-		}
+        public CombinedProductController(UnitOfWOrks unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
 
-		[HttpGet]
-		public async Task<IActionResult> GetCombinedProductDetails()
-		{
-			// Load products with related data using Eager Loading
-			var products = await _unitOfWork.ProductRepository
-				.SelectAllProduct()
-				.Include(p => p.SubCategory)
-				.Include(p => p.Brand)
-				.Include(p => p.ProductImages)
-				.Include(p => p.ProductLinks)
-					.ThenInclude(pl => pl.Domain)
-				.Include(p => p.ProductLinks)
-					.ThenInclude(pl => pl.ProductDetail)
-				.ToListAsync();
+        [HttpGet]
+        public async Task<IActionResult> GetCombinedProductDetails()
+        {
+            // Load products with related data using Eager Loading
+            var products = await _unitOfWork.ProductRepository
+                .SelectAllProduct()
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.ProductDetail)
+                .ToListAsync();
 
-			if (products == null || !products.Any()) return NotFound();
+            if (products == null || !products.Any()) return NotFound();
 
-			var combinedProductDetails = new List<CombinedProductDetailDTO>();
+            var combinedProductDetails = new List<CombinedProductDetailDTO>();
 
-			foreach (var product in products)
-			{
-				var combinedProductDetail = new CombinedProductDetailDTO
-				{
-					ProductId = product.Id,
+            foreach (var product in products)
+            {
+                var combinedProductDetail = new CombinedProductDetailDTO
+                {
+                    ProductId = product.Id,
                     ProductName_Local = product.Name_Local,
                     ProductName_Global = product.Name_Global,
                     ProductDescription_Local = product.Description_Local,
                     ProductDescription_Global = product.Description_Global,
-					SubCategoryName = product.SubCategory?.Name_Global,
-					BrandName = product.Brand?.Name_Global,
-					// Ensure non-empty lists are handled
-					LastUpdated = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastUpdated) : DateTime.MinValue,
-					LastScraped = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastScraped) : DateTime.MinValue,
-					Images = product.ProductImages.Select(img => img.Image).ToList(),
-					Links = product.ProductLinks.Select(link => new ProductLinkDTO2
-					{
-						DomainName = link.Domain.Name_Global,
-						DomainLogo = link.Domain.Logo,
-						ProductLink = link.ProductLink1,
-						Price = link.ProductDetail?.Price ?? 0,
-						Rating = link.ProductDetail?.Rating
-					}).ToList()
-				};
-				Console.WriteLine($"Product: {product.Name_Global}, Images: {combinedProductDetail.Images.Count}, Links: {combinedProductDetail.Links.Count}");
+                    SubCategoryName = product.SubCategory?.Name_Global,
+                    BrandName = product.Brand?.Name_Global,
+                    // Ensure non-empty lists are handled
+                    LastUpdated = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastUpdated) : DateTime.MinValue,
+                    LastScraped = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastScraped) : DateTime.MinValue,
+                    Images = product.ProductImages.Select(img => img.Image).ToList(),
+                    Links = product.ProductLinks.Select(link => new ProductLinkDTO2
+                    {
+                        DomainName = link.Domain.Name_Global,
+                        DomainLogo = link.Domain.Logo,
+                        ProductLink = link.ProductLink1,
+                        Price = link.ProductDetail?.Price ?? 0,
+                        Rating = link.ProductDetail?.Rating
+                    }).ToList()
+                };
+                Console.WriteLine($"Product: {product.Name_Global}, Images: {combinedProductDetail.Images.Count}, Links: {combinedProductDetail.Links.Count}");
 
-				combinedProductDetails.Add(combinedProductDetail);
-			}
+                combinedProductDetails.Add(combinedProductDetail);
+            }
 
-			return Ok(combinedProductDetails);
-		}
+            return Ok(combinedProductDetails);
+        }
 
-
+        //for product details component
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCombinedProductDetailsByID(int id)
         {
@@ -128,7 +128,74 @@ namespace PriceComparing.Controllers
             return Ok(combinedProductDetail);
         }
 
+        //for home component 
 
+        [HttpGet("home")]
+        public async Task<IActionResult> GetCombinedProductDetailsForHome(int page = 1)
+        {
+
+            int pageSize = 12; // Number of products per page
+                               // Calculate the number of products to skip
+            int skip = (page - 1) * pageSize;
+
+            // Load products with related data using Eager Loading
+            var products = await _unitOfWork.ProductRepository
+                .SelectAllProduct()
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.ProductDetail)
+                    .OrderBy(p => p.Id) // Ensure there is an order, so pagination works correctly
+            .Skip(skip) // Skip the previous pages' products
+            .Take(pageSize) // Take the next set of products
+
+                .ToListAsync();
+
+            if (products == null || !products.Any()) return NotFound();
+
+            var combinedProductDetailsList = new List<ProductCompositeForHomeDTO>();
+
+            // Refactored to use the CreateCombinedProductDetailDTO method
+            foreach (var product in products)
+            {
+                var combinedProductDetail = CreateCombinedProductDetailDTO(product);
+                combinedProductDetailsList.Add(combinedProductDetail);
+            }
+
+            return Ok(combinedProductDetailsList);
+        }
+
+        // Assuming CreateCombinedProductDetailDTO is defined within the same controller class
+        private ProductCompositeForHomeDTO CreateCombinedProductDetailDTO(Product product)
+        {
+            var minPriceLink = product.ProductLinks
+                .Where(pl => pl.ProductDetail != null)
+                .OrderBy(pl => pl.ProductDetail.Price)
+                .FirstOrDefault();
+
+            return new ProductCompositeForHomeDTO
+            {
+                ProductId = product.Id,
+                ProductName_Local = product.Name_Local,
+                ProductName_Global = product.Name_Global,
+                Images = product.ProductImages.Select(img => img.Image).ToList().FirstOrDefault(),
+                Links = product.ProductLinks.Select(link => new ProductLinkDTOForHOme
+                {
+                    DomainName = link.Domain.Name_Global,
+                    DomainLogo = link.Domain.Logo,
+                    ProductLink = link.ProductLink1,
+                    Price = link.ProductDetail?.Price ?? 0
+                   
+                }).ToList(),
+                MinPrice = minPriceLink?.ProductDetail?.Price ?? 0,
+                MinPriceDomainLogo = minPriceLink?.Domain?.Logo,
+                MinPriceBrandName = minPriceLink?.ProductDetail?.Brand, // Ensure this matches your model
+                DomainCount = product.ProductLinks.Select(link => link.Domain.Id).Distinct().Count() // Count of unique domains
+            };
+        }
 
         // Delete product, product detials and related data
         [HttpDelete("{id}")]
