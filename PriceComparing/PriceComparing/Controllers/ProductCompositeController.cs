@@ -179,7 +179,7 @@ namespace PriceComparing.Controllers
 				.Include(p => p.PriceHistories)
 				.Include(p => p.ProductImages)
                 // include the user favorite products with the product id 
-                .Include(p => p.UserFavProds).Where(p => p.UserFavProds.Any(uf => uf.ProductId == p.Id))
+                .Include(p => p.UserFavProds)//.Where(p => p.UserFavProds.Any(uf => uf.ProductId == p.Id))
                 .Include(p => p.ProductLinks)
 					.ThenInclude(pl => pl.ProductDetail)
                     // then get the sponsered products
