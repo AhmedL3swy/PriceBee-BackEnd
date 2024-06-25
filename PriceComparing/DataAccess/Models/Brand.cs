@@ -29,9 +29,12 @@ public partial class Brand : ISoftDeletable
     [Unicode(false)]
     public string Description_Global { get; set; }
 
+
     public string Logo { get; set; }
 
-    public int CategoryId { get; set; }
+    public string LogoUrl { get; set; }
+
+	public int CategoryId { get; set; }
 
     //public bool IsDeleted { get; set; }
 
@@ -42,6 +45,6 @@ public partial class Brand : ISoftDeletable
     [InverseProperty("Brand")]
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
-    public virtual ICollection<PaidProduct> PaidProducts { get; set; }
+   // public virtual ICollection<PaidProduct> PaidProducts { get; set; }
 
 }

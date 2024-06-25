@@ -34,6 +34,6 @@ public partial class SubCategory : ISoftDeletable
     [InverseProperty("SubCategory")]
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
-    public virtual ICollection<PaidProduct> PaidProducts { get; set; }
+   // public virtual ICollection<PaidProduct> PaidProducts { get; set; }
 
 }
