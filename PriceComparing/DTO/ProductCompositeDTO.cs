@@ -13,12 +13,17 @@
 			public DateTime LastScraped { get; set; }
 			public List<string> Images { get; set; }
 			public List<ProductLinkDTO2> Links { get; set; }
+		public decimal MinPrice { get; set; }
+		public string MinPriceDomainLogo { get; set; }
+		public string MinPriceBrandName { get; set; }
 
-			public CombinedProductDetailDTO()
+
+            public CombinedProductDetailDTO()
 			{
 				Images = new List<string>();
 				Links = new List<ProductLinkDTO2>();
-			}
+
+            }
 		}
 
 	public class ProductLinkDTO2

@@ -72,6 +72,63 @@ namespace PriceComparing.Controllers
 			return Ok(combinedProductDetails);
 		}
 
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCombinedProductDetailsByID(int id)
+        {
+            // Filter to load the specific product with related data using Eager Loading
+            var product = await _unitOfWork.ProductRepository
+                .SelectAllProduct()
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.ProductDetail)
+                .FirstOrDefaultAsync(p => p.Id == id); // Apply filter here
+
+            if (product == null) return NotFound();
+
+            // Calculate the minimum price among the product links
+            var minPriceLink = product.ProductLinks
+                .Where(pl => pl.ProductDetail != null)
+                .OrderBy(pl => pl.ProductDetail.Price)
+                .FirstOrDefault();
+
+			var combinedProductDetail = new CombinedProductDetailDTO
+			{
+				ProductId = product.Id,
+				ProductName_Local = product.Name_Local,
+				ProductName_Global = product.Name_Global,
+				ProductDescription_Local = product.Description_Local,
+				ProductDescription_Global = product.Description_Global,
+				SubCategoryName = product.SubCategory?.Name_Global,
+				BrandName = product.Brand?.Name_Global,
+				LastUpdated = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastUpdated) : DateTime.MinValue,
+				LastScraped = product.ProductLinks.Any() ? product.ProductLinks.Max(link => link.LastScraped) : DateTime.MinValue,
+				Images = product.ProductImages.Select(img => img.Image).ToList(),
+				Links = product.ProductLinks.Select(link => new ProductLinkDTO2
+				{
+					DomainName = link.Domain.Name_Global,
+					DomainLogo = link.Domain.Logo,
+					ProductLink = link.ProductLink1,
+					Price = link.ProductDetail?.Price ?? 0,
+					Rating = link.ProductDetail?.Rating
+				}).ToList(),
+				// Add minimum price, domain logo, and brand name for the product with the minimum price
+				MinPrice = minPriceLink?.ProductDetail?.Price ?? 0,
+				MinPriceDomainLogo = minPriceLink?.Domain?.Logo,
+				MinPriceBrandName = minPriceLink?.ProductDetail?.Brand
+			};
+
+            Console.WriteLine($"Product: {product.Name_Global}, Images: {combinedProductDetail.Images.Count}, Links: {combinedProductDetail.Links.Count}, MinPrice: {combinedProductDetail.MinPrice}");
+
+            return Ok(combinedProductDetail);
+        }
+
+
+
         // Delete product, product detials and related data
         [HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteProduct(int id)
