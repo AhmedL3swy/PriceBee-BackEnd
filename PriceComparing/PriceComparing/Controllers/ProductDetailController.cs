@@ -157,7 +157,6 @@ namespace PriceComparing.Controllers
         {
             var product = await _unitOfWork.ProductRepository
                 .SelectAllProduct()
-                .Include(p => p.SubCategory)
                 .Include(p => p.Brand)
                 .Include(p => p.PriceHistories)
                 .Include(p => p.ProductImages)
@@ -165,7 +164,7 @@ namespace PriceComparing.Controllers
                     .ThenInclude(pl => pl.Domain)
                 .Include(p => p.ProductLinks)
                     .ThenInclude(pl => pl.ProductDetail)
-                .Where(p => p.Id == id) // Filter by the given product ID
+                .Where(p => p.Id == id)
                 .Select(product => new
                 {
                     Product_Id = product.Id,
@@ -173,30 +172,37 @@ namespace PriceComparing.Controllers
                     Product_Name_Global = product.Name_Global,
                     Product_Description_Local = product.Description_Local,
                     Product_Description_Global = product.Description_Global,
-                    BrandLogo = product.Brand.Logo,
-                    MinPrice = product.PriceHistories.Min(ph => ph.Price), // Calculate the minimum price
-                    ProductImages = product.ProductImages.Select(pi => pi.Image).ToList(), // Select all product images
-                    ProductDomains = product.ProductLinks.GroupBy(pl => pl.Domain).Select(g => new
-                    {
-                        DomainId = g.Key.Id,
-                        DomainNameLocal = g.Key.Name_Local,
-						DomainNameGlobal = g.Key.Name_Global,
-                        DomainDescriptionLocal = g.Key.Description_Local,
-						DomainDescriptionGlobal = g.Key.Description_Global,
-                        LinkDetails = g.Select(pl => new
-                        {
-                            LinkId = pl.Id,
-                            LinkName = pl.ProductLink1,
-                            Price = pl.ProductDetail.Price,
-                            Name = pl.ProductDetail.Name_Local // Assuming you want the local name of the product detail
-                        }).ToList()
-                    }).ToList()
+                    BrandNameGlobal = product.Brand.Name_Global,
+                    MinPrice = product.ProductLinks
+                                .Select(pl => pl.ProductDetail.Price).DefaultIfEmpty().Min(),
+                    ProductImages = product.ProductImages.Select(pi => pi.Image).ToList(),
+                    ProductDomains = product.ProductLinks
+                                .Where(pl => pl.ProdId == product.Id) // Ensure links are related to the current product
+                                .GroupBy(pl => pl.Domain)
+                                .Select(g => new
+                                {
+                                    DomainId = g.Key.Id,
+                                    BrandNameGlobal = g.Key.Name_Global,
+                                    DomainDescriptionGlobal = g.Key.Description_Global,
+                                    DomainLogo = g.Key.Logo,
+                                    LinkDetails = g.Select(pl => new
+                                    {
+                                        LinkId = pl.Id,
+                                        LinkName = pl.ProductLink1,
+                                        Price = pl.ProductDetail.Price,
+                                        Name = pl.ProductDetail.Name_Local
+                                    }).ToList()
+                                }).ToList()
                 })
-                .FirstOrDefaultAsync(); // Since we're filtering by ID, we expect at most one result
+                .FirstOrDefaultAsync();
 
             if (product == null) return NotFound();
 
-            // Construct the DTO to include the minimum price, domain details, product images, and product domains
+            var minPriceLinks = product.ProductDomains
+                .SelectMany(pd => pd.LinkDetails)
+                .Where(ld => ld.Price == product.MinPrice)
+                .ToList();
+
             var productDetailDTO = new
             {
                 product.Product_Id,
@@ -204,15 +210,15 @@ namespace PriceComparing.Controllers
                 product.Product_Name_Global,
                 product.Product_Description_Local,
                 product.Product_Description_Global,
-                product.BrandLogo,
+                product.BrandNameGlobal,
                 MinPrice = product.MinPrice,
+                MinPriceLinks = minPriceLinks,
                 ProductImages = product.ProductImages,
                 ProductDomains = product.ProductDomains
             };
 
             return Ok(productDetailDTO);
         }
-
 
 
 
