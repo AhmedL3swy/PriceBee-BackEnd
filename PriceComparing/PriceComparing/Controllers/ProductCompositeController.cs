@@ -128,6 +128,49 @@ namespace PriceComparing.Controllers
             return Ok(combinedProductDetail);
         }
 
+
+        // for featured component
+        [HttpGet("featured")]
+        
+        public async Task<IActionResult> GetCombinedProductDetailsForFeatured(int page = 1)
+        {
+            const int pageSize = 12; // Number of products per page
+            var skip = (page - 1) * pageSize; // Calculate the number of products to skip
+
+            // Load products with active sponsorships using Eager Loading
+            var currentDate = DateTime.Now;
+            var featuredProducts = await _unitOfWork.ProductRepository
+                .SelectAllProduct()
+                .Where(p => p.ProductLinks.Any(pl => pl.ProductDetail.ProductSponsoreds.Any(ps => ps.StartDate <= currentDate && currentDate <= ps.StartDate.AddDays(ps.Duration))))
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.ProductDetail)
+                .OrderBy(p => p.Id) 
+                .Skip(skip) 
+                .Take(pageSize) 
+                .ToListAsync();
+
+            if (featuredProducts == null || !featuredProducts.Any()) return NotFound();
+
+            var combinedProductDetailsList = new List<ProductCompositeForHomeDTO>();
+
+            // Convert each product to a DTO
+            foreach (var product in featuredProducts)
+            {
+                var combinedProductDetail = CreateCombinedProductDetailDTO(product); // Assuming CreateCombinedProductDetailDTO properly converts a Product to ProductCompositeForHomeDTO
+                combinedProductDetailsList.Add(combinedProductDetail);
+            }
+
+            return Ok(combinedProductDetailsList);
+        }
+
+
+
+
         //for home component 
 
         [HttpGet("home")]
