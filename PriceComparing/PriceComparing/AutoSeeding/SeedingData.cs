@@ -247,7 +247,8 @@ namespace PriceComparing.Models
                     Description_Local = "لاب توب اتش بي",
                     Description_Global = "HP Laptop",
                     SubCategoryId = 2,
-                    BrandId = 3
+                    BrandId = 3,
+                    NumberOfClicks = 5
                 },
                 // Electronics:Printers
                 new Product
@@ -257,7 +258,8 @@ namespace PriceComparing.Models
                     Description_Local = "طابعة اتش بي",
                     Description_Global = "HP Printer",
                     SubCategoryId = 3,
-                    BrandId = 3
+                    BrandId = 3,
+                    NumberOfClicks = 10
                 },
                 // Office Supplies:Pens
                 new Product

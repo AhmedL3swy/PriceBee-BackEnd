@@ -168,6 +168,44 @@ namespace PriceComparing.Controllers
             return Ok(combinedProductDetailsList);
         }
 
+        //for most popular component
+        [HttpGet("MOstPopular")]
+        public async Task<IActionResult> GetCombinedProductDetailsForMostPopular(int page = 1)
+        {
+            const int pageSize = 10; // Define how many products per page you want
+            var skipAmount = (page - 1) * pageSize; // Calculate the number of products to skip
+
+           
+            var mostPopularProductsQuery = _unitOfWork.ProductRepository
+                .SelectAllProduct()
+                .OrderByDescending(p => p.NumberOfClicks) // Assuming NumberOfClicks indicates popularity
+                .Skip(skipAmount)
+                .Take(pageSize);
+
+            var mostPopularProducts = await mostPopularProductsQuery
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.ProductDetail)
+                .ToListAsync();
+
+            if (!mostPopularProducts.Any())
+            {
+                return NotFound("No popular products found.");
+            }
+
+            // Convert the products to your DTO
+            var productDTOs = mostPopularProducts.Select(p => CreateCombinedProductDetailDTO(p)).ToList();
+
+            return Ok(productDTOs);
+        }
+
+        // Assuming CreateCombinedProductDetailDTO is a method that converts a Product to a DTO
+        
+
 
 
 
