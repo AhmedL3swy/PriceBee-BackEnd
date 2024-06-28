@@ -643,8 +643,8 @@ namespace PriceComparing.Models
                     Description_Local = "متجر الكترونيات مصري",
                     Description_Global = "Egyptian Electronics Store",
                     Url = "http://www.egyptianelectronics.com",
-                    Logo = "logo1.jpg"
-                },
+                    Logo = "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+				},
                 new Domain
                 {
                     //Id = 2,
@@ -653,8 +653,8 @@ namespace PriceComparing.Models
                     Description_Local = "متجر الكترونيات سعودي",
                     Description_Global = "Saudi Electronics Store",
                     Url = "http://www.saudielectronics.com",
-                    Logo = "logo2.jpg"
-                },
+                    Logo = "https://seeklogo.com/images/N/noon-com-logo-96C05327E1-seeklogo.com.png"
+				},
                 new Domain
                 {
                     //Id = 3,
@@ -663,8 +663,8 @@ namespace PriceComparing.Models
                     Description_Local = "متجر الكترونيات اماراتي",
                     Description_Global = "Emirati Electronics Store",
                     Url = "http://www.emiratielectronics.com",
-                    Logo = "logo3.jpg"
-                }
+                    Logo = "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+				}
             );
             db.SaveChanges();
 
