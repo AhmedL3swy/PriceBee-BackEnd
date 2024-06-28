@@ -247,7 +247,8 @@ namespace PriceComparing.Models
                     Description_Local = "لاب توب اتش بي",
                     Description_Global = "HP Laptop",
                     SubCategoryId = 2,
-                    BrandId = 3
+                    BrandId = 3,
+                    NumberOfClicks = 5
                 },
                 // Electronics:Printers
                 new Product
@@ -257,7 +258,8 @@ namespace PriceComparing.Models
                     Description_Local = "طابعة اتش بي",
                     Description_Global = "HP Printer",
                     SubCategoryId = 3,
-                    BrandId = 3
+                    BrandId = 3,
+                    NumberOfClicks = 10
                 },
                 // Office Supplies:Pens
                 new Product
@@ -711,7 +713,29 @@ namespace PriceComparing.Models
                      Status = "In Stock",
                      LastUpdated = DateTime.Now,
                      LastScraped = DateTime.Now
-                 }
+                 },
+                 new ProductLink
+                    {
+    
+                        //Id= 5,
+                        ProdId = 4,
+                        DomainId = 3,
+                        ProductLink1 = "http://www.emirateselectronics.com/product/3",
+                        Status = "In Stock",
+                        LastUpdated = DateTime.Now,
+                        LastScraped = DateTime.Now
+                    },
+                 new ProductLink
+                        {
+        
+                            //Id= 6,
+                            ProdId = 4,
+                            DomainId = 1,
+                            ProductLink1 = "http://www.emirateselectronics.com/product/3",
+                            Status = "In Stock",
+                            LastUpdated = DateTime.Now,
+                            LastScraped = DateTime.Now
+                        }
             );
             db.SaveChanges();
 
@@ -763,7 +787,20 @@ namespace PriceComparing.Models
                      Price = 800,
                      Rating = 4.3m,
                      Brand = "samsung"
-                 }
+                 },
+                 new ProductDetail
+                    {
+    
+                        Id = 5,
+                        Name_Local = "88تليفون شاومى",
+                        Name_Global = "88xiaomi Phone",
+                        Description_Local = "تليفون شاومى",
+                        Description_Global = "xiaomi Phone",
+                        Price = 900,
+                        Rating = 4.4m,
+                        Brand = "samsung"
+                    }
+
             );
             db.SaveChanges();
             db.ProductImages.AddRange(
@@ -819,6 +856,19 @@ namespace PriceComparing.Models
             }
             );
             db.SaveChanges();
+
+            //ProductSponsored seeding
+            db.ProductSponsoreds.AddRange(
+                new ProductSponsored
+                {
+                    Cost = 1000,
+                    StartDate = DateTime.Now,
+                    Duration = 30,
+                    ProdDetId = 4
+                }
+            );
+            db.SaveChanges();
+
 
 
 

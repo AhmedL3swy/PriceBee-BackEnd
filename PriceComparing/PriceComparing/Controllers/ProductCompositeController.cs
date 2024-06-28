@@ -128,6 +128,87 @@ namespace PriceComparing.Controllers
             return Ok(combinedProductDetail);
         }
 
+
+        // for featured component
+        [HttpGet("featured")]
+        
+        public async Task<IActionResult> GetCombinedProductDetailsForFeatured(int page = 1)
+        {
+            const int pageSize = 12; // Number of products per page
+            var skip = (page - 1) * pageSize; // Calculate the number of products to skip
+
+            // Load products with active sponsorships using Eager Loading
+            var currentDate = DateTime.Now;
+            var featuredProducts = await _unitOfWork.ProductRepository
+                .SelectAllProduct()
+                .Where(p => p.ProductLinks.Any(pl => pl.ProductDetail.ProductSponsoreds.Any(ps => ps.StartDate <= currentDate && currentDate <= ps.StartDate.AddDays(ps.Duration))))
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.ProductDetail)
+                .OrderBy(p => p.Id) 
+                .Skip(skip) 
+                .Take(pageSize) 
+                .ToListAsync();
+
+            if (featuredProducts == null || !featuredProducts.Any()) return NotFound();
+
+            var combinedProductDetailsList = new List<ProductCompositeForHomeDTO>();
+
+            // Convert each product to a DTO
+            foreach (var product in featuredProducts)
+            {
+                var combinedProductDetail = CreateCombinedProductDetailDTO(product); // Assuming CreateCombinedProductDetailDTO properly converts a Product to ProductCompositeForHomeDTO
+                combinedProductDetailsList.Add(combinedProductDetail);
+            }
+
+            return Ok(combinedProductDetailsList);
+        }
+
+        //for most popular component
+        [HttpGet("MOstPopular")]
+        public async Task<IActionResult> GetCombinedProductDetailsForMostPopular(int page = 1)
+        {
+            const int pageSize = 10; // Define how many products per page you want
+            var skipAmount = (page - 1) * pageSize; // Calculate the number of products to skip
+
+           
+            var mostPopularProductsQuery = _unitOfWork.ProductRepository
+                .SelectAllProduct()
+                .OrderByDescending(p => p.NumberOfClicks) // Assuming NumberOfClicks indicates popularity
+                .Skip(skipAmount)
+                .Take(pageSize);
+
+            var mostPopularProducts = await mostPopularProductsQuery
+                .Include(p => p.SubCategory)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.ProductDetail)
+                .ToListAsync();
+
+            if (!mostPopularProducts.Any())
+            {
+                return NotFound("No popular products found.");
+            }
+
+            // Convert the products to your DTO
+            var productDTOs = mostPopularProducts.Select(p => CreateCombinedProductDetailDTO(p)).ToList();
+
+            return Ok(productDTOs);
+        }
+
+        // Assuming CreateCombinedProductDetailDTO is a method that converts a Product to a DTO
+        
+
+
+
+
         //for home component 
 
         [HttpGet("home")]
