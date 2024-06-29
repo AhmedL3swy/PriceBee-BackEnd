@@ -15,16 +15,21 @@ namespace PriceComparing.Repository
 
 		}
 
-		public IQueryable<TEntity> SelectAllProduct()
-		{
-			return _db.Set<TEntity>().AsNoTracking();
-		}
-		// when using this funtion global filteration is applied
+        // 1- Get all active entities
+        // when using this function global filtration is applied
         public async Task<List<TEntity>> SelectAll()
 		{
 			return await _db.Set<TEntity>().AsNoTracking().ToListAsync();
 		}
-        // when using this funtion global filteration not is applied
+        // sync version
+        public IQueryable<TEntity> SelectAllSync()
+        {
+            return _db.Set<TEntity>().AsNoTracking();
+        }
+
+
+        // 2- Get all entities ignoring filters
+        // when using this function global filtration not is applied
         public async Task<List<TEntity>> SelectAllIgnoringFiltersAsync()
         {
             return await _db.Set<TEntity>()
@@ -32,7 +37,9 @@ namespace PriceComparing.Repository
                 .IgnoreQueryFilters()
                 .ToListAsync();
         }
-        // when using this funtion only softdeleted is returned
+
+        // 3- Get all soft deleted entities
+        // when using this function only softdeleted is returned
         internal async Task<List<TEntity>> SelectAllSoftDeletedAsync()
         {
             // throw new NotImplementedException();
@@ -45,32 +52,21 @@ namespace PriceComparing.Repository
 
         }
 
-
+        // 4- Get entity by id
         public async Task<TEntity?> SelectById(int id)
 		{
 			return await _db.Set<TEntity>().FindAsync(id);
 		}
+        // not in use //
         public TEntity SelectionById(int id)
         {
             //return _db.Set<TEntity>().Where(entity => EF.Property<int>(entity, "Id") == id);
             //return find by id 
             // return _db.Set<TEntity>().Where(entity => (int)entity.GetType().GetProperty("Id").GetValue(entity) == id);
             return _db.Set<TEntity>().Find(id);
-
-
         }
 
-        public async Task<TEntity?> SelectUserById(string id)
-        {
-            return await _db.Set<TEntity>().FindAsync(id);
-        }
-
-        public async Task<TEntity?> SelectUserByEmail(string email)
-        {
-            return await _db.Set<TEntity>().FindAsync(email);
-        }
-
-     
+        // 5- Get by id ignoring filters
         // Get by id ignoring filters
         public async Task<TEntity?> SelectByIdIgnoringFiltersAsync(int id)
         {
@@ -82,22 +78,24 @@ namespace PriceComparing.Repository
             return entities.FirstOrDefault(e => (int)e.GetType().GetProperty("Id").GetValue(e) == id);
         }
 
+        // 6- Add entity
 
-       
         public async Task Add(TEntity entity)
 		{
 			await _db.Set<TEntity>().AddAsync(entity);
 			await _db.SaveChangesAsync();
 		}
 
-		public async Task UpdateAsync(TEntity entity)
+        // 7- Update entity
+        public async Task UpdateAsync(TEntity entity)
 		{
 			_db.Entry(entity).State = EntityState.Modified;
 			await _db.SaveChangesAsync();
 		}
 
-       
 
+        // 8- Delete entity
+        // Delete entity by id
         public async Task Delete(int id)
 		{
 			TEntity? obj = await _db.Set<TEntity>().FindAsync(id);
@@ -108,8 +106,8 @@ namespace PriceComparing.Repository
 			}
 		}
 
-		// Soft Delete using shadow property
-		public async Task SoftDelete(int id)
+        // 9- Soft Delete using shadow property
+        public async Task SoftDelete(int id)
         {
             TEntity? obj = await _db.Set<TEntity>().FindAsync(id);
             if (obj != null)
@@ -119,20 +117,8 @@ namespace PriceComparing.Repository
             }
         }
 
-
-       
-        internal async Task DeleteRange(IEnumerable<object> entities)
-        {
-            //TEntity? obj = await _db.Set<TEntity>().FindAsync(entities);
-            _db.Set<TEntity>().RemoveRange(entities.Cast<TEntity>());
-            await _db.SaveChangesAsync();
-            //foreach (var item in Items)
-            //{
-            //}
-        }
-
-
-        internal async Task RestoreAsync(TEntity entity)
+        // 10- Restore soft deleted entity
+        internal async Task Restore(TEntity entity)
         {
             // check if Attached 
             if (_db.Entry(entity).State == EntityState.Detached)
@@ -145,5 +131,26 @@ namespace PriceComparing.Repository
             await _db.SaveChangesAsync();
         }
 
+        // 11- Delete range of entities
+
+        internal async Task DeleteRange(IEnumerable<object> entities)
+        {
+            _db.Set<TEntity>().RemoveRange(entities.Cast<TEntity>());
+            await _db.SaveChangesAsync();
+        }
+
+        #region User
+        // 1- get user by id: string
+        public async Task<TEntity?> SelectUserById(string id)
+        {
+            return await _db.Set<TEntity>().FindAsync(id);
+        }
+
+        // 2- get user by email: string
+        public async Task<TEntity?> SelectUserByEmail(string email)
+        {
+            return await _db.Set<TEntity>().FindAsync(email);
+        }
+        #endregion
     }
 }

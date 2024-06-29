@@ -156,7 +156,7 @@ namespace PriceComparing.Controllers
         public async Task<IActionResult> GetProductDetailsByProductId(int id)
         {
             var product = await _unitOfWork.ProductRepository
-                .SelectAllProduct()
+                .SelectAllSync()
                 .Include(p => p.Brand)
                 .Include(p => p.PriceHistories)
                 .Include(p => p.ProductImages)
