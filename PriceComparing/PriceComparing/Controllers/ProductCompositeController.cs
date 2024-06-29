@@ -27,7 +27,7 @@ namespace PriceComparing.Controllers
         {
             // Load products with related data using Eager Loading
             var products = await _unitOfWork.ProductRepository
-                .SelectAllProduct()
+                .SelectAllSync()
                 .Include(p => p.SubCategory)
                 .Include(p => p.Brand)
                 .Include(p => p.ProductImages)
@@ -79,7 +79,7 @@ namespace PriceComparing.Controllers
         {
             // Filter to load the specific product with related data using Eager Loading
             var product = await _unitOfWork.ProductRepository
-                .SelectAllProduct()
+                .SelectAllSync()
                 .Include(p => p.SubCategory)
                 .Include(p => p.Brand)
                 .Include(p => p.ProductImages)
@@ -140,7 +140,7 @@ namespace PriceComparing.Controllers
             // Load products with active sponsorships using Eager Loading
             var currentDate = DateTime.Now;
             var featuredProducts = await _unitOfWork.ProductRepository
-                .SelectAllProduct()
+                .SelectAllSync()
                 .Where(p => p.ProductLinks.Any(pl => pl.ProductDetail.ProductSponsoreds.Any(ps => ps.StartDate <= currentDate && currentDate <= ps.StartDate.AddDays(ps.Duration))))
                 .Include(p => p.SubCategory)
                 .Include(p => p.Brand)
@@ -177,7 +177,7 @@ namespace PriceComparing.Controllers
 
            
             var mostPopularProductsQuery = _unitOfWork.ProductRepository
-                .SelectAllProduct()
+                .SelectAllSync()
                 .OrderByDescending(p => p.NumberOfClicks) // Assuming NumberOfClicks indicates popularity
                 .Skip(skipAmount)
                 .Take(pageSize);
@@ -221,7 +221,7 @@ namespace PriceComparing.Controllers
 
             // Load products with related data using Eager Loading
             var products = await _unitOfWork.ProductRepository
-                .SelectAllProduct()
+                .SelectAllSync()
                 .Include(p => p.SubCategory)
                 .Include(p => p.Brand)
                 .Include(p => p.ProductImages)
@@ -378,7 +378,7 @@ namespace PriceComparing.Controllers
 		{
 			// Build the base query with necessary includes
 			var query = _unitOfWork.ProductRepository
-				.SelectAllProduct()
+				.SelectAllSync()
 				.Include(p => p.SubCategory)
 				.Include(p => p.Brand)
 				.Include(p => p.PriceHistories)

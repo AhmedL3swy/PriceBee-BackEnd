@@ -17,7 +17,8 @@ namespace PriceComparing.Controllers
 			_unitOfWork = unitOfWork;
 		}
 
-		[HttpGet]
+        // 1- Get all active domains
+        [HttpGet]
 		public async Task<IActionResult> GetAllDomains()
 		{
 			var domains = await _unitOfWork.DomainRepository.SelectAll();
@@ -40,6 +41,7 @@ namespace PriceComparing.Controllers
 			return Ok(domainDTOs);
 		}
 
+        // 2- Get all domains ignoring filters
         // GET: api/Domain/All
         [HttpGet("All")]
         public async Task<IActionResult> GetAllDomainsIgnoringFilters()
@@ -64,6 +66,32 @@ namespace PriceComparing.Controllers
             return Ok(domainDTOs);
         }
 
+		// 3- Get all soft deleted domains
+		// GET: api/Domain/SoftDeleted
+		[HttpGet("softdeleted")]
+        public async Task<IActionResult> GetAllSoftDeletedDomains()
+		{
+			var domains = await _unitOfWork.DomainRepository.SelectAllSoftDeletedAsync();
+            if (domains == null) return NotFound();
+			List<DomainDTO> domainDTOs = new List<DomainDTO>();
+            foreach (var domain in domains)
+			{
+				domainDTOs.Add(new DomainDTO()
+                {
+                    Id = domain.Id,
+                    Name_Local = domain.Name_Local,
+                    Name_Global = domain.Name_Global,
+                    Description_Local = domain.Description_Local,
+                    Description_Global = domain.Description_Global,
+                    Url = domain.Url,
+                    Logo = domain.Logo
+                });
+            }
+            return Ok(domainDTOs);
+        }
+
+        // 4- Get domain by id
+        // GET: api/Domain/1
         [HttpGet("{id}")]
 		public async Task<IActionResult> GetDomainById(int id)
 		{
@@ -83,7 +111,30 @@ namespace PriceComparing.Controllers
 			return Ok(domainDTO);
 		}
 
-		[HttpPost]
+        // 5- Get domain by id ignoring filters
+        // GET: api/Domain/ignore/1
+        [HttpGet("ignore/{id}")]
+        public async Task<IActionResult> GetDomainByIdIgnoringFilters(int id)
+        {
+            var domain = await _unitOfWork.DomainRepository.SelectByIdIgnoringFiltersAsync(id);
+            if (domain == null) return NotFound();
+
+            DomainDTO domainDTO = new DomainDTO()
+            {
+                Id = domain.Id,
+                Name_Local = domain.Name_Local,
+                Name_Global = domain.Name_Global,
+                Description_Local = domain.Description_Local,
+                Description_Global = domain.Description_Global,
+                Url = domain.Url,
+                Logo = domain.Logo
+            };
+            return Ok(domainDTO);
+        }
+
+        // 6- Add domain
+        // POST: api/Domain
+        [HttpPost]
 		public async Task<IActionResult> AddDomain(DomainPostDTO domainDTO)
 		{
 			if (domainDTO == null) return BadRequest();
@@ -102,25 +153,40 @@ namespace PriceComparing.Controllers
 			return Ok(domain);
 		}
 
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateDomain(int id, [FromBody] DomainPostDTO domainDTO)
+        // 7- Update domain
+        // PUT: api/Domain/1
+        [HttpPut("{id}")]
+		public async Task<IActionResult> UpdateDomain(int id, [FromBody] DomainPostDTO domainPostDTO)
 		{
-			if (domainDTO == null) return BadRequest();
-			var domain = await _unitOfWork.DomainRepository.SelectById(id);
+			if (domainPostDTO == null) return BadRequest();
+			Domain domain = await _unitOfWork.DomainRepository.SelectById(id);
 			if (domain == null) return NotFound();
 
-			domain.Name_Local = domainDTO.Name_Local;
-			domain.Name_Global = domainDTO.Name_Global;
-			domain.Description_Local = domainDTO.Description_Local;
-			domain.Description_Global = domainDTO.Description_Global;
-			domain.Url = domainDTO.Url;
-			domain.Logo = domainDTO.Logo;
+			domain.Name_Local = domainPostDTO.Name_Local;
+			domain.Name_Global = domainPostDTO.Name_Global;
+			domain.Description_Local = domainPostDTO.Description_Local;
+			domain.Description_Global = domainPostDTO.Description_Global;
+			domain.Url = domainPostDTO.Url;
+			domain.Logo = domainPostDTO.Logo;
 
 			await _unitOfWork.DomainRepository.UpdateAsync(domain);
-			return Ok(domain);
+
+            BrandDTO brandDTO = new BrandDTO()
+            {
+                Id = domain.Id,
+                Name_Local = domain.Name_Local,
+                Name_Global = domain.Name_Global,
+                Description_Local = domain.Description_Local,
+                Description_Global = domain.Description_Global,
+                Logo = domain.Logo,
+                LogoUrl = domain.Logo
+            };
+            return Ok(domain);
 		}
 
-		[HttpDelete("{id}")]
+        // 8- Delete domain
+        // DELETE: api/Domain/1
+        [HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteDomain(int id)
 		{
 			var domain = await _unitOfWork.DomainRepository.SelectById(id);
@@ -131,6 +197,8 @@ namespace PriceComparing.Controllers
 			return Ok();
 		}
 
+        // 9- Soft delete domain
+        // DELETE: api/Domain/SoftDelete/1
         [HttpDelete("SoftDelete/{id}")]
         public async Task<IActionResult> SoftDeleteDomain(int id)
         {
@@ -141,7 +209,20 @@ namespace PriceComparing.Controllers
             return Ok();
         }
 
-		[HttpGet("count")]
+        // 10- Restore domain
+        // PUT: api/Domain/Restore/1
+        [HttpPut("Restore/{id}")]
+        public async Task<IActionResult> RestoreDomain(int id)
+        {
+            var domain = await _unitOfWork.DomainRepository.SelectByIdIgnoringFiltersAsync(id);
+            if (domain == null) return NotFound("Domain not found or already active.");
+            await _unitOfWork.DomainRepository.Restore(domain);
+            return Ok();
+        }
+
+        #region Dashboard_Counters
+        // 1- Get domain count
+        [HttpGet("count")]
 		public async Task<IActionResult> GetDomainCount()
 		{
 			var count = await _unitOfWork.DomainRepository.SelectAll();
@@ -149,6 +230,7 @@ namespace PriceComparing.Controllers
 			return Ok(count.Count());
 		}
 
+        // 2- Get active domain count
         [HttpGet("productscount")]
         public async Task<IActionResult> GetDomainsProductsCount()
         {
@@ -163,7 +245,7 @@ namespace PriceComparing.Controllers
 
             return Ok(domainProductsCountList);
         }
-
+        #endregion
 
 
 

@@ -66,6 +66,7 @@ namespace PriceComparing.Controllers
         }
 
         // 3- Get all soft deleted brands
+        // GET: api/Brand/softdeleted
         [HttpGet("softdeleted")]
         public async Task<IActionResult> GetAllSoftDeletedBrands()
         {
@@ -90,6 +91,7 @@ namespace PriceComparing.Controllers
         }
 
         // 4- Get brand by id
+        // GET: api/Brand/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBrandById(int id)
         {
@@ -128,6 +130,7 @@ namespace PriceComparing.Controllers
         }
 
         // 6- Add brand
+        // POST: api/Brand
         [HttpPost]
         public async Task<IActionResult> AddBrand(BrandPostDTO brandPostDTO)
         {
@@ -160,6 +163,7 @@ namespace PriceComparing.Controllers
         }
 
         // 7- Update brand
+        // PUT: api/Brand/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBrand(int id,[FromBody] BrandPostDTO brandPostDTO)
         {
@@ -186,13 +190,11 @@ namespace PriceComparing.Controllers
                 Logo = brand.Logo,
 				LogoUrl = brand.LogoUrl
 			};
-
-
             return Ok(brandDTO);
-            
         }
 
         // 8- Delete brand
+        // DELETE: api/Brand/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBrand(int id)
         {
@@ -204,6 +206,8 @@ namespace PriceComparing.Controllers
             return Ok();
         }
 
+        // 9- Soft delete brand
+        // DELETE: api/Brand/SoftDelete/5
         [HttpDelete("SoftDelete/{id}")]
         public async Task<IActionResult> SoftDeleteBrand(int id)
         {
@@ -213,6 +217,19 @@ namespace PriceComparing.Controllers
             _unitOfWork.savechanges();
             return Ok();
         }
+
+        // 10- Restore brand
+        [HttpPut("restore/{id}")]
+        public async Task<IActionResult> RestoreBrand(int id)
+        {
+            var brand = await _unitOfWork.BrandRepository.SelectByIdIgnoringFiltersAsync(id);
+            if (brand == null) return NotFound("Brand not found or already active.");
+            await _unitOfWork.BrandRepository.Restore(brand);
+            _unitOfWork.savechanges();
+            return Ok();
+        }
+
+        #region Brand_Counters
         //make one to get the count of the brands 
         [HttpGet("count")]  
         public async Task<IActionResult> GetBrandsCount()
@@ -240,20 +257,6 @@ namespace PriceComparing.Controllers
 
             return Ok(productsCountList);
         }
-
-
-
-
-
-        // 10- Restore brand
-        [HttpPut("restore/{id}")]
-        public async Task<IActionResult> RestoreBrand(int id)
-        {
-            var brand = await _unitOfWork.BrandRepository.SelectByIdIgnoringFiltersAsync(id);
-            if (brand == null) return NotFound();
-            await _unitOfWork.BrandRepository.RestoreAsync(brand);
-            _unitOfWork.savechanges();
-            return Ok();
-        }
+        #endregion
     }
 }
