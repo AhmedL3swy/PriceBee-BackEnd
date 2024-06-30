@@ -18,8 +18,8 @@ namespace PriceComparing.Repository
         {
             Product product = new Product()
             {
-                Name_Local = productDTO.Name_Global,
-                Name_Global = productDTO.Name_Local,
+                Name_Local = productDTO.Name_Local,
+                Name_Global = productDTO.Name_Global,
                 Description_Local = productDTO.Description_Local,
                 Description_Global = productDTO.Description_Global,
                 SubCategoryId = productDTO.SubCategoryId,
@@ -64,9 +64,23 @@ namespace PriceComparing.Repository
 
                 // Add the ProductDetail to the context
                 await _db.ProductDetails.AddAsync(productDetail);
+                // add Price History
+                 await AppendProductPriceHistory(productLink.Id, product.Price);
             }
 
             // Save changes after all ProductDetails have been added
+            await _db.SaveChangesAsync();
+        }
+        // Append Product Price History
+        public async Task AppendProductPriceHistory(int productId, decimal price)
+        {
+            PriceHistory priceHistory = new PriceHistory()
+            {
+                ProdId = productId,
+                Price = price,
+                Date = DateTime.Now
+            };
+            await _db.PriceHistories.AddAsync(priceHistory);
             await _db.SaveChangesAsync();
         }
         public async Task AppendProductImages(int productId, List<string> images)
@@ -142,7 +156,9 @@ namespace PriceComparing.Repository
                 {
                     productDetail.Price = result.price;
                     productLink.LastUpdated = DateTime.Now;
-                }               
+                }
+                // Add the new price to the PriceHistory
+                await AppendProductPriceHistory(productLink.Id, result.price);
             }
             // if Exception Set Status to false
             catch (Exception)
