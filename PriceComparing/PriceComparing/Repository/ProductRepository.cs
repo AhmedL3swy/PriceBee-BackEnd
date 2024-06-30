@@ -156,9 +156,10 @@ namespace PriceComparing.Repository
                 {
                     productDetail.Price = result.price;
                     productLink.LastUpdated = DateTime.Now;
+                    // Add the new price to the PriceHistory
+                    await AppendProductPriceHistory(productLink.Id, result.price);
                 }
-                // Add the new price to the PriceHistory
-                await AppendProductPriceHistory(productLink.Id, result.price);
+                
             }
             // if Exception Set Status to false
             catch (Exception)
