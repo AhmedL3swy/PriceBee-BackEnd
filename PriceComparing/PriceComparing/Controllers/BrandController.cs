@@ -12,12 +12,14 @@ namespace PriceComparing.Controllers
     public class BrandController : ControllerBase
     {
         private readonly UnitOfWOrks _unitOfWork;
+
         public BrandController(UnitOfWOrks unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
         // 1- Get all active brands
+        // GET: api/Brand
         [HttpGet]
         public async Task<IActionResult> GetAllBrands()
         {
@@ -42,6 +44,7 @@ namespace PriceComparing.Controllers
         }
 
         // 2- Get all brands ignoring filters
+        // GET: api/Brand/all
         [HttpGet("all")]
         public async Task<IActionResult> GetAllBrandsIgnoringFilters()
         {
@@ -198,7 +201,7 @@ namespace PriceComparing.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBrand(int id)
         {
-            var brand = await _unitOfWork.BrandRepository.SelectById(id);
+            var brand = await _unitOfWork.BrandRepository.SelectByIdIgnoringFiltersAsync(id);
             if (brand == null) return NotFound();
             await _unitOfWork.BrandRepository.Delete(id);
             _unitOfWork.savechanges();
@@ -211,7 +214,7 @@ namespace PriceComparing.Controllers
         [HttpDelete("SoftDelete/{id}")]
         public async Task<IActionResult> SoftDeleteBrand(int id)
         {
-            var brand = await _unitOfWork.BrandRepository.SelectById(id);
+            var brand = await _unitOfWork.BrandRepository.SelectByIdIgnoringFiltersAsync(id);
             if (brand == null) return NotFound();
             await _unitOfWork.BrandRepository.SoftDelete(id);
             _unitOfWork.savechanges();
