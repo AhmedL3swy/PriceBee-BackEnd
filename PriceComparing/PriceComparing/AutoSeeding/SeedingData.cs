@@ -640,33 +640,67 @@ namespace PriceComparing.Models
                 new Domain
                 {
                     //Id = 1,
-                    Name_Local = "متجر الكترونيات مصري",
-                    Name_Global = "Egyptian Electronics Store",
-                    Description_Local = "متجر الكترونيات مصري",
-                    Description_Global = "Egyptian Electronics Store",
-                    Url = "http://www.egyptianelectronics.com",
-                    Logo = "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-				},
+                    Name_Local = "جارير",
+                    Name_Global = "Jarir",
+                    Description_Local = "مكتبة جارير",
+                    Description_Global = "Jarir Store",
+                    Url = "https://www.jarir.com/",
+                    Logo = "https://www.jarir.com/assets/images/logo/jarir.svg"
+                },
                 new Domain
                 {
                     //Id = 2,
-                    Name_Local = "متجر الكترونيات سعودي",
-                    Name_Global = "Saudi Electronics Store",
-                    Description_Local = "متجر الكترونيات سعودي",
-                    Description_Global = "Saudi Electronics Store",
-                    Url = "http://www.saudielectronics.com",
-                    Logo = "https://seeklogo.com/images/N/noon-com-logo-96C05327E1-seeklogo.com.png"
-				},
-                new Domain
-                {
-                    //Id = 3,
-                    Name_Local = "متجر الكترونيات اماراتي",
-                    Name_Global = "Emirati Electronics Store",
-                    Description_Local = "متجر الكترونيات اماراتي",
-                    Description_Global = "Emirati Electronics Store",
-                    Url = "http://www.emiratielectronics.com",
-                    Logo = "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-				}
+                    Name_Local = "اكسترا",
+                    Name_Global = "Extra",
+                    Description_Local = "متجر اكسترا",
+                    Description_Global = "Extra Store",
+                    Url = "https://www.extra.com/",
+                    Logo = "https://cdn.extrastores.com/hybris/new_ui_ux/logo/eXtra-logo.svg"
+                },
+               //Amazon eg https://www.amazon.eg/
+               new Domain
+               {
+                   //Id = 3,
+                   Name_Local = "امازون مصر",
+                   Name_Global = "Amazon Eg",
+                   Description_Local = "متجر امازون",
+                   Description_Global = "Amazon Store",
+                   Url = "https://www.amazon.eg/",
+                   Logo = "https://www.amazon.eg/favicon.ico"
+               },
+               // Amazon Sa
+               new Domain
+               {
+                   //Id = 4,
+                   Name_Local = " امازون السعودي",
+                   Name_Global = "Amazon SA",
+                   Description_Local = "متجر امازون",
+                   Description_Global = "Amazon Store",
+                   Url = "https://www.amazon.sa/",
+                   Logo = "https://www.amazon.sa/favicon.ico"
+               },
+               //Noon
+               new Domain
+               {
+                   //Id = 5,
+                   Name_Local = "نون",
+                   Name_Global = "Noon",
+                   Description_Local = "متجر نون",
+                   Description_Global = "Noon Store",
+                   Url = "https://www.noon.com/",
+                   Logo = "https://f.nooncdn.com/s/app/com/noon/design-system/logos/noon-logo-ar.svg"
+               },
+               //aliexpress
+               new Domain
+               {
+                   //Id = 6,
+                   Name_Local = "علي اكسبريس",
+                   Name_Global = "Ali Express",
+                   Description_Local = "متجر علي اكسبريس",
+                   Description_Global = "Ali Express Store",
+                   Url = "https://www.aliexpress.com/",
+                   Logo = "https://www.aliexpress.com/favicon.ico"
+               }
             );
             db.SaveChanges();
 
