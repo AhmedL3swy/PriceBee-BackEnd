@@ -8,13 +8,15 @@ namespace PriceComparing.Services
         Task<UpdateUserModel> UpdateUserAsync(UpdateUserDTO user, string id);
         Task<List<UserFavProdDTO>> getUserFavProd(string id);
 
-        Task AddUserFavProd(int id, string Userid);
+        Task<string> AddUserFavProd(int id, string Userid);
         Task<List<UserProdHistoryDto>> getUserHistoryProd(string id);
 
-        Task AddUserHistoryProd(int id, string Userid);
+        Task<string> AddUserHistoryProd(int id, string Userid);
         Task<List<UserAlertProdDTO>> getUserAlert(string id);
 
-        Task AddUserAlertProd(int id, string Userid);
+        Task<string> AddUserAlertProd(int id, string Userid);
+
+       
 
         Task RemoveUserAlertProd(int id, string userId);
 

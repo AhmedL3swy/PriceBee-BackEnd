@@ -147,11 +147,11 @@ namespace PriceComparing.Controllers
             return Ok(x);
         }
 
-        [HttpPost("FavProduct")]
+        [HttpPost("AddFavProduct")]
         public async Task<IActionResult> AddFavProds(int id, string Userid)
         {
-            await userServices.AddUserFavProd(id, Userid);
-            return Ok();
+           string message= await userServices.AddUserFavProd(id, Userid);
+            return Ok(message);
         }
 
 
@@ -195,27 +195,27 @@ namespace PriceComparing.Controllers
 
 
 
-        [HttpPost("HistoryProduct")]
+        [HttpPost("AddHistoryProduct")]
         public async Task<IActionResult> AddHistoryProds(int id, string Userid)
         {
-            await userServices.AddUserHistoryProd(id, Userid);
-            return Ok();
+            string message = await userServices.AddUserHistoryProd(id, Userid);
+            return Ok(message);
         }
 
 
         [HttpGet("AlertProduct")]
-        public async Task<IActionResult> getAlertProd(string id)
+        public async Task<IActionResult> getAlerctProd(string id)
         {
             var x = await userServices.getUserAlert(id);
             return Ok(x);
         }
 
 
-        [HttpPost("AlertProduct")]
-        public async Task<IActionResult> AddAlertProd(int id, string Userid)
+        [HttpPost("AddAlertProduct")]
+        public async Task<IActionResult>getAlerctProd (int id, string Userid)
         {
-            await userServices.AddUserAlertProd(id, Userid);
-            return Ok();
+            string message = await userServices.AddUserAlertProd(id, Userid);
+            return Ok(message);
         }
 
         [HttpDelete("RemoveAlertProduct")]
