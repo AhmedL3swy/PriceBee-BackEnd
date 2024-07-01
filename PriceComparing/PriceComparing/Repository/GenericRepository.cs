@@ -50,6 +50,15 @@ namespace PriceComparing.Repository
 		{
 			return await _db.Set<TEntity>().FindAsync(id);
 		}
+        public TEntity SelectionById(int id)
+        {
+            //return _db.Set<TEntity>().Where(entity => EF.Property<int>(entity, "Id") == id);
+            //return find by id 
+            // return _db.Set<TEntity>().Where(entity => (int)entity.GetType().GetProperty("Id").GetValue(entity) == id);
+            return _db.Set<TEntity>().Find(id);
+
+
+        }
 
         public async Task<TEntity?> SelectUserById(string id)
         {

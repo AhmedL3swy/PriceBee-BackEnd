@@ -37,6 +37,8 @@ public partial class Product : ISoftDeletable
     public int? BrandId { get; set; }
 
     public int NumberOfClicks { get; set; } = 0;
+    [Column(TypeName = "datetime")]
+    public DateTime AddedDate { get; set; } = DateTime.Now;
 
     [ForeignKey("BrandId")]
     [InverseProperty("Products")]

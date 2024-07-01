@@ -2,6 +2,7 @@
 using DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PriceComparing.UnitOfWork;
 
 namespace PriceComparing.Controllers
@@ -150,5 +151,76 @@ namespace PriceComparing.Controllers
             await _unitOfWork.ProductDetailRepository.SoftDelete(id);
             return Ok();
         }
+
+        [HttpGet("ProductDetailsComponent/{id}")]
+        public async Task<IActionResult> GetProductDetailsByProductId(int id)
+        {
+            var product = await _unitOfWork.ProductRepository
+                .SelectAllProduct()
+                .Include(p => p.Brand)
+                .Include(p => p.PriceHistories)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.ProductDetail)
+                .Where(p => p.Id == id)
+                .Select(product => new
+                {
+                    Product_Id = product.Id,
+                    Product_Name_Local = product.Name_Local,
+                    Product_Name_Global = product.Name_Global,
+                    Product_Description_Local = product.Description_Local,
+                    Product_Description_Global = product.Description_Global,
+                    BrandNameGlobal = product.Brand.Name_Global,
+                    MinPrice = product.ProductLinks
+                                .Select(pl => pl.ProductDetail.Price).DefaultIfEmpty().Min(),
+                    ProductImages = product.ProductImages.Select(pi => pi.Image).ToList(),
+                    ProductDomains = product.ProductLinks
+                                .Where(pl => pl.ProdId == product.Id) // Ensure links are related to the current product
+                                .GroupBy(pl => pl.Domain)
+                                .Select(g => new
+                                {
+                                    DomainId = g.Key.Id,
+                                    BrandNameGlobal = g.Key.Name_Global,
+                                    DomainDescriptionGlobal = g.Key.Description_Global,
+                                    DomainLogo = g.Key.Logo,
+                                    LinkDetails = g.Select(pl => new
+                                    {
+                                        LinkId = pl.Id,
+                                        LinkName = pl.ProductLink1,
+                                        Price = pl.ProductDetail.Price,
+                                        Name = pl.ProductDetail.Name_Local
+                                    }).ToList()
+                                }).ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            if (product == null) return NotFound();
+
+            var minPriceLinks = product.ProductDomains
+                .SelectMany(pd => pd.LinkDetails)
+                .Where(ld => ld.Price == product.MinPrice)
+                .ToList();
+
+            var productDetailDTO = new
+            {
+                product.Product_Id,
+                product.Product_Name_Local,
+                product.Product_Name_Global,
+                product.Product_Description_Local,
+                product.Product_Description_Global,
+                product.BrandNameGlobal,
+                MinPrice = product.MinPrice,
+                MinPriceLinks = minPriceLinks,
+                ProductImages = product.ProductImages,
+                ProductDomains = product.ProductDomains
+            };
+
+            return Ok(productDetailDTO);
+        }
+
+
+
     }
 }

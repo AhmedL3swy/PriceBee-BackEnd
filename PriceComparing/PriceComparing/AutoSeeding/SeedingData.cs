@@ -110,7 +110,9 @@ namespace PriceComparing.Models
                     Name_Global = "Samsung",
                     Description_Local = "سامسونج",
                     Description_Global = "Samsung",
-                    CategoryId = 1
+                    Logo = "samsung.jpg",
+					LogoUrl = "samsung",
+					CategoryId = 1
                 },
                 new Brand
                 {
@@ -119,7 +121,10 @@ namespace PriceComparing.Models
                     Name_Global = "Apple",
                     Description_Local = "ابل",
                     Description_Global = "Apple",
-                    CategoryId = 1
+					Logo = "apple.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 1
                 },
                 new Brand
                 {
@@ -128,7 +133,10 @@ namespace PriceComparing.Models
                     Name_Global = "HP",
                     Description_Local = "اتش بي",
                     Description_Global = "HP",
-                    CategoryId = 1
+					Logo = "hp.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 1
                 },
                 // Office Supplies:Pens
                 new Brand
@@ -138,7 +146,10 @@ namespace PriceComparing.Models
                     Name_Global = "Bic",
                     Description_Local = "بيك",
                     Description_Global = "Bic",
-                    CategoryId = 2
+                    Logo = "bic.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 2
                 },
                 new Brand
                 {
@@ -147,7 +158,10 @@ namespace PriceComparing.Models
                     Name_Global = "Max",
                     Description_Local = "ماكس",
                     Description_Global = "Max",
-                    CategoryId = 2
+					Logo = "max.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 2
                 },
                 new Brand
                 {
@@ -156,7 +170,10 @@ namespace PriceComparing.Models
                     Name_Global = "Dar El Nashr",
                     Description_Local = "دار النشر",
                     Description_Global = "Dar El Nashr",
-                    CategoryId = 2
+					Logo = "dar_el_nashr.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 2
                 },
                 new Brand
                 {
@@ -165,7 +182,10 @@ namespace PriceComparing.Models
                     Name_Global = "Pyrex",
                     Description_Local = "بيركس",
                     Description_Global = "Pyrex",
-                    CategoryId = 3
+					Logo = "pyrex.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 3
                 },
                 new Brand
                 {
@@ -174,7 +194,10 @@ namespace PriceComparing.Models
                     Name_Global = "Vic",
                     Description_Local = "فيك",
                     Description_Global = "Vic",
-                    CategoryId = 3
+					Logo = "vic.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 3
                 },
                 new Brand
                 {
@@ -183,7 +206,10 @@ namespace PriceComparing.Models
                     Name_Global = "Tefal",
                     Description_Local = "تيفال",
                     Description_Global = "Tefal",
-                    CategoryId = 3
+					Logo = "tefal.jpg",
+					LogoUrl = "samsung",
+
+					CategoryId = 3
                 }
 
 
@@ -649,7 +675,7 @@ namespace PriceComparing.Models
                     //Id = 1,
                     ProdId = 1,
                     DomainId = 1,
-                    ProductLink1 = "http://www.egyptianelectronics.com/product/1",
+                    ProductLink1 = "https://www.amazon.eg/-/en/Apple-iPhone-11-FaceTime-SIM/dp/B07Y3L5KWP/ref=asc_df_B07Y3L5KWP/?tag=egoshpadde-21&linkCode=df0&hvadid=545070945026&hvpos=&hvnetw=g&hvrand=12806753509304419907&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=1005393&hvtargid=pla-823486245761&mcid=775299f28eed37cea33eaf9f40e75ca2&th=1",
                     Status = "In Stock",
                     LastUpdated = DateTime.Now,
                     LastScraped = DateTime.Now
@@ -659,7 +685,7 @@ namespace PriceComparing.Models
                     //Id = 2,
                     ProdId = 1,
                     DomainId = 2,
-                    ProductLink1 = "http://www.saudielectronics.com/product/1",
+                    ProductLink1 = "https://www.jarir.com/apple-iphone-11-smartphones-557620.html",
                     Status = "Out of Stock",
                     LastUpdated = DateTime.Now,
                     LastScraped = DateTime.Now
@@ -674,7 +700,18 @@ namespace PriceComparing.Models
                     Status = "In Stock",
                     LastUpdated = DateTime.Now,
                     LastScraped = DateTime.Now
-                }
+                },
+                 new ProductLink
+                 {
+
+                     //Id= 4,
+                     ProdId = 2,
+                     DomainId = 1,
+                     ProductLink1 = "http://www.emirateselectronics.com/product/2",
+                     Status = "In Stock",
+                     LastUpdated = DateTime.Now,
+                     LastScraped = DateTime.Now
+                 }
             );
             db.SaveChanges();
 
@@ -714,7 +751,19 @@ namespace PriceComparing.Models
                     Price = 1000,
                     Rating = 4.5m,
                     Brand = "xiaomi"
-                }
+                },
+                 new ProductDetail
+                 {
+
+                     Id = 4,
+                     Name_Local = "تليفون شاومى",
+                     Name_Global = "xiaomi Phone",
+                     Description_Local = "تليفون شاومى",
+                     Description_Global = "xiaomi Phone",
+                     Price = 800,
+                     Rating = 4.3m,
+                     Brand = "samsung"
+                 }
             );
             db.SaveChanges();
             db.ProductImages.AddRange(
