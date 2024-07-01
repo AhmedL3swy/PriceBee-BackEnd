@@ -111,8 +111,8 @@ namespace PriceComparing.Models
                     Description_Local = "سامسونج",
                     Description_Global = "Samsung",
                     Logo = "samsung.jpg",
-					LogoUrl = "samsung",
-					CategoryId = 1
+                    LogoUrl = "samsung",
+                    CategoryId = 1
                 },
                 new Brand
                 {
@@ -121,10 +121,10 @@ namespace PriceComparing.Models
                     Name_Global = "Apple",
                     Description_Local = "ابل",
                     Description_Global = "Apple",
-					Logo = "apple.jpg",
-					LogoUrl = "samsung",
+                    Logo = "apple.jpg",
+                    LogoUrl = "samsung",
 
-					CategoryId = 1
+                    CategoryId = 1
                 },
                 new Brand
                 {
@@ -133,10 +133,10 @@ namespace PriceComparing.Models
                     Name_Global = "HP",
                     Description_Local = "اتش بي",
                     Description_Global = "HP",
-					Logo = "hp.jpg",
-					LogoUrl = "samsung",
+                    Logo = "hp.jpg",
+                    LogoUrl = "samsung",
 
-					CategoryId = 1
+                    CategoryId = 1
                 },
                 // Office Supplies:Pens
                 new Brand
@@ -147,9 +147,9 @@ namespace PriceComparing.Models
                     Description_Local = "بيك",
                     Description_Global = "Bic",
                     Logo = "bic.jpg",
-					LogoUrl = "samsung",
+                    LogoUrl = "samsung",
 
-					CategoryId = 2
+                    CategoryId = 2
                 },
                 new Brand
                 {
@@ -158,10 +158,10 @@ namespace PriceComparing.Models
                     Name_Global = "Max",
                     Description_Local = "ماكس",
                     Description_Global = "Max",
-					Logo = "max.jpg",
-					LogoUrl = "samsung",
+                    Logo = "max.jpg",
+                    LogoUrl = "samsung",
 
-					CategoryId = 2
+                    CategoryId = 2
                 },
                 new Brand
                 {
@@ -170,10 +170,10 @@ namespace PriceComparing.Models
                     Name_Global = "Dar El Nashr",
                     Description_Local = "دار النشر",
                     Description_Global = "Dar El Nashr",
-					Logo = "dar_el_nashr.jpg",
-					LogoUrl = "samsung",
+                    Logo = "dar_el_nashr.jpg",
+                    LogoUrl = "samsung",
 
-					CategoryId = 2
+                    CategoryId = 2
                 },
                 new Brand
                 {
@@ -182,10 +182,10 @@ namespace PriceComparing.Models
                     Name_Global = "Pyrex",
                     Description_Local = "بيركس",
                     Description_Global = "Pyrex",
-					Logo = "pyrex.jpg",
-					LogoUrl = "samsung",
+                    Logo = "pyrex.jpg",
+                    LogoUrl = "samsung",
 
-					CategoryId = 3
+                    CategoryId = 3
                 },
                 new Brand
                 {
@@ -194,10 +194,10 @@ namespace PriceComparing.Models
                     Name_Global = "Vic",
                     Description_Local = "فيك",
                     Description_Global = "Vic",
-					Logo = "vic.jpg",
-					LogoUrl = "samsung",
+                    Logo = "vic.jpg",
+                    LogoUrl = "samsung",
 
-					CategoryId = 3
+                    CategoryId = 3
                 },
                 new Brand
                 {
@@ -206,10 +206,10 @@ namespace PriceComparing.Models
                     Name_Global = "Tefal",
                     Description_Local = "تيفال",
                     Description_Global = "Tefal",
-					Logo = "tefal.jpg",
-					LogoUrl = "samsung",
+                    Logo = "tefal.jpg",
+                    LogoUrl = "samsung",
 
-					CategoryId = 3
+                    CategoryId = 3
                 }
 
 
@@ -247,8 +247,7 @@ namespace PriceComparing.Models
                     Description_Local = "لاب توب اتش بي",
                     Description_Global = "HP Laptop",
                     SubCategoryId = 2,
-                    BrandId = 3,
-                    NumberOfClicks = 5
+                    BrandId = 3
                 },
                 // Electronics:Printers
                 new Product
@@ -258,8 +257,7 @@ namespace PriceComparing.Models
                     Description_Local = "طابعة اتش بي",
                     Description_Global = "HP Printer",
                     SubCategoryId = 3,
-                    BrandId = 3,
-                    NumberOfClicks = 10
+                    BrandId = 3
                 },
                 // Office Supplies:Pens
                 new Product
@@ -525,13 +523,13 @@ namespace PriceComparing.Models
 
             var productIds = new List<int> { 1, 2, 3 };
 
-          
+
             var products = db.Products
                 .Where(p => productIds.Contains(p.Id))
-                .Include(p => p.ProductImages) 
+                .Include(p => p.ProductImages)
                 .ToList();
 
-            
+
 
             var UserWebsite = new User()
             {
@@ -640,67 +638,33 @@ namespace PriceComparing.Models
                 new Domain
                 {
                     //Id = 1,
-                    Name_Local = "جارير",
-                    Name_Global = "Jarir",
-                    Description_Local = "مكتبة جارير",
-                    Description_Global = "Jarir Store",
-                    Url = "https://www.jarir.com/",
-                    Logo = "https://www.jarir.com/assets/images/logo/jarir.svg"
+                    Name_Local = "متجر الكترونيات مصري",
+                    Name_Global = "Egyptian Electronics Store",
+                    Description_Local = "متجر الكترونيات مصري",
+                    Description_Global = "Egyptian Electronics Store",
+                    Url = "http://www.egyptianelectronics.com",
+                    Logo = "logo1.jpg"
                 },
                 new Domain
                 {
                     //Id = 2,
-                    Name_Local = "اكسترا",
-                    Name_Global = "Extra",
-                    Description_Local = "متجر اكسترا",
-                    Description_Global = "Extra Store",
-                    Url = "https://www.extra.com/",
-                    Logo = "https://cdn.extrastores.com/hybris/new_ui_ux/logo/eXtra-logo.svg"
+                    Name_Local = "متجر الكترونيات سعودي",
+                    Name_Global = "Saudi Electronics Store",
+                    Description_Local = "متجر الكترونيات سعودي",
+                    Description_Global = "Saudi Electronics Store",
+                    Url = "http://www.saudielectronics.com",
+                    Logo = "logo2.jpg"
                 },
-               //Amazon eg https://www.amazon.eg/
-               new Domain
-               {
-                   //Id = 3,
-                   Name_Local = "امازون مصر",
-                   Name_Global = "Amazon Eg",
-                   Description_Local = "متجر امازون",
-                   Description_Global = "Amazon Store",
-                   Url = "https://www.amazon.eg/",
-                   Logo = "https://www.amazon.eg/favicon.ico"
-               },
-               // Amazon Sa
-               new Domain
-               {
-                   //Id = 4,
-                   Name_Local = " امازون السعودي",
-                   Name_Global = "Amazon SA",
-                   Description_Local = "متجر امازون",
-                   Description_Global = "Amazon Store",
-                   Url = "https://www.amazon.sa/",
-                   Logo = "https://www.amazon.sa/favicon.ico"
-               },
-               //Noon
-               new Domain
-               {
-                   //Id = 5,
-                   Name_Local = "نون",
-                   Name_Global = "Noon",
-                   Description_Local = "متجر نون",
-                   Description_Global = "Noon Store",
-                   Url = "https://www.noon.com/",
-                   Logo = "https://f.nooncdn.com/s/app/com/noon/design-system/logos/noon-logo-ar.svg"
-               },
-               //aliexpress
-               new Domain
-               {
-                   //Id = 6,
-                   Name_Local = "علي اكسبريس",
-                   Name_Global = "Ali Express",
-                   Description_Local = "متجر علي اكسبريس",
-                   Description_Global = "Ali Express Store",
-                   Url = "https://www.aliexpress.com/",
-                   Logo = "https://www.aliexpress.com/favicon.ico"
-               }
+                new Domain
+                {
+                    //Id = 3,
+                    Name_Local = "متجر الكترونيات اماراتي",
+                    Name_Global = "Emirati Electronics Store",
+                    Description_Local = "متجر الكترونيات اماراتي",
+                    Description_Global = "Emirati Electronics Store",
+                    Url = "http://www.emiratielectronics.com",
+                    Logo = "logo3.jpg"
+                }
             );
             db.SaveChanges();
 
@@ -747,29 +711,7 @@ namespace PriceComparing.Models
                      Status = "In Stock",
                      LastUpdated = DateTime.Now,
                      LastScraped = DateTime.Now
-                 },
-                 new ProductLink
-                    {
-    
-                        //Id= 5,
-                        ProdId = 4,
-                        DomainId = 3,
-                        ProductLink1 = "http://www.emirateselectronics.com/product/3",
-                        Status = "In Stock",
-                        LastUpdated = DateTime.Now,
-                        LastScraped = DateTime.Now
-                    },
-                 new ProductLink
-                        {
-        
-                            //Id= 6,
-                            ProdId = 4,
-                            DomainId = 1,
-                            ProductLink1 = "http://www.emirateselectronics.com/product/3",
-                            Status = "In Stock",
-                            LastUpdated = DateTime.Now,
-                            LastScraped = DateTime.Now
-                        }
+                 }
             );
             db.SaveChanges();
 
@@ -821,27 +763,14 @@ namespace PriceComparing.Models
                      Price = 800,
                      Rating = 4.3m,
                      Brand = "samsung"
-                 },
-                 new ProductDetail
-                    {
-    
-                        Id = 5,
-                        Name_Local = "88تليفون شاومى",
-                        Name_Global = "88xiaomi Phone",
-                        Description_Local = "تليفون شاومى",
-                        Description_Global = "xiaomi Phone",
-                        Price = 900,
-                        Rating = 4.4m,
-                        Brand = "samsung"
-                    }
-
+                 }
             );
             db.SaveChanges();
             db.ProductImages.AddRange(
              new ProductImage
-            {
-                ProdId = 1, // Assuming this corresponds to a "Samsung Phone"
-                Image = "https://f.nooncdn.com/p/pnsku/N70029832V/45/_/1706601417/c68be273-1532-4459-a8fc-19392b1b3521.jpg?format=avif&width=240"
+             {
+                 ProdId = 1, // Assuming this corresponds to a "Samsung Phone"
+                 Image = "https://f.nooncdn.com/p/pnsku/N70029832V/45/_/1706601417/c68be273-1532-4459-a8fc-19392b1b3521.jpg?format=avif&width=240"
              },
             new ProductImage
             {
@@ -890,19 +819,6 @@ namespace PriceComparing.Models
             }
             );
             db.SaveChanges();
-
-            //ProductSponsored seeding
-            db.ProductSponsoreds.AddRange(
-                new ProductSponsored
-                {
-                    Cost = 1000,
-                    StartDate = DateTime.Now,
-                    Duration = 30,
-                    ProdDetId = 4
-                }
-            );
-            db.SaveChanges();
-
 
 
 
