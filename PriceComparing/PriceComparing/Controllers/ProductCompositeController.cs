@@ -389,7 +389,9 @@ namespace PriceComparing.Controllers
 					.ThenInclude(pl => pl.ProductDetail)
                     // then get the sponsered products
                     .ThenInclude(pd => pd.ProductSponsoreds)
-				.AsQueryable();
+                .Include(p => p.ProductLinks)
+                    .ThenInclude(pl => pl.Domain)
+                .AsQueryable();
 
 			// Apply filters to the query
 			if (!string.IsNullOrEmpty(searchValue))
@@ -471,8 +473,9 @@ namespace PriceComparing.Controllers
 					productLinkDTOs = product.ProductLinks.Select(pl => new ProudctLinkWithDetailsDTO
 					{
 						Link_Id = pl.Id,
-						Link_DomainId = pl.Domain.Id,
-						ProductLink = pl.ProductLink1,
+						// Link_DomainId = pl.Domain.Id,
+                        // Domain_Logo = pl.Domain.Logo,
+                        ProductLink = pl.ProductLink1,
 						ProductDet_Name_Local = pl.ProductDetail.Name_Local,
 						ProductDet_Name_Global = pl.ProductDetail.Name_Global,
 						ProductDet_Description_Local = pl.ProductDetail.Description_Local,
@@ -481,6 +484,10 @@ namespace PriceComparing.Controllers
 						ProductDet_Rating = pl.ProductDetail.Rating,
 						ProductDet_isAvailable = pl.ProductDetail.isAvailable,
                         LastUpdated = pl.LastUpdated,
+                        // Domain 
+                        Link_DomainId = pl.Domain.Id,
+                        Domain_Logo = pl.Domain.Logo,
+
                         // the sponsered products
                         productSponsoredDTOs = pl.ProductDetail.ProductSponsoreds.Select(ps => new ProductSponsoredDTO
                         {
