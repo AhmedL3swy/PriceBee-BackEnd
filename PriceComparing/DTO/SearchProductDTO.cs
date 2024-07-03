@@ -71,8 +71,9 @@ namespace DTO
     public class ProudctLinkWithDetailsDTO
 	{
 		public int Link_Id { get; set; }
-		public int Link_DomainId { get; set; }
-		public string ProductLink { get; set; }
+		//public int Link_DomainId { get; set; }
+		//public string Domain_Logo { get; set; }
+        public string ProductLink { get; set; }
 		public string ProductDet_Name_Local { get; set; }
 		public string ProductDet_Name_Global { get; set; }
 		public string ProductDet_Description_Local { get; set; }
@@ -81,6 +82,12 @@ namespace DTO
 		public decimal? ProductDet_Rating { get; set; }
 		public bool ProductDet_isAvailable { get; set; }
 		public DateTime LastUpdated { get; set; }
+
+        // Domain Required Data
+        // 1. ID
+		public int Link_DomainId { get; set; }
+        // 2. Domain Name
+        public string? Domain_Logo { get; set; }
 
         // then get the sponsered products
         public List<ProductSponsoredDTO> productSponsoredDTOs { get; set; } = new List<ProductSponsoredDTO>();
