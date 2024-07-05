@@ -84,6 +84,11 @@ namespace PriceComparing.Controllers
 		{
 			return Ok("This is a dummy api to test CI/CD in publish");
 		}
+		[HttpGet("dummyapi3")]
+		public async Task<IActionResult> GetDummyApiii()
+		{
+			return Ok("This is a dummy api to test CI/CD in publish");
+		}
 
 		//for product details component
 		[HttpGet("{id}")]
