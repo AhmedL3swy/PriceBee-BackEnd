@@ -102,7 +102,6 @@ CREATE TABLE ProductDetails (
     Price DECIMAL(18, 2) NOT NULL,
     Rating DECIMAL(3, 2) NULL, -- 0.0 to 5.0
     isAvailable BIT NOT NULL,
-    Brand NVARCHAR(255) NULL
     -- Foreign Key
     FOREIGN KEY (Id) REFERENCES ProductLinks(Id)
 );
@@ -212,4 +211,43 @@ CREATE TABLE UserHistoryProd (
     PRIMARY KEY (UserID, ProdId)
 );
 GO
+
+-- Editing in data base of ProductComparingDB
+USE ProdCompDatabase;
+GO
+
+
+drop table Brands;
+-- Creating Brands table
+-- BrandID: Primary Key, Identity
+-- CategoryID: Foreign Key
+create TABLE Brands (
+	Id INT PRIMARY KEY IDENTITY,
+	Name_Local NVARCHAR(255) NOT NULL,
+	Name_Global VARCHAR(255) NOT NULL,
+	Description_Local NVARCHAR(MAX) NULL,
+	Description_Global VARCHAR(MAX) NULL,
+    Logo NVARCHAR(MAX) NOT NULL,
+	CategoryId INT NOT NULL,
+	-- Foreign Key
+	FOREIGN KEY (CategoryId) REFERENCES Category(Id)
+);
+
+-- Creating Product table
+-- ProductID: Primary Key, Identity
+-- SubCategoryID: Foreign Key
+-- BrandID: Foreign Key
+CREATE TABLE Product (
+    Id INT PRIMARY KEY IDENTITY,
+    Name_Local NVARCHAR(255) NOT NULL,
+    Name_Global VARCHAR(255) NOT NULL,
+    Description_Local NVARCHAR(MAX) NULL,
+    Description_Global VARCHAR(MAX) NULL,
+    SubCategoryId INT NOT NULL,
+    -- Foreign Key
+    FOREIGN KEY (SubCategoryId) REFERENCES SubCategory(Id),
+    FOREIGN KEY (BrandId) REFERENCES Brands(Id)
+);
+GO
+
 
