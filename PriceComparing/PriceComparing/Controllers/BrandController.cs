@@ -20,7 +20,7 @@ namespace PriceComparing.Controllers
 
         //test the ci/cd 
         [HttpGet("TestCI/CD")]
-        public async Task<IActionResult> GetAllBrands()
+        public async Task<IActionResult> GetAllBrandsTest()
         {
             var brands = await _unitOfWork.BrandRepository.SelectAll();
             if (brands == null) return NotFound();
