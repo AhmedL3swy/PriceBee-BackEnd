@@ -554,10 +554,14 @@ namespace PriceComparing.Controllers
             switch (sortedBy)
             {
                 case SortedBy.HightToLowPrice:
-                    result = result.OrderByDescending(p => p.productLinkDTOs.Min(pl => pl.ProductDet_Price)).ToList();
+                    // result = result.OrderByDescending(p => p.productLinkDTOs.Min(pl => pl.ProductDet_Price)).ToList();
+                    // sorting by the most minimum price
+                    result = result.OrderByDescending(p => p.mostMinimumPrice).ToList();
                     break;
                 case SortedBy.LowToHighPrice:
-                    result = result.OrderBy(p => p.productLinkDTOs.Min(pl => pl.ProductDet_Price)).ToList();
+                    // result = result.OrderBy(p => p.productLinkDTOs.Min(pl => pl.ProductDet_Price)).ToList();
+                    // sorting by the most minimum price
+                    result = result.OrderBy(p => p.mostMinimumPrice).ToList();
                     break;
                 case SortedBy.MostViewed:
                     result = result.OrderByDescending(p => p.Product_NumberOfClicks).ToList();
