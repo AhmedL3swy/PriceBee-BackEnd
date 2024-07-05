@@ -172,7 +172,7 @@ namespace PriceComparing
 
             app.MapControllers();
 
-            //app.CreateDbIfNotExists();
+           // app.CreateDbIfNotExists();
 
             app.UseHangfireDashboard();
             app.Run();
