@@ -66,6 +66,9 @@ namespace DTO
 		public int numberOfFavorites { get; set; }
         // average rating
         public decimal? averageRating { get; set; }
+
+		// Most minimum price 
+		public decimal? mostMinimumPrice { get; set; }
     }
 
     public class ProudctLinkWithDetailsDTO
