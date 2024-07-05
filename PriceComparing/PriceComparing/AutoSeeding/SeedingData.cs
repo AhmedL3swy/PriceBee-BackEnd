@@ -643,8 +643,8 @@ namespace PriceComparing.Models
                     Description_Local = "متجر الكترونيات مصري",
                     Description_Global = "Egyptian Electronics Store",
                     Url = "http://www.egyptianelectronics.com",
-                    Logo = "logo1.jpg"
-                },
+                    Logo = "https://cdn.logojoy.com/wp-content/uploads/20230629132639/current-logo-600x338.png"
+				},
                 new Domain
                 {
                     //Id = 2,
@@ -653,8 +653,8 @@ namespace PriceComparing.Models
                     Description_Local = "متجر الكترونيات سعودي",
                     Description_Global = "Saudi Electronics Store",
                     Url = "http://www.saudielectronics.com",
-                    Logo = "logo2.jpg"
-                },
+                    Logo = "https://upload.wikimedia.org/wikipedia/ar/archive/d/d5/20220821185837%21Noon_log.jpeg"
+				},
                 new Domain
                 {
                     //Id = 3,
@@ -663,9 +663,39 @@ namespace PriceComparing.Models
                     Description_Local = "متجر الكترونيات اماراتي",
                     Description_Global = "Emirati Electronics Store",
                     Url = "http://www.emiratielectronics.com",
-                    Logo = "logo3.jpg"
-                }
-            );
+                    Logo = "https://vectorlogoseek.com/wp-content/uploads/2018/12/jarir-bookstore-vector-logo.png"
+				},
+				new Domain
+				{
+					//Id = 4,
+					Name_Local = "متجر الكترونيات امريكي",
+					Name_Global = "American Electronics Store",
+					Description_Local = "متجر الكترونيات امريكي",
+					Description_Global = "American Electronics Store",
+					Url = "http://www.americanelectronics.com",
+					Logo = "https://upload.wikimedia.org/wikipedia/commons/4/4a/Amazon_icon.png"
+				},
+				new Domain
+				{
+					//Id = 5,
+					Name_Local = "متجر الكترونيات انجليزي",
+					Name_Global = "English Electronics Store",
+					Description_Local = "متجر الكترونيات انجليزي",
+					Description_Global = "English Electronics Store",
+					Url = "http://www.englishelectronics.com",
+					Logo = "https://upload.wikimedia.org/wikipedia/commons/4/4a/Amazon_icon.png"
+				},
+				new Domain
+				{
+					//Id = 6,
+					Name_Local = "متجر الكترونيات فرنسي",
+					Name_Global = "French Electronics Store",
+					Description_Local = "متجر الكترونيات فرنسي",
+					Description_Global = "French Electronics Store",
+					Url = "http://www.frenchelectronics.com",
+					Logo = "https://upload.wikimedia.org/wikipedia/commons/4/4a/Amazon_icon.png"
+				}
+			);
             db.SaveChanges();
 
             // ProductLinks seeding
