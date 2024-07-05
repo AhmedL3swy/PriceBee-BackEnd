@@ -45,7 +45,7 @@ namespace PriceComparing.Controllers
 
         // 2- Get all brands ignoring filters
         // GET: api/Brand/all
-        [HttpGet("allForTest")]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllBrandsIgnoringFilters()
         {
             var brands = await _unitOfWork.BrandRepository.SelectAllIgnoringFiltersAsync();
