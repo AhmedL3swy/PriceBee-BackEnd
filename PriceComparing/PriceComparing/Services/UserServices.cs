@@ -87,26 +87,37 @@ namespace PriceComparing.Services
             if (user == null)
             {
                 user = new User() { AuthUserID = Auser.Id };
-             //   user.ProdFavUser = new List<UserFavProd>(); 
                 await unitOfWork.WebUserRepository.Add(user);
             }
 
-            var userFavProds= (await unitOfWork.UserFavProdRepo.SelectAll()).Where(a=>a.UserID==user.Id);
-            if(userFavProds==null)
-            { 
-               // userFavProds=new List<UserFavProd>() ;
-            }
-            if (userFavProds.FirstOrDefault(a=>a.ProductId==id)==null)
+            var userFavProds = await unitOfWork.UserFavProdRepo.SelectAll();
+            var existingFavProd = userFavProds.FirstOrDefault(a => a.ProductId == id && a.UserID == user.Id);
+
+            if (existingFavProd != null)
             {
-                var newUserFavProd = new UserFavProd() { ProductId = id, UserID = user.Id };
-                await unitOfWork.UserFavProdRepo.Add(newUserFavProd);
-                return "Added Successfully";
-            }
-            else { 
-                return "Already Exists";
+                bool? isDeleted =  unitOfWork.UserFavProdRepo.isdeleted(existingFavProd);
+                //Console.WriteLine(isDeleted);
+                if (isDeleted == null)
+                {
+                    return "Error: IsDeleted property not found.";
+                }
+
+                if (isDeleted.Value)
+                {
+                    unitOfWork.UserFavProdRepo.Restore(existingFavProd);
+                    return "Restored Successfully";
+                }
+                else
+                {
+                    return "Already Exists";
+                }
             }
 
+            var newUserFavProd = new UserFavProd() { ProductId = id, UserID = user.Id };
+            await unitOfWork.UserFavProdRepo.Add(newUserFavProd);
+            return "Added Successfully";
         }
+
 
         public async Task<string> AddUserHistoryProd(int id, string Userid)
         {
@@ -119,18 +130,18 @@ namespace PriceComparing.Services
             }
 
             var userHistProd = (await unitOfWork.UserHisProdRepo.SelectAll()).Where(a => a.UserID == user.Id);
-            if (userHistProd == null)
-            {
-              //  userHistProd = new List<UserHistoryProd>();
-            }
+           
             if (userHistProd.FirstOrDefault(a => a.ProductId == id && a.UserID == user.Id) == null)
             {
+               
                 var newUserHisProd = new UserHistoryProd() { ProductId = id, UserID = user.Id };
                 await unitOfWork.UserHisProdRepo.Add(newUserHisProd);
                 return "Added Successfully";
             }
             else
             {
+                // if ((userHistProd.FirstOrDefault(a => a.ProductId == id).isdele)
+              
                 return "Already Exists";
             }
         }
@@ -154,6 +165,7 @@ namespace PriceComparing.Services
             }
             else
             {
+               
                 return "Already Exists";
             }
         }

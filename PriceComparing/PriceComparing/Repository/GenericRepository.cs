@@ -139,6 +139,37 @@ namespace PriceComparing.Repository
             await _db.SaveChangesAsync();
         }
 
+        public async Task<bool?> GetIsDeletedByIdAsync(int id)
+        {
+            var entity = await _db.Set<TEntity>().FindAsync(id);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            var isDeletedProperty = typeof(TEntity).GetProperty("IsDeleted");
+            if (isDeletedProperty == null)
+            {
+                throw new InvalidOperationException("The IsDeleted property does not exist on the entity.");
+            }
+
+            var isDeletedValue = isDeletedProperty.GetValue(entity);
+            if (isDeletedValue == null)
+            {
+                return null;
+            }
+
+            return (bool)isDeletedValue;
+        }
+
+        public Boolean isdeleted(TEntity entity)
+        {
+            var x = _db.Entry(entity).Property("IsDeleted").CurrentValue;
+            Console.WriteLine("fvfvf" +x );
+            Boolean isdeleted = _db.Entry(entity).Property("IsDeleted").CurrentValue==null? true : false;
+            return isdeleted;
+        }
+
         #region User
         // 1- get user by id: string
         public async Task<TEntity?> SelectUserById(string id)

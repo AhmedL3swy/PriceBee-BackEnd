@@ -1,5 +1,6 @@
 ﻿using DataAccess.Models;
 using DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -50,6 +51,8 @@ namespace PriceComparing.Controllers
             return Ok(users);
         }
 
+
+        //[Authorize(Roles = "Admin")]
         [HttpGet("user")]
         public async Task<IActionResult> GetUserOnly()
         {
@@ -116,7 +119,9 @@ namespace PriceComparing.Controllers
 
             return Ok(user);
         }
-        [HttpPost("AssignAdmin")]
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("AssignAdmin")]
         public async Task<IActionResult> AssignAdminRole(string ID)
         {
             string message = await authServices.AssignAdminRole(ID);
