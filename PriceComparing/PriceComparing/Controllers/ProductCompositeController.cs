@@ -355,6 +355,8 @@ namespace PriceComparing.Controllers
 
         public enum SortedBy
         {
+            [EnumMember(Value = "None")]
+            None,
             [EnumMember(Value = "HightToLowPrice")]
             HightToLowPrice,
 
@@ -374,10 +376,7 @@ namespace PriceComparing.Controllers
             Newest,
 
             [EnumMember(Value = "Oldest")]
-            Oldest,
-
-            [EnumMember(Value = "None")]
-            None
+            Oldest
         }
         [HttpGet("search")]
         public async Task<IActionResult> SearchProduct(
@@ -389,7 +388,9 @@ namespace PriceComparing.Controllers
             [FromQuery] int? maxPrice = null,
             [FromQuery] List<int>? domainID = null,
             [FromQuery] Boolean isFeatured = false,
-            [FromQuery] SortedBy sortedBy = SortedBy.None
+            [FromQuery] SortedBy sortedBy = SortedBy.None,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10
         )
         {
             // Build the base query with necessary includes
@@ -403,6 +404,8 @@ namespace PriceComparing.Controllers
                 .Include(p => p.ProductLinks)
                     .ThenInclude(pl => pl.ProductDetail)
                     .ThenInclude(pd => pd.ProductSponsoreds)
+                .Include(p=>p.ProductLinks)
+                    .ThenInclude(d=>d.Domain)
                 .AsQueryable();
 
             // Apply filters to the query
@@ -493,6 +496,7 @@ namespace PriceComparing.Controllers
                             pl.ProductDetail.Rating,
                             pl.ProductDetail.isAvailable,
                             pl.LastUpdated,
+                            pl.Domain,
                             ProductSponsoreds = pl.ProductDetail.ProductSponsoreds.Select(ps => new
                             {
                                 ps.Id,
@@ -546,7 +550,6 @@ namespace PriceComparing.Controllers
                     .Select(pl => new ProudctLinkWithDetailsDTO
                     {
                         Link_Id = pl.Id,
-                        Link_DomainId = pl.DomainId,
                         ProductLink = pl.ProductLink1,
                         ProductDet_Name_Local = pl.ProductDetail.Name_Local,
                         ProductDet_Name_Global = pl.ProductDetail.Name_Global,
@@ -556,6 +559,18 @@ namespace PriceComparing.Controllers
                         ProductDet_Rating = pl.ProductDetail.Rating,
                         ProductDet_isAvailable = pl.ProductDetail.isAvailable,
                         LastUpdated = pl.ProductDetail.LastUpdated,
+                        // Domain Required Data
+                        domainDTO = new DomainDTO
+                        {
+                            Id = pl.ProductDetail.Domain.Id,
+                            Name_Local = pl.ProductDetail.Domain.Name_Local,
+                            Name_Global = pl.ProductDetail.Domain.Name_Global,
+                            Description_Local = pl.ProductDetail.Domain.Description_Local,
+                            Description_Global = pl.ProductDetail.Domain.Description_Global,
+                            Url = pl.ProductDetail.Domain.Url,
+                            Logo = pl.ProductDetail.Domain.Logo
+                        },
+                        // sponsorship data
                         productSponsoredDTOs = pl.ProductDetail.ProductSponsoreds.Select(ps => new ProductSponsoredDTO
                         {
                             Id = ps.Id,
@@ -571,12 +586,10 @@ namespace PriceComparing.Controllers
             switch (sortedBy)
             {
                 case SortedBy.HightToLowPrice:
-                    // result = result.OrderByDescending(p => p.productLinkDTOs.Min(pl => pl.ProductDet_Price)).ToList();
                     // sorting by the most minimum price
                     result = result.OrderByDescending(p => p.mostMinimumPrice).ToList();
                     break;
                 case SortedBy.LowToHighPrice:
-                    // result = result.OrderBy(p => p.productLinkDTOs.Min(pl => pl.ProductDet_Price)).ToList();
                     // sorting by the most minimum price
                     result = result.OrderBy(p => p.mostMinimumPrice).ToList();
                     break;
@@ -601,7 +614,13 @@ namespace PriceComparing.Controllers
 
             if (!result.Any()) return NotFound();
 
-            return Ok(result);
+            // get pageNumber, numberOfProducts
+            var resultPaginated = result
+                                    .Skip((pageNumber - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToList();
+
+            return Ok(resultPaginated);
         }
 
 
