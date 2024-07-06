@@ -371,7 +371,9 @@ namespace PriceComparing.Controllers
             [FromQuery] int? maxPrice = null,
             [FromQuery] List<int>? domainID = null,
             [FromQuery] Boolean isFeatured = false,
-            [FromQuery] SortedBy sortedBy = SortedBy.None
+            [FromQuery] SortedBy sortedBy = SortedBy.None,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10
         )
         {
             // Build the base query with necessary includes
@@ -581,7 +583,13 @@ namespace PriceComparing.Controllers
 
             if (!result.Any()) return NotFound();
 
-            return Ok(result);
+            // get pageNumber, numberOfProducts
+            var resultPaginated = result
+                                    .Skip((pageNumber - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToList();
+
+            return Ok(resultPaginated);
         }
 
 
