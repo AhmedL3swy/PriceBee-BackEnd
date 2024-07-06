@@ -15,6 +15,7 @@ namespace PriceComparing.Controllers
         {
             authserv = _authserv;
         }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegsiterUserDTO user)
         {
@@ -28,14 +29,19 @@ namespace PriceComparing.Controllers
             return Ok(AuthResult);
         }
 
-
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginUserDTO user)
+        [HttpGet("Login")]
+        public async Task<IActionResult> Login([FromQuery] string email, [FromQuery] string password)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var AuthResult = await authserv.Login(user);
+            var loginUserDTO = new LoginUserDTO
+            {
+                Email = email,
+                Password = password
+            };
+
+            var AuthResult = await authserv.Login(loginUserDTO);
             if (!AuthResult.IsAuthenticated)
                 return BadRequest(AuthResult.Message);
 
