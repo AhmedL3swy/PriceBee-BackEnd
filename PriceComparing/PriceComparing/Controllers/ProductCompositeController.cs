@@ -73,8 +73,25 @@ namespace PriceComparing.Controllers
             return Ok(combinedProductDetails);
         }
 
-        //for product details component
-        [HttpGet("{id}")]
+		//create dummy api to test ci cd in publish with route dummyapi 
+		[HttpGet("dummyapi")]
+		public async Task<IActionResult> GetDummyApi()
+		{
+			return Ok("This is a dummy api to test CI/CD in publish");
+		}
+		[HttpGet("dummyapi2")]
+		public async Task<IActionResult> GetDummyApii()
+		{
+			return Ok("This is a dummy api to test CI/CD in publish");
+		}
+		[HttpGet("dummyapi3")]
+		public async Task<IActionResult> GetDummyApiii()
+		{
+			return Ok("This is a dummy api to test CI/CD in publish");
+		}
+
+		//for product details component
+		[HttpGet("{id}")]
         public async Task<IActionResult> GetCombinedProductDetailsByID(int id)
         {
             // Filter to load the specific product with related data using Eager Loading

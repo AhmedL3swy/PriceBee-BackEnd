@@ -18,6 +18,77 @@ namespace PriceComparing.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        //test the ci/cd 
+        [HttpGet("TestCI/CD")]
+        public async Task<IActionResult> GetAllBrandsTest()
+        {
+            var brands = await _unitOfWork.BrandRepository.SelectAll();
+            if (brands == null) return NotFound();
+            List<BrandDTO> brandsDTO = new List<BrandDTO>();
+            foreach (var brand in brands)
+            {
+                brandsDTO.Add(new BrandDTO()
+                {
+                    Id = brand.Id,
+                    Name_Local = brand.Name_Local,
+                    Name_Global = brand.Name_Global,
+                    Description_Local = brand.Description_Local,
+                    Description_Global = brand.Description_Global,
+                    Logo = brand.Logo,
+                    LogoUrl = brand.LogoUrl,
+                    CategoryId = brand.CategoryId
+                });
+            }
+            return Ok(brandsDTO);
+        }
+
+
+        //test the ci/cd  again
+        [HttpGet("TestCICDAgain")]
+        public async Task<IActionResult> GetAllBrandsTestTwo()
+        {
+            var brands = await _unitOfWork.BrandRepository.SelectAll();
+            if (brands == null) return NotFound();
+            List<BrandDTO> brandsDTO = new List<BrandDTO>();
+            foreach (var brand in brands)
+            {
+                brandsDTO.Add(new BrandDTO()
+                {
+                    Id = brand.Id,
+                    Name_Local = brand.Name_Local,
+                    Name_Global = brand.Name_Global,
+                    Description_Local = brand.Description_Local,
+                    Description_Global = brand.Description_Global,
+                    Logo = brand.Logo,
+                    LogoUrl = brand.LogoUrl,
+                    CategoryId = brand.CategoryId
+                });
+            }
+            return Ok(brandsDTO);
+        }
+        //test the ci/cd  from github DESKTOP
+        [HttpGet("TestCICDAgainfromgithubdesktop")]
+        public async Task<IActionResult> GetAllBrandsTestfromgithubdesktop()
+        {
+            var brands = await _unitOfWork.BrandRepository.SelectAll();
+            if (brands == null) return NotFound();
+            List<BrandDTO> brandsDTO = new List<BrandDTO>();
+            foreach (var brand in brands)
+            {
+                brandsDTO.Add(new BrandDTO()
+                {
+                    Id = brand.Id,
+                    Name_Local = brand.Name_Local,
+                    Name_Global = brand.Name_Global,
+                    Description_Local = brand.Description_Local,
+                    Description_Global = brand.Description_Global,
+                    Logo = brand.Logo,
+                    LogoUrl = brand.LogoUrl,
+                    CategoryId = brand.CategoryId
+                });
+            }
+            return Ok(brandsDTO);
+        }
         // 1- Get all active brands
         // GET: api/Brand
         [HttpGet]
