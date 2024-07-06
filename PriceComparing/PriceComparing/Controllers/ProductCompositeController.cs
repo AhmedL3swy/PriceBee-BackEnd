@@ -338,6 +338,8 @@ namespace PriceComparing.Controllers
 
         public enum SortedBy
         {
+            [EnumMember(Value = "None")]
+            None,
             [EnumMember(Value = "HightToLowPrice")]
             HightToLowPrice,
 
@@ -357,10 +359,7 @@ namespace PriceComparing.Controllers
             Newest,
 
             [EnumMember(Value = "Oldest")]
-            Oldest,
-
-            [EnumMember(Value = "None")]
-            None
+            Oldest
         }
         [HttpGet("search")]
         public async Task<IActionResult> SearchProduct(
@@ -554,12 +553,10 @@ namespace PriceComparing.Controllers
             switch (sortedBy)
             {
                 case SortedBy.HightToLowPrice:
-                    // result = result.OrderByDescending(p => p.productLinkDTOs.Min(pl => pl.ProductDet_Price)).ToList();
                     // sorting by the most minimum price
                     result = result.OrderByDescending(p => p.mostMinimumPrice).ToList();
                     break;
                 case SortedBy.LowToHighPrice:
-                    // result = result.OrderBy(p => p.productLinkDTOs.Min(pl => pl.ProductDet_Price)).ToList();
                     // sorting by the most minimum price
                     result = result.OrderBy(p => p.mostMinimumPrice).ToList();
                     break;
