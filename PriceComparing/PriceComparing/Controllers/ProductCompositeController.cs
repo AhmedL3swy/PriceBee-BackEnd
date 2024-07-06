@@ -387,6 +387,8 @@ namespace PriceComparing.Controllers
                 .Include(p => p.ProductLinks)
                     .ThenInclude(pl => pl.ProductDetail)
                     .ThenInclude(pd => pd.ProductSponsoreds)
+                .Include(p=>p.ProductLinks)
+                    .ThenInclude(d=>d.Domain)
                 .AsQueryable();
 
             // Apply filters to the query
@@ -477,6 +479,7 @@ namespace PriceComparing.Controllers
                             pl.ProductDetail.Rating,
                             pl.ProductDetail.isAvailable,
                             pl.LastUpdated,
+                            pl.Domain,
                             ProductSponsoreds = pl.ProductDetail.ProductSponsoreds.Select(ps => new
                             {
                                 ps.Id,
@@ -530,7 +533,6 @@ namespace PriceComparing.Controllers
                     .Select(pl => new ProudctLinkWithDetailsDTO
                     {
                         Link_Id = pl.Id,
-                        Link_DomainId = pl.DomainId,
                         ProductLink = pl.ProductLink1,
                         ProductDet_Name_Local = pl.ProductDetail.Name_Local,
                         ProductDet_Name_Global = pl.ProductDetail.Name_Global,
@@ -540,6 +542,18 @@ namespace PriceComparing.Controllers
                         ProductDet_Rating = pl.ProductDetail.Rating,
                         ProductDet_isAvailable = pl.ProductDetail.isAvailable,
                         LastUpdated = pl.ProductDetail.LastUpdated,
+                        // Domain Required Data
+                        domainDTO = new DomainDTO
+                        {
+                            Id = pl.ProductDetail.Domain.Id,
+                            Name_Local = pl.ProductDetail.Domain.Name_Local,
+                            Name_Global = pl.ProductDetail.Domain.Name_Global,
+                            Description_Local = pl.ProductDetail.Domain.Description_Local,
+                            Description_Global = pl.ProductDetail.Domain.Description_Global,
+                            Url = pl.ProductDetail.Domain.Url,
+                            Logo = pl.ProductDetail.Domain.Logo
+                        },
+                        // sponsorship data
                         productSponsoredDTOs = pl.ProductDetail.ProductSponsoreds.Select(ps => new ProductSponsoredDTO
                         {
                             Id = ps.Id,
